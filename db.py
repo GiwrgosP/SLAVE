@@ -1,7 +1,7 @@
 import sqlite3
 
 def conn():
-    con = sqlite3.connect("C:\Python37-64\sof\db.db")  #++++++++++++++++++++++ ALLAGI URL************* MIN ALLAXEIS TO ONOMA TOU ARXEIOU
+    con = sqlite3.connect("C:\Python37-64\sof\SLAVE\db.db")  #++++++++++++++++++++++ ALLAGI URL************* MIN ALLAXEIS TO ONOMA TOU ARXEIOU
     c = con.cursor()
     return con,c
 
