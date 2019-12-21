@@ -88,7 +88,7 @@ class mainWindow(tk.Tk):
         context = {}
         for ent in entryEntities:
 
-            input = entries[ent[2]].widgetInput.get()
+            input = entries[ent[2]].widgets["input"].get()
             print(input)
 
             if input == "" or input == "0.00":
@@ -110,8 +110,8 @@ class mainWindow(tk.Tk):
             self.quit()
 
     def giveValues(self):
-        spinBoxWeight = float(self.entries["weight"].widgetInput.get())
-        spinBoxAge = float(self.entries["age"].widgetInput.get())
+        spinBoxWeight = float(self.entries["weight"].widgets["input"].get())
+        spinBoxAge = float(self.entries["age"].widgets["input"].get())
 
         if spinBoxWeight != 0.00 and spinBoxAge != 0.00:
 
@@ -148,19 +148,19 @@ class menuEnt():
         self.values = db.getFieldValues(ent[0])
 
         self.currentValue =  tk.StringVar()
-        self.widgets["input"] =  tk.Menubutton(self.master.inputFrame, text = self.text)
+        self.widgets["menuButton"] =  tk.Menubutton(self.master.inputFrame, text = self.text)
 
         self.applyValues()
 
-        self.widgets["entry"] = tk.Entry(self.master.inputFrame, text = self.currentValue)
+        self.widgets["input"] = tk.Entry(self.master.inputFrame, text = self.currentValue)
 
     def applyValues(self):
 
-        self.widgets["input"].menu =   tk.Menu(self.widgets["input"])
-        self.widgets["input"]["menu"] = self.widgets["input"].menu
+        self.widgets["menuButton"].menu =   tk.Menu(self.widgets["menuButton"])
+        self.widgets["menuButton"]["menu"] = self.widgets["menuButton"].menu
 
         for val in self.values:
-            self.widgets["input"].menu.add_radiobutton(label = val[0], variable = self.currentValue, value = val[0])
+            self.widgets["menuButton"].menu.add_radiobutton(label = val[0], variable = self.currentValue, value = val[0])
 
     def checkSelf(self):
         if self.currentValue in self.values:
@@ -178,12 +178,14 @@ class spinBoxEnt():
         self.widgets = {}
 
         self.widgets["label"] = tk.Label(self.master.inputFrame, text = self.text)
-        self.widgets["spinboxs"] = tk.Spinbox(self.master.inputFrame, from_ = 0, to = 1000, increment=0.01, format= "%.2f")
-
+        self.widgets["input"] = tk.Spinbox(self.master.inputFrame, from_ = 0, to = 1000, increment=0.01, format= "%.2f")
         if self.name == "weight" or self.name == "age":
 
-            self.widgets["spinboxs"].configure(command = lambda: master.giveValues())
+            self.widgets["input"].configure(command = lambda: master.giveValues())
 
+    def checkSelf(self):
+        pass
+    
 class entryEnt():
     def __init__(self, master, ent):
         print("Creating mainFrame.entry")
@@ -193,8 +195,10 @@ class entryEnt():
         self.widgets = {}
 
         self.widgets["label"] = tk.Label(self.master.inputFrame, text = self.text)
-        self.widgets["entry"] = tk.Entry(self.master.inputFrame)
+        self.widgets["input"] = tk.Entry(self.master.inputFrame)
 
+    def checkSelf(self):
+        pass
 
 def main():
     root = mainWindow()
