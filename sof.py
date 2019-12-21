@@ -129,10 +129,10 @@ class mainWindow(tk.Tk):
             else:
                 age = "υπερήλικο"
 
-            self.entries["cardiologicalAnalysis"].values = (("Καρδιολογικός έλεγχος σε "+age+" "+weight+" σκύλο με υποψία καρδιακής νόσου.",),\
-                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+age+" "+weight+" σκύλο.",),\
-                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+age+" "+weight+" σκύλο.",),\
-                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+age+" "+weight+" σκύλο.",))
+            self.entries["cardiologicalAnalysis"].values = (("Καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο με υποψία καρδιακής νόσου.",),\
+                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
+                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
+                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",))
             self.entries["cardiologicalAnalysis"].applyValues()
         else:
             pass
@@ -185,7 +185,7 @@ class spinBoxEnt():
 
     def checkSelf(self):
         pass
-    
+
 class entryEnt():
     def __init__(self, master, ent):
         print("Creating mainFrame.entry")
