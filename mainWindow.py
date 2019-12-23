@@ -104,8 +104,8 @@ class mainWindow(tk.Tk):
 
         print("CONTEXT",context)
         doc.render(context)
-        doc.save("C:\Python37-64\sof\generated_doc.docx")  #++++++++++++++++++++++ ALLAGI URL************* MIN ALLAXEIS TO ONOMA TOU ARXEIOU
-
+        str = self.path + "\\" + "generated_doc.docx"
+        doc.save(str) 
         answer = messagebox.askyesno('Make slave keep working','Whip slave and make him go back to work?')
         if answer:
             self.canvas.destroy()
