@@ -2,7 +2,7 @@ from docx import Document
 import tkinter as tk
 import os
 
-import mainWindow
+import formWindow
 import fileSelectionWindow
 import db as db
 
@@ -23,7 +23,7 @@ class window(tk.Tk):
         if self.fileSelected == None:
             selection = fileSelectionWindow.fileSelectionWindow(self)
         else:
-            selection = mainWindow.mainWindow(self)
+            selection = formWindow.formWindow(self)
 
 def main():
     root = window()
