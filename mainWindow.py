@@ -4,24 +4,18 @@ from tkinter import messagebox
 from docxtpl import DocxTemplate
 
 class mainWindow(tk.Tk):
-    def __init__(self,path):
+    def __init__(self,master):
+        self.master = master
         print("Creating window")
-        self.path = path
-        self.entryEntities = db.getEntryFields(path)
+        self.entryEntities = db.getEntryFields(self.master.path)
         self.entries = {}
-
-        self.window = tk.Tk()
-        self.window.title("Sophi's Loyal Assistant Vet Edition")
-        self.window.geometry("1024x512")
 
         self.createInputFrame()
 
         self.createButtonFrame()
 
-        self.window.mainloop()
-
     def createInputFrame(self):
-        self.canvas = tk.Canvas(self.window)
+        self.canvas = tk.Canvas(self.master.window)
 
         self.inputFrame = tk.Frame(self.canvas)
 
@@ -46,12 +40,15 @@ class mainWindow(tk.Tk):
         self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
 
     def createButtonFrame(self):
-        self.buttonFrame = tk.Frame(self.window)
+        self.buttonFrame = tk.Frame(self.master.window)
 
         self.enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
         self.enterData.pack()
 
-        self.quitButton =  tk.Button(self.buttonFrame, text="Quit", command = self.quit)
+        self.clearButton =  tk.Button(self.buttonFrame, text = "Clear Form", command = self.clearForm)
+        self.clearButton.pack()
+
+        self.quitButton =  tk.Button(self.buttonFrame, text="Back to form selection", command = self.quit)
         self.quitButton.pack()
 
         self.buttonFrame.pack(side = tk.RIGHT)
@@ -71,23 +68,40 @@ class mainWindow(tk.Tk):
         scrollDir = int(event.delta/120)
         self.canvas.yview('scroll',-1*scrollDir, "units")
 
-    def quit(self):
-        answer = messagebox.askyesno('Let your slave rest','Do you think it is time for your slave to rest?')
+    def clearForm(self):
+        answer = messagebox.askyesno('You do not appreciate the work that your slave has done so far','Do you need slave to clear the board and start all over?')
         if answer:
-            exit()
+            self.clearWidgets()
         else:
-            self.canvas.destroy()
-            self.createFrame()
+            pass
+
+    def quit(self):
+        answer = messagebox.askyesno('You need to your slave to hand an other task','Do you need slave to get you bask to the form selection window?')
+        if answer:
+            self.goBack()
+        else:
+            pass
+
+    def clearWidgets(self):
+        self.canvas.destroy()
+        self.createInputFrame()
+
+    def goBack(self):
+        self.master.fileSelected = None
+        self.master.window.destroy()
+
+        self.master.createWindow()
 
     def enterdata(self):
-        entryEntities = self.entryEntities
-        entries = self.entries
-        str = self.path+"\\"+"DMVD-1-report.docx"
-        doc = DocxTemplate(str)
-        context = {}
-        for ent in entryEntities:
+        str = self.master.path+"\\"+"DMVD-1-report.docx"
 
-            input = entries[ent[2]].widgets["input"].get()
+        doc = DocxTemplate(str)
+
+        context = {}
+
+        for ent in self.entryEntities:
+
+            input = self.entries[ent[2]].widgets["input"].get()
             print(input)
 
             if input == "" or input == "0.0":
@@ -98,21 +112,19 @@ class mainWindow(tk.Tk):
                     if temp == 0 and float(input) >= 1:
                         input = int(float(input))
                 input = str(input)
-                entries[ent[2]].checkSelf()
+                self.entries[ent[2]].checkSelf()
                 context[ent[2]] = input
 
 
         print("CONTEXT",context)
         doc.render(context)
-        str = self.path + "\\" + "generated_doc.docx"
-        doc.save(str) 
-        answer = messagebox.askyesno('Make slave keep working','Whip slave and make him go back to work?')
+        str = self.master.path + "\\" + "generated_doc.docx"
+        doc.save(str)
+        answer = messagebox.askyesno('Make slave keep working on this form','Whip slave and make him go back to work?')
         if answer:
-            self.canvas.destroy()
-            self.createInputFrame()
-
+            self.clearWidgets()
         else:
-            self.quit()
+            self.goBack()
 
     def giveValues(self):
         spinBoxWeight = float(self.entries["weight"].widgets["input"].get())
@@ -150,7 +162,7 @@ class menuEnt():
         self.text = ent[1]
         self.name = ent[2]
         self.widgets = {}
-        self.values = db.getFieldValues(ent[0],master.path)
+        self.values = db.getFieldValues(ent[0],self.master.master.path)
 
         self.currentValue =  tk.StringVar()
         self.widgets["menuButton"] =  tk.Menubutton(self.master.inputFrame, text = self.text)
