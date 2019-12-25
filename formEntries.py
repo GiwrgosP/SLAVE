@@ -17,6 +17,8 @@ class menuEnt(tk.Tk):
 
         self.widgets["input"] = tk.Entry(self.master.inputFrame, text = self.currentValue)
 
+
+
     def applyValues(self):
 
         self.widgets["menuButton"].menu =   tk.Menu(self.widgets["menuButton"])

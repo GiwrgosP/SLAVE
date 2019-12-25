@@ -46,6 +46,7 @@ class fileSelectionWindow(tk.Tk):
     def openTemplate(self,ent):
         if ent[2] != None:
             str = self.master.path + "\\" + ent[2]
+            print(ent[2])
             try:
                 doc = DocxTemplate(str)
                 self.master.fileSelected = ent

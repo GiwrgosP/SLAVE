@@ -9,14 +9,12 @@ class formWindow(tk.Tk):
     def __init__(self,master):
 
         self.master = master
-        print(self.master.fileSelected)
         self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0])
         self.entries = {}
 
         self.createInputFrame()
-        print("hi")
         self.createButtonFrame()
-        print("hi")
+
     def createInputFrame(self):
         self.canvas = tk.Canvas(self.master.window)
 
@@ -108,7 +106,6 @@ class formWindow(tk.Tk):
         for ent in self.entryEntities:
 
             input = self.entries[ent[2]].widgets["input"].get()
-            print(input)
 
             if input == "" or input == "0.0":
                 pass
@@ -121,8 +118,6 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]].checkSelf()
                 context[ent[2]] = temp
 
-
-        print("CONTEXT",context)
         doc.render(context)
         filePath = self.master.path + "\\" + "generated_doc.docx"
         doc.save(filePath)

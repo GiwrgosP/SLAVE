@@ -29,13 +29,11 @@ def getFieldValues(fieldId,path):
     rows = c.fetchall()
     rows.sort()
     con.close()
-    print(rows)
     return rows
 
 
 def createFieldValue(path,value,field):
     con,c = conn(path)
-    print(field,value)
     c.execute("INSERT INTO valuesFields (field,value) VALUES(?,?)", (field,value))
 
     con.commit()
