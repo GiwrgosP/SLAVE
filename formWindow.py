@@ -9,7 +9,7 @@ class formWindow(tk.Tk):
     def __init__(self,master):
 
         self.master = master
-        self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0])
+        self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0]) + db.getEntryFields(self.master.path,"all")
 
         self.entries = {}
 
@@ -18,10 +18,11 @@ class formWindow(tk.Tk):
         self.inputFrame = tk.Frame(self.canvas)
 
         self.createInputFrame()
-        self.entryEntities = db.getEntryFields(self.master.path,"all")
-        self.createInputFrame()
+
         self.gridInputWidgets()
+
         self.createScrollbar()
+        
         self.createButtonFrame()
 
     def createInputFrame(self):
