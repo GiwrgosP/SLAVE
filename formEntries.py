@@ -3,7 +3,6 @@ import db as db
 
 class menuEnt(tk.Tk):
     def __init__(self, master, ent):
-        print("Creating mainFrame.menu")
         self.master = master
         self.field = ent[0]
         self.text = ent[1]
@@ -30,11 +29,10 @@ class menuEnt(tk.Tk):
         if self.currentValue in self.values:
             pass
         else:
-            db.createFieldValue(self.currentValue.get(),self.field)
+            db.createFieldValue(self.master.master.path,self.currentValue.get(),self.field)
 
 class spinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
-        print("Creating mainFrame.spinbox")
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
@@ -45,15 +43,41 @@ class spinBoxEnt(tk.Tk):
         self.widgets["input"] = tk.Spinbox(self.master.inputFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f")
 
         if self.name == "weight" or self.name == "age":
-
-            self.widgets["input"].configure(command = lambda: self.master.giveValues())
+            self.widgets["input"].configure(command = lambda: self.giveValues())
 
     def checkSelf(self):
         pass
 
+    def giveValues(self):
+        spinBoxWeight = float(self.master.entries["weight"].widgets["input"].get())
+        spinBoxAge = float(self.master.entries["age"].widgets["input"].get())
+
+        if spinBoxWeight != 0.00 and spinBoxAge != 0.00:
+
+            if spinBoxWeight<= 15.00:
+                weight = "μικρόσωμο"
+            elif spinBoxWeight <= 55.00:
+                weight = "μεγαλόσωμο"
+            else:
+                weight = "γιαγαντόσωμο"
+
+            if spinBoxAge<= 4.00:
+                age = "νεαρό"
+            elif spinBoxAge <= 6.00:
+                age = "ενήλικο"
+            else:
+                age = "υπερήλικο"
+
+            self.master.entries["cardiologicalAnalysis"].values = (("Καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο με υποψία καρδιακής νόσου.",),\
+                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
+                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
+                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",))
+            self.master.entries["cardiologicalAnalysis"].applyValues()
+        else:
+            pass
+
 class entryEnt(tk.Tk):
     def __init__(self, master, ent):
-        print("Creating mainFrame.entry")
         self.master = master
         self.text = ent[1]
         self.name = ent[2]

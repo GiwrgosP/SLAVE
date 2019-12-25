@@ -16,9 +16,9 @@ def getFirstFields(path):
     return rows
 
 
-def getEntryFields(path):
+def getEntryFields(path,file):
     con,c = conn(path)
-    c.execute("SELECT * FROM entryFields")
+    c.execute("SELECT * FROM entryFields WHERE formName = ?", (file,))
     rows = c.fetchall()
     con.close()
     return rows
@@ -33,8 +33,8 @@ def getFieldValues(fieldId,path):
     return rows
 
 
-def createFieldValue(value,field):
-    con,c = conn()
+def createFieldValue(path,value,field):
+    con,c = conn(path)
     print(field,value)
     c.execute("INSERT INTO valuesFields (field,value) VALUES(?,?)", (field,value))
 

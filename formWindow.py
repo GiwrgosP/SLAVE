@@ -7,14 +7,16 @@ import formEntries
 
 class formWindow(tk.Tk):
     def __init__(self,master):
+
         self.master = master
-        self.entryEntities = db.getEntryFields(self.master.path)
+        print(self.master.fileSelected)
+        self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0])
         self.entries = {}
 
         self.createInputFrame()
-
+        print("hi")
         self.createButtonFrame()
-
+        print("hi")
     def createInputFrame(self):
         self.canvas = tk.Canvas(self.master.window)
 
@@ -29,26 +31,23 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.entryEnt(self,ent)
 
         self.gridInputWidgets()
-        self.canvas.update_idletasks()
-        self.canvas.create_window(0, 0, anchor='nw', window=self.inputFrame)
+        self.createScrollbar()
 
-        self.scrollBar = tk.Scrollbar(self.canvas, orient="vertical", command=self.canvas.yview)
-        self.canvas.configure(scrollregion=self.canvas.bbox('all'),yscrollcommand=self.scrollBar.set)
-        self.canvas.pack(fill='both', expand=True, side='left')
-        self.scrollBar.pack(fill='y', side='right')
-        self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
 
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)
 
+        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1])
+        self.fileSelectedLabel.pack(side = tk.TOP)
+
         self.enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
-        self.enterData.pack()
+        self.enterData.pack(side = tk.BOTTOM)
 
         self.clearButton =  tk.Button(self.buttonFrame, text = "Clear Form", command = self.clearForm)
-        self.clearButton.pack()
+        self.clearButton.pack(side = tk.BOTTOM)
 
         self.quitButton =  tk.Button(self.buttonFrame, text="Back to form selection", command = self.quit)
-        self.quitButton.pack()
+        self.quitButton.pack(side = tk.BOTTOM)
 
         self.buttonFrame.pack(side = tk.RIGHT)
 
@@ -63,7 +62,17 @@ class formWindow(tk.Tk):
                 column+=1
             row += 1
 
-    def on_mousewheel(self, event):
+    def createScrollbar(self):
+        self.canvas.update_idletasks()
+        self.canvas.create_window(0, 0, anchor='nw', window=self.inputFrame)
+
+        self.scrollBar = tk.Scrollbar(self.canvas, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(scrollregion=self.canvas.bbox('all'),yscrollcommand=self.scrollBar.set)
+        self.canvas.pack(fill='both', expand=True, side='left')
+        self.scrollBar.pack(fill='y', side='right')
+        self.canvas.bind_all("<MouseWheel>", self.onMouseWheel)
+
+    def onMouseWheel(self, event):
         scrollDir = int(event.delta/120)
         self.canvas.yview('scroll',-1*scrollDir, "units")
 
@@ -92,10 +101,8 @@ class formWindow(tk.Tk):
         self.master.createWindow()
 
     def enterdata(self):
-        str = self.master.path+"\\"+"DMVD-1-report.docx"
-
-        doc = DocxTemplate(str)
-
+        filePath = self.master.path+"\\"+"DMVD-1-report.docx"
+        doc = DocxTemplate(filePath)
         context = {}
 
         for ent in self.entryEntities:
@@ -110,45 +117,17 @@ class formWindow(tk.Tk):
                     temp = float(input) % 1
                     if temp == 0 and float(input) >= 1:
                         input = int(float(input))
-                input = str(input)
+                temp = str(input)
                 self.entries[ent[2]].checkSelf()
-                context[ent[2]] = input
+                context[ent[2]] = temp
 
 
         print("CONTEXT",context)
         doc.render(context)
-        str = self.master.path + "\\" + "generated_doc.docx"
-        doc.save(str)
+        filePath = self.master.path + "\\" + "generated_doc.docx"
+        doc.save(filePath)
         answer = messagebox.askyesno('Make slave keep working on this form','Whip slave and make him go back to work?')
         if answer:
             self.clearWidgets()
         else:
             self.goBack()
-
-    def giveValues(self):
-        spinBoxWeight = float(self.entries["weight"].widgets["input"].get())
-        spinBoxAge = float(self.entries["age"].widgets["input"].get())
-
-        if spinBoxWeight != 0.00 and spinBoxAge != 0.00:
-
-            if spinBoxWeight<= 15.00:
-                weight = "μικρόσωμο"
-            elif spinBoxWeight <= 55.00:
-                weight = "μεγαλόσωμο"
-            else:
-                weight = "γιαγαντόσωμο"
-
-            if spinBoxAge<= 4.00:
-                age = "νεαρό"
-            elif spinBoxAge <= 6.00:
-                age = "ενήλικο"
-            else:
-                age = "υπερήλικο"
-
-            self.entries["cardiologicalAnalysis"].values = (("Καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο με υποψία καρδιακής νόσου.",),\
-                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",))
-            self.entries["cardiologicalAnalysis"].applyValues()
-        else:
-            pass

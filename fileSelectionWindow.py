@@ -23,9 +23,9 @@ class fileSelectionWindow(tk.Tk):
         for ent in self.entryEntities:
 
             if ent[3] == "greek":
-                self.leftFrameButtons[ent[0]] = tk.Button(self.leftFrame, text = ent[1], command = lambda fileName = ent[2], file = ent[0]: self.openTemplate(fileName,file))
+                self.leftFrameButtons[ent[0]] = tk.Button(self.leftFrame, text = ent[1], command = lambda ent = ent: self.openTemplate(ent))
             elif ent[3] == "english":
-                self.rightFrameButtons[ent[0]] = tk.Button(self.rightFrame, text = ent[1], command = lambda fileName = ent[2], file = ent[0]: self.openTemplate(fileName,file))
+                self.rightFrameButtons[ent[0]] = tk.Button(self.rightFrame, text = ent[1], command = lambda ent = ent: self.openTemplate(ent))
 
         self.gridFrame(self.leftFrameButtons)
         self.gridFrame(self.rightFrameButtons)
@@ -43,13 +43,12 @@ class fileSelectionWindow(tk.Tk):
                 column = 0
                 row += 1
 
-    def openTemplate(self,fileName,file):
-        if fileName != None:
-            str = self.master.path + "\\" + fileName
-            print(str)
+    def openTemplate(self,ent):
+        if ent[2] != None:
+            str = self.master.path + "\\" + ent[2]
             try:
                 doc = DocxTemplate(str)
-                self.master.fileSelected = fileName
+                self.master.fileSelected = ent
                 self.master.window.destroy()
                 self.master.createWindow()
 
