@@ -10,15 +10,22 @@ class formWindow(tk.Tk):
 
         self.master = master
         self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0])
+
         self.entries = {}
 
-        self.createInputFrame()
-        self.createButtonFrame()
-
-    def createInputFrame(self):
         self.canvas = tk.Canvas(self.master.window)
 
         self.inputFrame = tk.Frame(self.canvas)
+
+        self.createInputFrame()
+        self.entryEntities = db.getEntryFields(self.master.path,"all")
+        self.createInputFrame()
+        self.gridInputWidgets()
+        self.createScrollbar()
+        self.createButtonFrame()
+
+    def createInputFrame(self):
+
 
         for ent in self.entryEntities:
             if ent[3] == "listbox":
@@ -28,8 +35,7 @@ class formWindow(tk.Tk):
             elif ent[3] == "entry":
                 self.entries[ent[2]] = formEntries.entryEnt(self,ent)
 
-        self.gridInputWidgets()
-        self.createScrollbar()
+
 
 
     def createButtonFrame(self):

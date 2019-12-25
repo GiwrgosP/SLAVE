@@ -65,7 +65,7 @@ class spinBoxEnt(tk.Tk):
 
             if spinBoxAge<= 4.00:
                 age = "νεαρό"
-            elif spinBoxAge <= 6.00:
+            elif spinBoxAge <= 8.00:
                 age = "ενήλικο"
             else:
                 age = "υπερήλικο"
