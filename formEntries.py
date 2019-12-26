@@ -1,6 +1,29 @@
 import tkinter as tk
 import db as db
+import PyPDF2
 
+
+class pdfReader(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.widgets = {}
+
+
+        self.widgets["input"] = tk.Entry(self.master.inputFrame)
+        #self.widgets["label"] = tk.Button(self.master.inputFrame, text = self.text, command = self.readPdf)
+
+#    def readPdf(self):
+#        pdfPath = self.widgets["input"].get() +"\\"+ "pdf.pdf"
+#        with open(pdfPath, 'rb') as pdf:
+#            pdf = open(pdfPath, mode = "rb")
+#            pdfReader = PyPDF2.PdfFileReader(pdf)
+#            page = pdfReader.getPage(0)
+#            pdfText = page.extractText()
+#            print("pppppppppppppppppp")
+#            print(pdfText)
+#            print("pppppppppppppppppp")
 class menuEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
@@ -9,6 +32,7 @@ class menuEnt(tk.Tk):
         self.name = ent[2]
         self.widgets = {}
         self.values = db.getFieldValues(self.field,self.master.master.path)
+        print(self.values)
 
         self.currentValue =  tk.StringVar()
         self.widgets["menuButton"] =  tk.Menubutton(self.master.inputFrame, text = self.text)
@@ -21,11 +45,15 @@ class menuEnt(tk.Tk):
 
     def applyValues(self):
 
+
         self.widgets["menuButton"].menu =   tk.Menu(self.widgets["menuButton"])
         self.widgets["menuButton"]["menu"] = self.widgets["menuButton"].menu
 
         for val in self.values:
-            self.widgets["menuButton"].menu.add_radiobutton(label = val[0], variable = self.currentValue, value = val[0])
+            self.widgets["menuButton"].menu.add_radiobutton(label = val[0], command = lambda val = val[0]: self.setValue(val), value = val[0])
+
+    def setValue(self,val):
+        self.currentValue = val
 
     def checkSelf(self):
         if self.currentValue in self.values:

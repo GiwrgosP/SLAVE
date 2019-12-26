@@ -10,6 +10,7 @@ class formWindow(tk.Tk):
 
         self.master = master
         self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0]) + db.getEntryFields(self.master.path,"all")
+        self.entryEntities.sort(key = self.entryFields[5])
 
         self.entries = {}
 
@@ -22,7 +23,7 @@ class formWindow(tk.Tk):
         self.gridInputWidgets()
 
         self.createScrollbar()
-        
+
         self.createButtonFrame()
 
     def createInputFrame(self):
@@ -35,6 +36,10 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.spinBoxEnt(self,ent)
             elif ent[3] == "entry":
                 self.entries[ent[2]] = formEntries.entryEnt(self,ent)
+            elif ent[3] == "pdf":
+                self.entries[ent[2]] = formEntries.pdfReader(self,ent)
+            else:
+                print("Error with widget")
 
 
 
