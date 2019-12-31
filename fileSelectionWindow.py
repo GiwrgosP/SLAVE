@@ -47,13 +47,13 @@ class fileSelectionWindow(tk.Tk):
         if ent[2] != None:
             str = self.master.path + "\\" + ent[2]
             print(ent[2])
-            try:
-                doc = DocxTemplate(str)
-                self.master.fileSelected = ent
-                self.master.window.destroy()
-                self.master.createWindow()
+            #try:
+            doc = DocxTemplate(str)
+            self.master.fileSelected = ent
+            self.master.window.destroy()
+            self.master.createWindow()
 
-            except:
-                print("error with file path name")
+            #except:
+                #print("error with file path name")
         else:
             print("file name is none in datebase")
