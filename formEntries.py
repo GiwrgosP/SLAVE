@@ -1,6 +1,68 @@
 import tkinter as tk
 import db as db
 
+class checkUpSpinBoxEnt(tk.Tk):
+    def __init__(self, master, ent):
+        print("hello")
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.value = tk.IntVar()
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.widgetsInput = list()
+
+        spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(spinBoxLabel)
+
+        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=1, format= "%.1f")
+        self.widgets.append(spinBoxWidget)
+        self.widgetsInput.append(spinBoxWidget)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def getWidgetValues(self):
+        monthCounter = {
+        1:"Ιανουάριος",\
+        2:"Φεβρουάριος",\
+        3:"Μάρτιος",\
+        4:"Απρίλιος",\
+        5:"Μάιος",\
+        6:"Ιούνιος",\
+        7:"Ιούλιος",\
+        8:"Αύγουστος",\
+        9:"Σεπτέμβριος",\
+        10:"Οκτώβριος",\
+        11:"Νοέμβριος",\
+        12:"Δεκέμβριος"
+        }
+        input = list()
+        curDate = self.master.entries["date"].getWidgetValues()
+
+        curDate = curDate.split(".")
+
+        curMonth = int(curDate[1])
+        curYear = int(curDate[2])
+        endDate = int(self.widgetsInput[0].get())
+
+        endMonth = monthCounter[(curMonth + endDate) % 12]
+        print((curMonth + endDate) % 12)
+        endYear = (curMonth + endDate) // 12
+        endYear+= curYear
+        input.append(endDate)
+        input.append(endMonth)
+        input.append(str(endYear))
+        return input
+
+    def checkSelf(self):
+        pass
+
+    def gridWidgets(self):
+        for ent in self.widgets:
+            column = 0
+            ent.grid(column = column, row = 0)
+            column += 1
 
 
 class flowButtonEnt(tk.Tk):
@@ -39,13 +101,19 @@ class flowButtonEnt(tk.Tk):
             self.widgetsInput[0].configure(bg = "white")
 
     def getWidgetValues(self):
-        return self.buttonValue[0].get()
+        input = self.buttonValue[0].get()
+        if input == " ":
+            input = None
+        return input
 
     def gridWidgets(self):
         for ent in self.widgets:
             column = 0
             ent.grid(column = column, row = 0)
             column += 1
+
+    def checkSelf(self):
+        pass
 
 class ecgMenuEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -55,6 +123,7 @@ class ecgMenuEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.frames = list()
+        self.menuValues = list()
         self.menuValue = list()
         self.widgets = list()
         self.widgetsInput = list()
@@ -70,6 +139,7 @@ class ecgMenuEnt(tk.Tk):
         destroyButton = tk.Button(widgetFrame, text = "-", command = lambda x = widgetFrame: self.destroyButtonAction(x))
 
         values = db.getFieldValues(self.field,self.master.master.path)
+        self.menuValue.append(values)
 
         menuWidget = tk.Menubutton(widgetFrame, text = self.text)
         menuWidget.menu = tk.Menu(menuWidget)
@@ -128,9 +198,22 @@ class ecgMenuEnt(tk.Tk):
         values = list()
         for ent in self.widgetsInput:
             groupValue = ent[0].get()
-            values.append(groupValue)
-
+            if groupValue == "":
+                pass
+            else:
+                self.checkSelf()
+                values.append(groupValue)
         return values
+
+    def checkSelf(self):
+        flagFound = False
+        for i in range(len(self.menuValues)-1):
+            for j in range(len(self.menuValues[i])-1):
+                if self.menuValues[i][j] == self.menuValue[i].get():
+                    flagFound = True
+                    break
+            if flagFound == False:
+                db.createFieldValue(self.master.master.path,self.menuValue[i].get(),self.field)
 
 class ageSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -209,13 +292,13 @@ class ageSpinBoxEnt(tk.Tk):
             flagPlural = False
 
         if timeAproximation == 2:
-            textTimeAproximation = " χρονών"
+            textTimeAproximation = " ετών"
             if flagPlural == False:
                 textTimeAproximation = " έτους"
         else:
             textTimeAproximation = " μηνών"
             if flagPlural == False:
-                textTimeAproximation = " μηνώς"
+                textTimeAproximation = " μηνός"
 
         return str(age) + textTimeAproximation
 
@@ -228,6 +311,7 @@ class medicMenuEnt(tk.Tk):
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.frames = list()
         self.menuValue = list()
+        self.menuValues = list()
         self.widgets = list()
         self.widgetsInput = list()
 
@@ -242,6 +326,7 @@ class medicMenuEnt(tk.Tk):
         destroyButton = tk.Button(widgetFrame, text = "-", command = lambda x = widgetFrame: self.destroyButtonAction(x))
 
         values = db.getFieldValues(self.field,self.master.master.path)
+        self.menuValues.append(values)
 
         menuWidget = tk.Menubutton(widgetFrame, text = self.text)
         menuWidget.menu = tk.Menu(menuWidget)
@@ -258,6 +343,7 @@ class medicMenuEnt(tk.Tk):
         spinBoxWidget = tk.Spinbox(widgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f")
 
         values3 = db.getFieldValues(25,self.master.master.path)
+        self.menuValues.append(values3)
 
         menuWidget3 = tk.Menubutton(widgetFrame, text = "Μονάδα μέτρησης")
         menuWidget3.menu = tk.Menu(menuWidget3)
@@ -272,6 +358,7 @@ class medicMenuEnt(tk.Tk):
         menuEntry3 = tk.Entry(widgetFrame, text = self.menuValue[temp])
 
         values2 = db.getFieldValues(26,self.master.master.path)
+        self.menuValues.append(values2)
 
         menuWidget2 = tk.Menubutton(widgetFrame, text = "Δοσολογία")
         menuWidget2.menu = tk.Menu(menuWidget2)
@@ -316,7 +403,6 @@ class medicMenuEnt(tk.Tk):
         widgetFrame.grid()
 
     def gridWidgets(self):
-
         for frame in self.widgets:
             column = 0
             for ent in frame:
@@ -345,11 +431,37 @@ class medicMenuEnt(tk.Tk):
         for ent in self.widgetsInput:
             groupValue = list()
             groupValue.append(ent[0].get())
+            #if ent[0].get() != "ουδεμία"
+            #if ent[0].get() != "δεν συστήνεται"
             groupValue.append(" (" + ent[1].get() + " " + ent[2].get()+ " " + ent[3].get() + "), ")
             values.append(groupValue)
 
         values[-1][1] = values[-1][1][:-2]
+        #self.checkSelf() #++++++++
+        #++++++++
+        #++++++++
+        #++++++++
+        #++++++++
+        #++++++++
+
         return values
+
+    def checkSelf(self):
+        flagFound = False
+        for i in range(len(self.menuValues)-1):
+            for j in range(len(self.menuValues[i])-1):
+                if self.menuValues[i][j] == self.menuValue[i].get():
+                    flagFound = True
+                    break
+            if flagFound == False:
+                if i == 0:
+                    field = self.field
+                elif i == 1:
+                    field == 25
+                else:
+                    field == 26
+            db.createFieldValue(self.master.master.path,self.menuValue[i].get(),field)
+
 
 class pdfReader(tk.Tk):
     def __init__(self, master, ent):
@@ -422,8 +534,12 @@ class menuEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        return self.widgetsInput[0].get()
-
+        input = self.widgetsInput[0].get()
+        if input == "":
+            input == None
+        else:
+            self.checkSelf()
+        return input
 
 class spinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -451,9 +567,6 @@ class spinBoxEnt(tk.Tk):
     def individualize (self):
         if self.name == "weight" or self.name == "age":
             self.widgets[1].configure(command = lambda: self.giveValues())
-
-    def checkSelf(self):
-        pass
 
     def giveValues(self):
         spinBoxWeight = float(self.master.entries["weight"].widgetsInput[0].get())
@@ -493,7 +606,11 @@ class spinBoxEnt(tk.Tk):
         input = float(self.widgetsInput[0].get())
         if input % 1 == 0:
             input = int(input)
-        return str(input)
+        if input == 0:
+            input = None
+        else:
+            str(input)
+        return input
 
 
 class entryEnt(tk.Tk):
@@ -521,8 +638,8 @@ class entryEnt(tk.Tk):
             ent.grid(column = column, row = 0)
             column += 1
 
-    def checkSelf(self):
-        pass
-
     def getWidgetValues(self):
-        return self.widgetsInput[0].get()
+        input = self.widgetsInput[0].get()
+        if input == "":
+            input = None
+        return input

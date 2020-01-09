@@ -3,7 +3,7 @@ import sqlite3
 
 
 def conn(path):
-    str = path +"\db.db"
+    str = path +"\\db.db"
     con = sqlite3.connect(str)
     c = con.cursor()
     return con,c
@@ -31,6 +31,12 @@ def getFieldValues(fieldId,path):
     con.close()
     return rows
 
+def getEksetasi(path):
+    con,c = conn(path)
+    c.execute("SELECT * FROM Eksetasi")
+    rows = c.fetchall()
+    con.close()
+    return rows
 
 def createFieldValue(path,value,field):
     con,c = conn(path)

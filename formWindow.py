@@ -7,8 +7,8 @@ import formEntries
 
 
 class formWindow(tk.Tk):
-    def __init__(self,master):
 
+    def __init__(self,master):
         self.master = master
         self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0]) + db.getEntryFields(self.master.path,"all")
         self.entryEntities = sorted(self.entryEntities,key = lambda x: x[0])
@@ -16,6 +16,8 @@ class formWindow(tk.Tk):
         self.entries = {}
 
         self.createInputFrame()
+        self.createScrollbar()
+        self.createButtonFrame()
 
     def createInputFrame(self):
 
@@ -38,11 +40,11 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.ecgMenuEnt(self,ent)
             elif ent[3] == "flowButtonEnt":
                 self.entries[ent[2]] = formEntries.flowButtonEnt(self,ent)
+            elif ent[3] == "checkUpSpinBoxEnt":
+                self.entries[ent[2]] = formEntries.checkUpSpinBoxEnt(self,ent)
             else:
                 print("Error with widget")
-
-        self.createScrollbar()
-        self.createButtonFrame()
+            
 
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)
@@ -109,21 +111,22 @@ class formWindow(tk.Tk):
         self.master.createWindow()
 
     def enterdata(self):
-        filePath = self.master.path+"\\"+"DMVD-1-report.docx"
+        filePath = self.master.path+"\\Protipa\\" + "DMVD-1-report.docx"
         doc = DocxTemplate(filePath)
         context = {}
 
         for ent in self.entries:
             input = self.entries[ent].getWidgetValues()
 
-            if input == "" or input == "0.0" : # or ' (0.0 mg/kg po )'
+            if input == "" or input == "0.0" or input == [['', ' (0.0  )']] or input == None : # or ' (0.0 mg/kg po )'
                 pass
             else:
                 context[ent] = input
+
         print(context)
         doc.render(context)
 
-        filePath = self.master.path + "\\" + "generated_doc.docx"
+        filePath = self.master.path + "\\Protipa\\" + "generated_doc.docx"
         doc.save(filePath)
         answer = messagebox.askyesno('Make slave keep working on this form','Whip slave and make him go back to work?')
         if answer:

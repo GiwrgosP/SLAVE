@@ -1,6 +1,14 @@
-import tabula# readinf the PDF file that contain Table Data
-# you can find find the pdf file with complete code in below
-# read_pdf will save the pdf table into Pandas
-Dataframedf = tabula.read_pdf("offense.pdf")
-# in order to print first 5 lines of
-Tabledf.head()
+import tika
+from tika import parser
+import db as db
+import re
+result = {}
+tags = db.getEksetasi('C:\\Python37-64\\sof\\SLAVE')
+
+parsed = parser.from_file('C:\\Python37-64\\sof\\SLAVE\\pdf.pdf')
+
+doc = parsed["content"].split("Status:")
+doc = doc[0].split("M\xadMode")
+doc = re.sub("\n", " ", doc[1])
+
+print(doc)
