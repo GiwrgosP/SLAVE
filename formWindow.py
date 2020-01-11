@@ -16,8 +16,8 @@ class formWindow(tk.Tk):
         self.entries = {}
 
         self.createInputFrame()
-        self.createScrollbar()
-        self.createButtonFrame()
+
+
 
     def createInputFrame(self):
 
@@ -34,17 +34,27 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.entryEnt(self,ent)
             elif ent[3] == "mediMenu":
                 self.entries[ent[2]] = formEntries.medicMenuEnt(self,ent)
-            elif ent[3] == "ageSpinBoxEnt":
-                self.entries[ent[2]] = formEntries.ageSpinBoxEnt(self,ent)
+            elif ent[3] == "dogAgeSpinBoxEnt":
+                self.entries[ent[2]] = formEntries.dogAgeSpinBoxEnt(self,ent)
             elif ent[3] == "ecgMenuEnt":
                 self.entries[ent[2]] = formEntries.ecgMenuEnt(self,ent)
             elif ent[3] == "flowButtonEnt":
                 self.entries[ent[2]] = formEntries.flowButtonEnt(self,ent)
             elif ent[3] == "checkUpSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.checkUpSpinBoxEnt(self,ent)
+            elif ent[3] == "nameAitEntryEnt":
+                self.entries[ent[2]] = formEntries.nameAitEntryEnt(self,ent)
+            elif ent[3] == "bodyWeightSpinBoxEnt":
+                self.entries[ent[2]] = formEntries.bodyWeightSpinBoxEnt(self,ent)
+            elif ent[3] == "dogCardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.dogCardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "dogWeightSpinBoxEnt":
+                self.entries[ent[2]] = formEntries.dogWeightSpinBoxEnt(self,ent)
             else:
                 print("Error with widget")
-            
+
+        self.createScrollbar()
+        self.createButtonFrame()
 
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)

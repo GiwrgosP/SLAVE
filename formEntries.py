@@ -1,13 +1,13 @@
 import tkinter as tk
 import db as db
 
-class checkUpSpinBoxEnt(tk.Tk):
+
+class dogWeightSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
-        print("hello")
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.value = tk.IntVar()
+        self.value = tk.DoubleVar()
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
         self.widgetsInput = list()
@@ -15,7 +15,196 @@ class checkUpSpinBoxEnt(tk.Tk):
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
         self.widgets.append(spinBoxLabel)
 
-        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=1, format= "%.1f")
+        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f",command = lambda: self.giveValues())
+        self.widgets.append(spinBoxWidget)
+        self.widgetsInput.append(spinBoxWidget)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def giveValues(self):
+        self.master.entries["cardiologicalAnalysis"].getMenuValues()
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        input = float(self.widgetsInput[0].get())
+        if input % 1 == 0:
+            input = int(input)
+        if input == 0:
+            input = None
+        else:
+            input = str(input)
+            input = input.replace(".",",")
+        return input
+
+class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.field = ent[0]
+        self.text = ent[1]
+        self.name = ent[2]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.widgetsInput = list()
+        self.currentValue =  tk.StringVar()
+
+        menuWidget =  tk.Menubutton(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(menuWidget)
+
+        menuEntry = tk.Entry(self.mainWidgetFrame, text = self.currentValue)
+        self.widgets.append(menuEntry)
+        self.widgetsInput.append(menuEntry)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def getMenuValues(self):
+        spinBoxWeight = self.master.entries["weight"].getWidgetValues()
+        spinBoxAge = self.master.entries["age"].getWidgetValues()
+
+        if spinBoxWeight != 0.00 and spinBoxWeight != None and spinBoxAge[0] != "0" :
+            spinBoxWeight = spinBoxWeight.replace(",",".")
+
+
+            if float(spinBoxWeight)<= 15.00:
+                weight = "μικρόσωμο"
+            elif float(spinBoxWeight) <= 55.00:
+                weight = "μεγαλόσωμο"
+            else:
+                weight = "γιαγαντόσωμο"
+
+            if spinBoxAge[1] != " μηνών" and spinBoxAge[1] != " μηνός":
+                if int(spinBoxAge[0])<= 4:
+                    age = "νεαρό"
+                elif int(spinBoxAge[0]) <= 8:
+                    age = "ενήλικο"
+                else:
+                    age = "υπερήλικο"
+            else:
+                age = "νεαρό"
+
+            self.values = (("Καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο με υποψία καρδιακής νόσου.",),\
+                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
+                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
+                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",))
+            self.applyValues()
+        else:
+            pass
+
+    def applyValues(self):
+        self.widgets[0].menu =   tk.Menu(self.widgets[0])
+        self.widgets[0]["menu"] = self.widgets[0].menu
+        for val in self.values:
+            self.widgets[0].menu.add_radiobutton(label = val[0], value = val[0],variable = self.currentValue)
+
+    def checkSelf(self):
+        pass
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        input = self.widgetsInput[0].get()
+        if input == "":
+            input == None
+        else:
+            self.checkSelf()
+        return input
+
+class bodyWeightSpinBoxEnt(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.widgetsInput = list()
+
+        spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(spinBoxLabel)
+
+        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0.5, to = 5, increment=0.5)
+        self.widgets.append(spinBoxWidget)
+        self.widgetsInput.append(spinBoxWidget)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def getWidgetValues(self):
+        input = None
+        num = float(self.widgetsInput[0].get())
+        if num < 1.5:
+            input = "Καχεξία (BS: " + str(num) + "/5)"
+        elif num < 2.5:
+            input = "Αδύνατο (BS: " + str(num) + "/5)"
+        elif num <= 4.0:
+            input = "Κ.Σ.Β (BS: " + str(num) + "/5)"
+        elif num <= 5:
+            input = "Παχύσαρκο (BS: " + str(num) + "/5)"
+
+        return input
+
+    def checkSelf(self):
+        pass
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+class nameAitEntryEnt(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.widgetsInput = list()
+
+        entryLabel = tk.Label(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(entryLabel)
+
+        entryWidget = tk.Entry(self.mainWidgetFrame)
+        self.widgets.append(entryWidget)
+        self.widgetsInput.append(entryWidget)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        input = self.widgetsInput[0].get()
+        if input == "":
+            input = self.master.entries["petName"].getWidgetValues()
+        return input
+
+class checkUpSpinBoxEnt(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.widgetsInput = list()
+
+        spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(spinBoxLabel)
+
+        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=1)
         self.widgets.append(spinBoxWidget)
         self.widgetsInput.append(spinBoxWidget)
 
@@ -39,31 +228,31 @@ class checkUpSpinBoxEnt(tk.Tk):
         }
         input = list()
         curDate = self.master.entries["date"].getWidgetValues()
+        if curDate!= None:
+            curDate = curDate.split(".")
 
-        curDate = curDate.split(".")
+            curMonth = int(curDate[1])
+            curYear = int(curDate[2])
+            endDate = int(self.widgetsInput[0].get())
 
-        curMonth = int(curDate[1])
-        curYear = int(curDate[2])
-        endDate = int(self.widgetsInput[0].get())
-
-        endMonth = monthCounter[(curMonth + endDate) % 12]
-        print((curMonth + endDate) % 12)
-        endYear = (curMonth + endDate) // 12
-        endYear+= curYear
-        input.append(endDate)
-        input.append(endMonth)
-        input.append(str(endYear))
+            endMonth = monthCounter[(curMonth + endDate) % 12]
+            endYear = (curMonth + endDate) // 12
+            endYear+= curYear
+            input.append(endDate)
+            input.append(endMonth)
+            input.append(str(endYear))
+        else:
+            input=None
         return input
 
     def checkSelf(self):
         pass
 
     def gridWidgets(self):
+        column = 0
         for ent in self.widgets:
-            column = 0
             ent.grid(column = column, row = 0)
             column += 1
-
 
 class flowButtonEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -215,7 +404,7 @@ class ecgMenuEnt(tk.Tk):
             if flagFound == False:
                 db.createFieldValue(self.master.master.path,self.menuValue[i].get(),self.field)
 
-class ageSpinBoxEnt(tk.Tk):
+class dogAgeSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
         self.text = ent[1]
@@ -250,32 +439,7 @@ class ageSpinBoxEnt(tk.Tk):
         pass
 
     def giveValues(self):
-        spinBoxWeight = float(self.master.entries["weight"].widgetsInput[0].get())
-        spinBoxAge = float(self.master.entries["age"].widgetsInput[0].get())
-
-        if spinBoxWeight != 0.00 and spinBoxAge != 0.00:
-
-            if spinBoxWeight<= 15.00:
-                weight = "μικρόσωμο"
-            elif spinBoxWeight <= 55.00:
-                weight = "μεγαλόσωμο"
-            else:
-                weight = "γιαγαντόσωμο"
-
-            if spinBoxAge<= 4.00:
-                age = "νεαρό"
-            elif spinBoxAge <= 8.00:
-                age = "ενήλικο"
-            else:
-                age = "υπερήλικο"
-
-            self.master.entries["cardiologicalAnalysis"].values = (("Καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο με υποψία καρδιακής νόσου.",),\
-                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",))
-            self.master.entries["cardiologicalAnalysis"].applyValues()
-        else:
-            pass
+        self.master.entries["cardiologicalAnalysis"].getMenuValues()
 
     def gridWidgets(self):
         column = 0
@@ -300,7 +464,7 @@ class ageSpinBoxEnt(tk.Tk):
             if flagPlural == False:
                 textTimeAproximation = " μηνός"
 
-        return str(age) + textTimeAproximation
+        return (str(age),textTimeAproximation)
 
 class medicMenuEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -462,7 +626,6 @@ class medicMenuEnt(tk.Tk):
                     field == 26
             db.createFieldValue(self.master.master.path,self.menuValue[i].get(),field)
 
-
 class pdfReader(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
@@ -558,43 +721,8 @@ class spinBoxEnt(tk.Tk):
         self.widgets.append(spinBoxWidget)
         self.widgetsInput.append(spinBoxWidget)
 
-        self.individualize()
-
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
-
-
-    def individualize (self):
-        if self.name == "weight" or self.name == "age":
-            self.widgets[1].configure(command = lambda: self.giveValues())
-
-    def giveValues(self):
-        spinBoxWeight = float(self.master.entries["weight"].widgetsInput[0].get())
-        spinBoxAge = float(self.master.entries["age"].widgetsInput[0].get())
-
-        if spinBoxWeight != 0.00 and spinBoxAge != 0.00:
-
-            if spinBoxWeight<= 15.00:
-                weight = "μικρόσωμο"
-            elif spinBoxWeight <= 55.00:
-                weight = "μεγαλόσωμο"
-            else:
-                weight = "γιαγαντόσωμο"
-
-            if spinBoxAge<= 4.00:
-                age = "νεαρό"
-            elif spinBoxAge <= 8.00:
-                age = "ενήλικο"
-            else:
-                age = "υπερήλικο"
-
-            self.master.entries["cardiologicalAnalysis"].values = (("Καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο με υποψία καρδιακής νόσου.",),\
-                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",))
-            self.master.entries["cardiologicalAnalysis"].applyValues()
-        else:
-            pass
 
     def gridWidgets(self):
         column = 0
@@ -609,9 +737,9 @@ class spinBoxEnt(tk.Tk):
         if input == 0:
             input = None
         else:
-            str(input)
+            input = str(input)
+            input = input.replace(".",",")
         return input
-
 
 class entryEnt(tk.Tk):
     def __init__(self, master, ent):
