@@ -50,6 +50,8 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.dogCardiologicalAnalysisListBoxEnt(self,ent)
             elif ent[3] == "dogWeightSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.dogWeightSpinBoxEnt(self,ent)
+            elif ent[3] == "pdfReader":
+                self.entries[ent[2]] = formEntries.pdfReader(self,ent)
             else:
                 print("Error with widget")
 

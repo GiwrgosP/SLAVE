@@ -1,6 +1,9 @@
 import tkinter as tk
 import db as db
-
+from tkinter import filedialog
+import tika
+from tika import parser
+import re
 
 class dogWeightSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -146,7 +149,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
         elif num < 2.5:
             input = "Αδύνατο (BS: " + str(num) + "/5)"
         elif num <= 4.0:
-            input = "Κ.Σ.Β (BS: " + str(num) + "/5)"
+            input = "Κανονικό σωματικό βάρος (BS: " + str(num) + "/5)"
         elif num <= 5:
             input = "Παχύσαρκο (BS: " + str(num) + "/5)"
 
@@ -426,7 +429,7 @@ class dogAgeSpinBoxEnt(tk.Tk):
         self.widgets.append(radioButton1)
         self.widgetsInput.append(radioButton1)
 
-        radioButton2 = tk.Radiobutton(self.mainWidgetFrame ,variable = self.radioButtonValue, text="Χρονών", value=2)
+        radioButton2 = tk.Radiobutton(self.mainWidgetFrame ,variable = self.radioButtonValue, text="Ετών", value=2)
         radioButton2.select()
         self.widgets.append(radioButton2)
         self.widgetsInput.append(radioButton2)
@@ -463,8 +466,10 @@ class dogAgeSpinBoxEnt(tk.Tk):
             textTimeAproximation = " μηνών"
             if flagPlural == False:
                 textTimeAproximation = " μηνός"
-
-        return (str(age),textTimeAproximation)
+        l = list()
+        l.append(str(age))
+        l.append(textTimeAproximation)
+        return l
 
 class medicMenuEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -629,25 +634,69 @@ class medicMenuEnt(tk.Tk):
 class pdfReader(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
+        self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
+        self.currentValue =  tk.StringVar()
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.widgetsInput = list()
 
-        self.widgets = {}
+        button = tk.Button(self.mainWidgetFrame, text = self.text, command = self.buttonAction)
+        self.widgets.append(button)
+
+        buttonEntry = tk.Entry(self.mainWidgetFrame, text = self.currentValue)
+        self.widgets.append(buttonEntry)
+        self.widgetsInput.append(buttonEntry)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
 
 
-        self.widgets["input"] = tk.Entry(self.master.inputFrame)
-        #self.widgets["label"] = tk.Button(self.master.inputFrame, text = self.text, command = self.readPdf)
+    def buttonAction(self):
+        fileName = filedialog.askopenfilename()
+        self.currentValue.set(fileName)
 
-#    def readPdf(self):
-#        pdfPath = self.widgets["input"].get() +"\\"+ "pdf.pdf"
-#        with open(pdfPath, 'rb') as pdf:
-#            pdf = open(pdfPath, mode = "rb")
-#            pdfReader = PyPDF2.PdfFileReader(pdf)
-#            page = pdfReader.getPage(0)
-#            pdfText = page.extractText()
-#            print("pppppppppppppppppp")
-#            print(pdfText)
-#            print("pppppppppppppppppp")
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        fileName = self.currentValue.get()
+        if fileName == "":
+            input = None
+        else:
+            tags = db.getEksetasi(self.master.master.path)
+            parsed = parser.from_file(fileName)
+            tempDoc = parsed["content"].split("Status:")
+            tempDoc = tempDoc[0].split("M\xadMode")
+            tempDoc = re.sub("\n", " ", tempDoc[1])
+            tempDoc = tempDoc.split(" ")
+            doc = list()
+            result = {}
+            for i in tempDoc:
+                doc.append(re.sub("\xa0", " ", i))
+            for tag in tags:
+                for i in range(len(doc)):
+                    if tag[0] == doc[i]:
+                        temp = list()
+                        for j in range(1,tag[2]+1):
+                            temp.append(re.sub("\xad", "",doc[i+j]))
+                        result[tag[1]] = temp
+                        break
+
+            input = {}
+            for i in result:
+                if len(result[i])==2 and result[i][1] == "cm":
+                    temp = float(result[i][0])*10
+                    input[i] = str(round(temp,1))
+                else:
+                    input[i] = result[i][0]
+
+        return input
 
 class menuEnt(tk.Tk):
     def __init__(self, master, ent):
