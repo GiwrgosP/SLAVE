@@ -5,13 +5,14 @@ import tika
 from tika import parser
 import re
 from decimal import *
+
 def buildNumber(num, formWindow):
     if num % 1 == 0:
         num = str(int(num))
     else:
         if num % 0.1 != 0:
             temp = Decimal(num)
-            temp = temp -(temp % Decimal(0.1))
+            temp = temp - Decimal((temp % Decimal(0.1)))
             num = float(temp)
         num = str(num)
         if formWindow.master.fileSelected[-1] == "greek":
