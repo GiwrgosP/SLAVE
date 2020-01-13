@@ -609,12 +609,12 @@ class medicMenuEnt(tk.Tk):
             if ent[0].get() != "ουδεμία" and ent[0].get() != "δεν συστήνεται":
                 num = buildNumber(float(ent[1].get()),self.master)
                 groupValue.append(" (" + num + " " + ent[2].get()+ " " + ent[3].get() + "), ")
-
-
+                values.append(groupValue)
             else:
                 return None
-        groupValue[1] = groupValue[1][:-2]
-        values.append(groupValue)
+        print(groupValue)
+        values[-1][1] = values[-1][1][:-2]
+
         #self.checkSelf()
         #++++++++
         #++++++++
