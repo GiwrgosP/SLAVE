@@ -88,7 +88,6 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
                 weight = "μεγαλόσωμο"
             else:
                 weight = "γιαγαντόσωμο"
-            print(spinBoxAge[1])
             if spinBoxAge[1] != "μηνών" and spinBoxAge[1] != "μηνός":
                 if int(spinBoxAge[0])<= 4:
                     age = "νεαρό"
@@ -610,10 +609,11 @@ class medicMenuEnt(tk.Tk):
             if ent[0].get() != "ουδεμία" and ent[0].get() != "δεν συστήνεται":
                 num = buildNumber(float(ent[1].get()),self.master)
                 groupValue.append(" (" + num + " " + ent[2].get()+ " " + ent[3].get() + "), ")
-                groupValue[1] = groupValue[1][:-2]
+
 
             else:
                 return None
+            groupValue[1] = groupValue[1][:-2]
             values.append(groupValue)
         #self.checkSelf()
         #++++++++
