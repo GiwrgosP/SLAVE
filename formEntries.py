@@ -249,9 +249,11 @@ class checkUpSpinBoxEnt(tk.Tk):
             endMonth = monthCounter[(curMonth + endDate) % 12]
             endYear = (curMonth + endDate) // 12
             endYear+= curYear
-            input.append(endDate)
-            input.append(endMonth)
-            input.append(str(endYear))
+            temp = list()
+            temp.append(str(endDate))
+            temp.append(endMonth)
+            temp.append(str(endYear))
+            input.append(temp)
         else:
             input=None
         return input
