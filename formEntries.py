@@ -613,8 +613,8 @@ class medicMenuEnt(tk.Tk):
 
             else:
                 return None
-            groupValue[1] = groupValue[1][:-2]
-            values.append(groupValue)
+        groupValue[1] = groupValue[1][:-2]
+        values.append(groupValue)
         #self.checkSelf()
         #++++++++
         #++++++++
