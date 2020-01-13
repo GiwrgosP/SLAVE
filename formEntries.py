@@ -10,7 +10,9 @@ def buildNumber(num, formWindow):
         num = str(int(num))
     else:
         if num % 0.1 != 0:
-            num = num - (num % 0.1)
+            temp = Decimal(num)
+            temp = temp -(temp % Decimal(0.1))
+            num = float(temp)
         num = str(num)
         if formWindow.master.fileSelected[-1] == "greek":
             num = num.replace(".",",")
