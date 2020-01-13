@@ -76,7 +76,7 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
     def getMenuValues(self):
         spinBoxWeight = self.master.entries["weight"].getWidgetValues()
         spinBoxAge = self.master.entries["age"].getWidgetValues()
-        spinBoxAge.split(" ")
+        spinBoxAge = spinBoxAge.split(" ")
 
         if spinBoxWeight != 0.00 and spinBoxWeight != None and spinBoxAge[0] != "0" :
             spinBoxWeight = spinBoxWeight.replace(",",".")
@@ -88,7 +88,7 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
                 weight = "μεγαλόσωμο"
             else:
                 weight = "γιαγαντόσωμο"
-
+            print(spinBoxAge[1])
             if spinBoxAge[1] != "μηνών" and spinBoxAge[1] != "μηνός":
                 if int(spinBoxAge[0])<= 4:
                     age = "νεαρό"
