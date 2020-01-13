@@ -609,6 +609,9 @@ class medicMenuEnt(tk.Tk):
                 num = buildNumber(float(ent[1].get()),self.master)
                 groupValue.append(" (" + num + " " + ent[2].get()+ " " + ent[3].get() + "), ")
                 groupValue[1] = groupValue[1][:-2]
+
+            else:
+                return None
             values.append(groupValue)
         #self.checkSelf()
         #++++++++
@@ -617,7 +620,6 @@ class medicMenuEnt(tk.Tk):
         #++++++++
         #++++++++
         #++++++++
-
         return values
 
     def checkSelf(self):
