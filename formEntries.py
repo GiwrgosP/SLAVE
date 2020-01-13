@@ -692,6 +692,8 @@ class pdfReader(tk.Tk):
                         result[tag[1]] = temp
                         break
 
+
+
             input = {}
             for i in result:
                 if len(result[i])==2 and result[i][1] == "cm":
