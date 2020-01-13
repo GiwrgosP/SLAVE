@@ -4,6 +4,19 @@ from tkinter import filedialog
 import tika
 from tika import parser
 import re
+from decimal import *
+def buildNumber(num, formWindow):
+    if num % 1 == 0:
+        num = str(int(num))
+    else:
+        if num % 0.1 != 0:
+            num = num - (num % 0.1)
+        num = str(num)
+        if formWindow.master.fileSelected[-1] == "greek":
+            num = num.replace(".",",")
+
+    return num
+
 
 class dogWeightSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -36,14 +49,7 @@ class dogWeightSpinBoxEnt(tk.Tk):
 
     def getWidgetValues(self):
         input = float(self.widgetsInput[0].get())
-        if input % 1 == 0:
-            input = int(input)
-        if input == 0:
-            input = None
-        else:
-            input = str(input)
-            input = input.replace(".",",")
-        return input
+        return buildNumber(input,self.master)
 
 class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -69,6 +75,7 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
     def getMenuValues(self):
         spinBoxWeight = self.master.entries["weight"].getWidgetValues()
         spinBoxAge = self.master.entries["age"].getWidgetValues()
+        spinBoxAge.split(" ")
 
         if spinBoxWeight != 0.00 and spinBoxWeight != None and spinBoxAge[0] != "0" :
             spinBoxWeight = spinBoxWeight.replace(",",".")
@@ -81,7 +88,7 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
             else:
                 weight = "γιαγαντόσωμο"
 
-            if spinBoxAge[1] != " μηνών" and spinBoxAge[1] != " μηνός":
+            if spinBoxAge[1] != "μηνών" and spinBoxAge[1] != "μηνός":
                 if int(spinBoxAge[0])<= 4:
                     age = "νεαρό"
                 elif int(spinBoxAge[0]) <= 8:
@@ -115,7 +122,7 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        input = self.widgetsInput[0].get()
+        input = self.currentValue.get()
         if input == "":
             input == None
         else:
@@ -145,18 +152,18 @@ class bodyWeightSpinBoxEnt(tk.Tk):
         input = None
         num = float(self.widgetsInput[0].get())
         if num < 1.5:
-            input = "Καχεξία (BS: " + str(num) + "/5)"
+            input = "Καχεξία (BS: "
         elif num < 2.5:
-            input = "Αδύνατο (BS: " + str(num) + "/5)"
+            input = "Αδύνατο (BS: "
         elif num <= 4.0:
-            input = "Κανονικό σωματικό βάρος (BS: " + str(num) + "/5)"
+            input = "Κανονικό σωματικό βάρος (BS: "
         elif num <= 5:
-            input = "Παχύσαρκο (BS: " + str(num) + "/5)"
+            input = "Παχύσαρκο (BS: "
+
+        temp = buildNumber(num, self.master)
+        input += temp + "/5)"
 
         return input
-
-    def checkSelf(self):
-        pass
 
     def gridWidgets(self):
         column = 0
@@ -280,7 +287,7 @@ class flowButtonEnt(tk.Tk):
         self.widgetsInput .append(button)
 
         self.gridWidgets()
-        widgetFrame.grid()
+        widgetFrame.grid(column = 0, row = len(self.frames)-1)
 
     def buttonAction(self):
         self.state = not self.state
@@ -299,8 +306,8 @@ class flowButtonEnt(tk.Tk):
         return input
 
     def gridWidgets(self):
+        column = 0
         for ent in self.widgets:
-            column = 0
             ent.grid(column = column, row = 0)
             column += 1
 
@@ -360,7 +367,7 @@ class ecgMenuEnt(tk.Tk):
         self.widgetsInput.append(tempListWidgetsInput)
 
         self.gridWidgets()
-        widgetFrame.grid()
+        widgetFrame.grid(column = 0, row = len(self.frames)-1)
 
     def gridWidgets(self):
         for frame in self.widgets:
@@ -455,7 +462,7 @@ class dogAgeSpinBoxEnt(tk.Tk):
         timeAproximation = self.radioButtonValue.get()
 
         flagPlural = True
-        if age == 1:
+        if age <= 1:
             flagPlural = False
 
         if timeAproximation == 2:
@@ -466,10 +473,7 @@ class dogAgeSpinBoxEnt(tk.Tk):
             textTimeAproximation = " μηνών"
             if flagPlural == False:
                 textTimeAproximation = " μηνός"
-        l = list()
-        l.append(str(age))
-        l.append(textTimeAproximation)
-        return l
+        return str(age)+textTimeAproximation
 
 class medicMenuEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -600,13 +604,13 @@ class medicMenuEnt(tk.Tk):
         for ent in self.widgetsInput:
             groupValue = list()
             groupValue.append(ent[0].get())
-            #if ent[0].get() != "ουδεμία"
-            #if ent[0].get() != "δεν συστήνεται"
-            groupValue.append(" (" + ent[1].get() + " " + ent[2].get()+ " " + ent[3].get() + "), ")
+            if ent[0].get() != "ουδεμία" and ent[0].get() != "δεν συστήνεται":
+                num = buildNumber(float(ent[1].get()),self.master)
+                groupValue.append(" (" + num + " " + ent[2].get()+ " " + ent[3].get() + "), ")
+                groupValue[1] = groupValue[1][:-2]
             values.append(groupValue)
-
-        values[-1][1] = values[-1][1][:-2]
-        #self.checkSelf() #++++++++
+        #self.checkSelf()
+        #++++++++
         #++++++++
         #++++++++
         #++++++++
@@ -691,10 +695,11 @@ class pdfReader(tk.Tk):
             input = {}
             for i in result:
                 if len(result[i])==2 and result[i][1] == "cm":
-                    temp = float(result[i][0])*10
-                    input[i] = str(round(temp,1))
+                    temp = float(Decimal(result[i][0]) * Decimal(10))
                 else:
-                    input[i] = result[i][0]
+                    temp = float(result[i][0])
+
+                input[i] = buildNumber(temp,self.master)
 
         return input
 
@@ -781,14 +786,7 @@ class spinBoxEnt(tk.Tk):
 
     def getWidgetValues(self):
         input = float(self.widgetsInput[0].get())
-        if input % 1 == 0:
-            input = int(input)
-        if input == 0:
-            input = None
-        else:
-            input = str(input)
-            input = input.replace(".",",")
-        return input
+        return buildNumber(input,self.master)
 
 class entryEnt(tk.Tk):
     def __init__(self, master, ent):

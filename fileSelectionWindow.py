@@ -7,7 +7,6 @@ import os
 class fileSelectionWindow(tk.Tk):
     def __init__(self,master):
         self.master = master
-
         self.entryEntities = db.getFirstFields(self.master.path)
 
         self.leftFrameButtons = {}

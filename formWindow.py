@@ -11,13 +11,9 @@ class formWindow(tk.Tk):
     def __init__(self,master):
         self.master = master
         self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0]) + db.getEntryFields(self.master.path,"all")
-        self.entryEntities = sorted(self.entryEntities,key = lambda x: x[0])
-
+        self.entryEntities = sorted(self.entryEntities,key = lambda x: x[5])
         self.entries = {}
-
         self.createInputFrame()
-
-
 
     def createInputFrame(self):
 
