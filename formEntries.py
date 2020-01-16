@@ -141,7 +141,7 @@ class dogWeightSpinBoxEnt(tk.Tk):
     def getWidgetValues(self):
         input = float(self.widgets[1].get())
         if input == 0.0:
-            return none
+            return None
         return buildNumber(input,self.master)
 
 class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
