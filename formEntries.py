@@ -47,27 +47,27 @@ class auditoryFindingsMenuEnt(tk.Tk):
         widgetLabel = tk.Label(self.mainWidgetFrame, text = self.text )
         self.widgets.append(widgetLabel)
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
         systolicMenuWidget = tk.Menubutton(self.mainWidgetFrame, text = "systolic")
         self.widgets.append(systolicMenuWidget)
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
         degreeMenuWidget = tk.Menubutton(self.mainWidgetFrame, text = "degree")
         self.widgets.append(degreeMenuWidget)
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
         ausculationMenuWidget = tk.Menubutton(self.mainWidgetFrame, text = "ausculation")
         self.widgets.append(ausculationMenuWidget)
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
         auditoryMenuWidget = tk.Menubutton(self.mainWidgetFrame, text = "auditory")
         self.widgets.append(auditoryMenuWidget)
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
         heartMenuWidget = tk.Menubutton(self.mainWidgetFrame, text = "heart")
         self.widgets.append(heartMenuWidget)
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
         valveMenuWidget = tk.Menubutton(self.mainWidgetFrame, text = "valve")
         self.widgets.append(valveMenuWidget)
 
@@ -107,23 +107,30 @@ class dogWeightSpinBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.value = tk.DoubleVar()
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
-        self.widgetsInput = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
         self.widgets.append(spinBoxLabel)
 
-        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f",command = lambda: self.giveValues())
+        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f", command = lambda: self.giveValues())
         self.widgets.append(spinBoxWidget)
-        self.widgetsInput.append(spinBoxWidget)
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
 
     def giveValues(self):
-        self.master.entries["cardiologicalAnalysis"].getMenuValues()
+        val = float(self.widgets[1].get())
+
+        if val == 0.0:
+            pass
+        elif val <= 15.00:
+            self.master.entries["cardiologicalAnalysis"].weightAgeValues["weight"].set("μικρόσωμο")
+        elif val <= 55.00:
+            self.master.entries["cardiologicalAnalysis"].weightAgeValues["weight"].set("μεγαλόσωμο")
+        else:
+            self.master.entries["cardiologicalAnalysis"].weightAgeValues["weight"].set("γιαγαντόσωμο")
+        self.master.entries["cardiologicalAnalysis"].applyValues()
 
     def gridWidgets(self):
         column = 0
@@ -132,7 +139,9 @@ class dogWeightSpinBoxEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        input = float(self.widgetsInput[0].get())
+        input = float(self.widgets[1].get())
+        if input == 0.0:
+            return none
         return buildNumber(input,self.master)
 
 class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
@@ -143,60 +152,24 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
-        self.widgetsInput = list()
-        self.currentValue =  tk.StringVar("")
+        self.weightAgeValues = {"weight" : tk.StringVar(value = "+++"), "age" : tk.StringVar(value = "+++"), "currentValue" : tk.StringVar(value = "")}
 
         menuWidget =  tk.Menubutton(self.mainWidgetFrame, text = self.text)
         self.widgets.append(menuWidget)
 
-        menuEntry = tk.Entry(self.mainWidgetFrame, text = self.currentValue)
-        self.widgets.append(menuEntry)
-        self.widgetsInput.append(menuEntry)
-
+        self.applyValues()
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
 
-    def getMenuValues(self):
-        spinBoxWeight = self.master.entries["weight"].getWidgetValues()
-        spinBoxAge = self.master.entries["age"].getWidgetValues()
-        spinBoxAge = spinBoxAge.split(" ")
-
-        if spinBoxWeight != 0.00 and spinBoxWeight != None and spinBoxAge[0] != "0" :
-            spinBoxWeight = spinBoxWeight.replace(",",".")
-
-
-            if float(spinBoxWeight)<= 15.00:
-                weight = "μικρόσωμο"
-            elif float(spinBoxWeight) <= 55.00:
-                weight = "μεγαλόσωμο"
-            else:
-                weight = "γιαγαντόσωμο"
-            if spinBoxAge[1] != "μηνών" and spinBoxAge[1] != "μηνός":
-                if int(spinBoxAge[0])<= 4:
-                    age = "νεαρό"
-                elif int(spinBoxAge[0]) <= 8:
-                    age = "ενήλικο"
-                else:
-                    age = "υπερήλικο"
-            else:
-                age = "νεαρό"
-
-            self.values = (("Καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο με υποψία καρδιακής νόσου.",),\
-                                                ("Προεγχειρητικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προληπτικός καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",),\
-                                                ("Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+weight+" "+age+" σκύλο.",))
-            self.applyValues()
-        else:
-            pass
-
     def applyValues(self):
+        self.values = ("Καρδιολογικός έλεγχος σε "+self.weightAgeValues["weight"].get()+" "+self.weightAgeValues["age"].get()+" σκύλο με υποψία καρδιακής νόσου.",\
+                    "Προεγχειρητικός καρδιολογικός έλεγχος σε "+self.weightAgeValues["weight"].get()+" "+self.weightAgeValues["age"].get()+" σκύλο.",\
+                    "Προληπτικός καρδιολογικός έλεγχος σε "+self.weightAgeValues["weight"].get()+" "+self.weightAgeValues["age"].get()+" σκύλο.",\
+                    "Προεγχειρητικός και προληπτικός  καρδιολογικός έλεγχος σε "+self.weightAgeValues["weight"].get()+" "+self.weightAgeValues["age"].get()+" σκύλο.")
         self.widgets[0].menu =   tk.Menu(self.widgets[0])
         self.widgets[0]["menu"] = self.widgets[0].menu
         for val in self.values:
-            self.widgets[0].menu.add_radiobutton(label = val[0], value = val[0],variable = self.currentValue)
-
-    def checkSelf(self):
-        pass
+            self.widgets[0].menu.add_radiobutton(label = val, value = val,variable = self.weightAgeValues["currentValue"])
 
     def gridWidgets(self):
         column = 0
@@ -205,11 +178,9 @@ class dogCardiologicalAnalysisListBoxEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        input = self.currentValue.get()
+        input = self.weightAgeValues["currentValue"].get()
         if input == "":
-            input == None
-        else:
-            self.checkSelf()
+            return None
         return input
 
 class bodyWeightSpinBoxEnt(tk.Tk):
@@ -349,10 +320,10 @@ class flowButtonEnt(tk.Tk):
         self.name = ent[2]
         self.state = False
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
-        self.buttonValue = tk.StringVar("")
+        self.buttonValue = tk.StringVar(value = "")
         self.widgets = list()
 
-        button = tk.Button(widgetFrame, text = self.text, command = self.buttonAction)
+        button = tk.Button(self.mainWidgetFrame, text = self.text, command = self.buttonAction)
         self.widgets.append(button)
 
         self.gridWidgets()
@@ -486,26 +457,22 @@ class dogAgeSpinBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.radioButtonValue = tk.IntVar()
+        self.value = tk.IntVar()
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
-        self.widgetsInput = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
         self.widgets.append(spinBoxLabel)
 
-        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=1 ,command = lambda: self.giveValues())
+        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=1, command = lambda: self.giveValues())
         self.widgets.append(spinBoxWidget)
-        self.widgetsInput.append(spinBoxWidget)
 
-        radioButton1 = tk.Radiobutton(self.mainWidgetFrame, variable = self.radioButtonValue, text="Μηνών", value=1)
+        radioButton1 = tk.Radiobutton(self.mainWidgetFrame, variable = self.value, text="Μηνών", value=1)
         self.widgets.append(radioButton1)
-        self.widgetsInput.append(radioButton1)
 
-        radioButton2 = tk.Radiobutton(self.mainWidgetFrame ,variable = self.radioButtonValue, text="Ετών", value=2)
+        radioButton2 = tk.Radiobutton(self.mainWidgetFrame ,variable = self.value, text="Ετών", value=2)
         radioButton2.select()
         self.widgets.append(radioButton2)
-        self.widgetsInput.append(radioButton2)
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
@@ -515,7 +482,25 @@ class dogAgeSpinBoxEnt(tk.Tk):
         pass
 
     def giveValues(self):
-        self.master.entries["cardiologicalAnalysis"].getMenuValues()
+        num = int(self.widgets[1].get())
+        approx = self.value.get()
+
+        if  num == 0:
+            pass
+        else:
+            if approx == 1:
+                self.master.entries["cardiologicalAnalysis"].weightAgeValues["age"].set("νεαρό")
+            else:
+                if num<= 4:
+                    self.master.entries["cardiologicalAnalysis"].weightAgeValues["age"].set("νεαρό")
+                elif num <= 8:
+                    self.master.entries["cardiologicalAnalysis"].weightAgeValues["age"].set("ενήλικο")
+                else:
+                    self.master.entries["cardiologicalAnalysis"].weightAgeValues["age"].set("υπερήλικο")
+
+            self.master.entries["cardiologicalAnalysis"].applyValues()
+
+
 
     def gridWidgets(self):
         column = 0
