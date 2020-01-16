@@ -10,13 +10,15 @@ class formWindow(tk.Tk):
 
     def __init__(self,master):
         self.master = master
-        self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0]) + db.getEntryFields(self.master.path,"all")
-        self.entryEntities = sorted(self.entryEntities,key = lambda x: x[5])
         self.entries = {}
         self.createInputFrame()
 
-    def createInputFrame(self):
+    def __del__(self):
+        pass
 
+    def createInputFrame(self):
+        self.entryEntities = db.getEntryFields(self.master.path,self.master.fileSelected[0]) + db.getEntryFields(self.master.path,"all")
+        self.entryEntities = sorted(self.entryEntities,key = lambda x: x[5])
         self.canvas = tk.Canvas(self.master.window)
 
         self.inputFrame = tk.Frame(self.canvas)
@@ -48,16 +50,19 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.dogWeightSpinBoxEnt(self,ent)
             elif ent[3] == "pdfReader":
                 self.entries[ent[2]] = formEntries.pdfReader(self,ent)
+            elif ent[3] == "auditoryFindingsMenuEnt":
+                self.entries[ent[2]] = formEntries.auditoryFindingsMenuEnt(self,ent)
             else:
                 print("Error with widget")
 
+        self.inputFrame.pack()
         self.createScrollbar()
         self.createButtonFrame()
 
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)
 
-        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1])
+        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1] + " " + self.master.fileSelected[-1])
         self.fileSelectedLabel.pack(side = tk.TOP)
 
         self.enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
@@ -111,12 +116,14 @@ class formWindow(tk.Tk):
     def clearWidgets(self):
         self.canvas.destroy()
         self.buttonFrame.destroy()
+
         self.createInputFrame()
 
     def goBack(self):
         self.master.fileSelected = None
         self.master.window.destroy()
         self.master.createWindow()
+        del self
 
     def enterdata(self):
         filePath = self.master.path+"\\Protipa\\" + "DMVD-1-report.docx"
@@ -126,7 +133,7 @@ class formWindow(tk.Tk):
         for ent in self.entries:
             input = self.entries[ent].getWidgetValues()
 
-            if input == "" or input == "0.0" or input == [['', ' (0.0  )']] or input == None : # or ' (0.0 mg/kg po )'
+            if input == "" or input == "0.0" or input == [['', ' (0  )']] or input == None : # or ' (0.0 mg/kg po )'
                 pass
             else:
                 context[ent] = input
