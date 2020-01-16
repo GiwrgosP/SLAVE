@@ -451,7 +451,6 @@ class ecgMenuEnt(tk.Tk):
             if flagFound == False:
                 db.createFieldValue(self.master.master.path,self.menuValue[i].get(),self.field)
 
-# to giveValues na dinei sugkekrimenes times ston kardiologiko
 class dogAgeSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
@@ -509,7 +508,7 @@ class dogAgeSpinBoxEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        age = int(self.widgetsInput[0].get())
+        age = int(self.widgets[1].get())
         timeAproximation = self.radioButtonValue.get()
 
         flagPlural = True
@@ -625,7 +624,7 @@ class medicMenuEnt(tk.Tk):
         self.widgetsInput.append(tempListWidgetsInput)
 
         self.gridWidgets()
-        widgetFrame.grid(column = 0, row = 0)
+        widgetFrame.grid(column = 0, row = len(self.widgets)-1)
 
     #pass
     def applyValues():
