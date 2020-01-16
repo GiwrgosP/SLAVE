@@ -509,7 +509,7 @@ class dogAgeSpinBoxEnt(tk.Tk):
 
     def getWidgetValues(self):
         age = int(self.widgets[1].get())
-        timeAproximation = self.radioButtonValue.get()
+        timeAproximation = self.value.get()
 
         flagPlural = True
         if age == 0:
