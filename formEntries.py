@@ -623,7 +623,7 @@ class medicMenuEnt(tk.Tk):
         menuWidget.menu = tk.Menu(menuWidget)
         menuWidget["menu"] = menuWidget.menu
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
 
         for val in values:
             menuWidget.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[-1])
@@ -639,7 +639,7 @@ class medicMenuEnt(tk.Tk):
         menuWidget3.menu = tk.Menu(menuWidget3)
         menuWidget3["menu"] = menuWidget3.menu
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
 
         for val in values:
             menuWidget3.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[-1])
@@ -653,7 +653,7 @@ class medicMenuEnt(tk.Tk):
         menuWidget2.menu = tk.Menu(menuWidget2)
         menuWidget2["menu"] = menuWidget2.menu
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar( value = ""))
 
         for val in values:
             menuWidget2.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[-1])
