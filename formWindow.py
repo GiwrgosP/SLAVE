@@ -44,14 +44,16 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.nameAitEntryEnt(self,ent)
             elif ent[3] == "bodyWeightSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.bodyWeightSpinBoxEnt(self,ent)
-            elif ent[3] == "dogCardiologicalAnalysisListBoxEnt":
-                self.entries[ent[2]] = formEntries.dogCardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "dogDMVD1CardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,ent)
             elif ent[3] == "dogWeightSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.dogWeightSpinBoxEnt(self,ent)
             elif ent[3] == "pdfReader":
                 self.entries[ent[2]] = formEntries.pdfReader(self,ent)
             elif ent[3] == "auditoryFindingsMenuEnt":
                 self.entries[ent[2]] = formEntries.auditoryFindingsMenuEnt(self,ent)
+            elif ent[3] == "dogDMVD1RECardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,ent)
             else:
                 print("Error with widget")
 
