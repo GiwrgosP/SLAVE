@@ -2,7 +2,7 @@ import tkinter as tk
 import db as db
 from tkinter import messagebox
 from docxtpl import DocxTemplate
-
+from tkinter import filedialog
 import formEntries
 
 
@@ -143,7 +143,8 @@ class formWindow(tk.Tk):
         print(context)
         doc.render(context)
 
-        filePath = self.master.path + "\\Protipa\\" + "generated_doc.docx"
+        filePath = filedialog.asksaveasfilename(title = "Select file",filetypes = [("docx files","*.docx")])
+        filePath += ".docx"
         doc.save(filePath)
         answer = messagebox.askyesno('Make slave keep working on this form','Whip slave and make him go back to work?')
         if answer:
