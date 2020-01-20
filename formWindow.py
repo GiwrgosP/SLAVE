@@ -142,12 +142,16 @@ class formWindow(tk.Tk):
 
         print(context)
         doc.render(context)
-
+        filePath = ""
         filePath = filedialog.asksaveasfilename(title = "Select file",filetypes = [("docx files","*.docx")])
-        filePath += ".docx"
-        doc.save(filePath)
-        answer = messagebox.askyesno('Make slave keep working on this form','Whip slave and make him go back to work?')
-        if answer:
-            self.clearWidgets()
+        print(filePath)
+        if filePath == "":
+            pass
         else:
-            self.goBack()
+            filePath += ".docx"
+            doc.save(filePath)
+            answer = messagebox.askyesno('Make slave keep working on this form','Whip slave and make him go back to work?')
+            if answer:
+                self.clearWidgets()
+            else:
+                self.goBack()

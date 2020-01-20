@@ -76,6 +76,7 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
+        self.value = [("1ου (1/5)","2ου (2/5)","3ου (3/5)","4ου (4/5)","5ου (5/5)"),db.getFieldValues(57,self.master.master.path)]
         self.values = {"weight" : tk.StringVar(value = "+++"),\
         "age" : tk.StringVar(value = "+++"),\
         "time" : tk.StringVar(value = "+++"),\
@@ -88,24 +89,29 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, text = "Αρ. επισκεψης",from_ = 2, to = 1000, increment=1, command = lambda: self.values["time"].set(str(self.widgets[1].get())) )
         self.widgets.append(spinBoxWidget)
 
-        menuWidget =  tk.Menubutton(self.mainWidgetFrame, text = self.text)
-        self.widgets.append(menuWidget)
+        menuYg =  tk.Menubutton(self.mainWidgetFrame, text = "Υ/Γ")
+        self.widgets.append(menuYg)
+        self.applyValues(2)
 
-        self.applyValues()
+        menuClinicalState = tk.Menubutton(self.mainWidgetFrame, text = "Κλινικό στάδιο")
+        self.widgets.append(menuClinicalState)
+        self.applyValues(3)
+
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
 
     def refreshVar(self):
         self.values["weight"].set(self.master.entries["weight"].giveValues())
         self.values["age"].set(self.master.entries["age"].giveValues())
-        self.values["clinicalstage"].set(self.master.entries["clinicalstage"].getWidgetValues())
 
-    def applyValues(self):
-        self.value = ("1ου", "2ου ", "3ου ","4ου ","5ου ")
-        self.widgets[2].menu =   tk.Menu(self.widgets[2])
-        self.widgets[2]["menu"] = self.widgets[2].menu
-        for val in self.value:
-            self.widgets[2].menu.add_radiobutton(label = val, value = val,variable = self.values["yG"])
+    def applyValues(self,pos):
+        self.widgets[pos].menu =   tk.Menu(self.widgets[pos])
+        self.widgets[pos]["menu"] = self.widgets[pos].menu
+        for val in self.value[pos-2]:
+            if pos == 2:
+                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["yG"])
+            else:
+                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["clinicalstage"])
 
     def gridWidgets(self):
         column = 0
@@ -769,7 +775,6 @@ class pdfReader(tk.Tk):
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
-
 
     def buttonAction(self):
         fileName = filedialog.askopenfilename(filetypes = (("pdf files","*.pdf"),))
