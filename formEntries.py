@@ -776,7 +776,6 @@ class pdfReader(tk.Tk):
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
 
-
     def buttonAction(self):
         fileName = filedialog.askopenfilename(filetypes = (("pdf files","*.pdf"),))
         self.currentValue.set(fileName)
