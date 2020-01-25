@@ -54,6 +54,16 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.auditoryFindingsMenuEnt(self,ent)
             elif ent[3] == "dogDMVD1RECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "dogDCMRECardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.dogDCMRECardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "dogPERECardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.dogPERECardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "catHCMRECardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.catHCMRECardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "catHOCMREardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.catHOCMREardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "dogPHRECardiologicalAnalysisListBoxEnt":
+                self.entries[ent[2]] = formEntries.dogPHRECardiologicalAnalysisListBoxEnt(self,ent)
             else:
                 print("Error with widget")
 
@@ -64,7 +74,7 @@ class formWindow(tk.Tk):
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)
 
-        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1] + " " + self.master.fileSelected[-1])
+        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1] + " " + self.master.fileSelected[-2])
         self.fileSelectedLabel.pack(side = tk.TOP)
 
         self.enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
