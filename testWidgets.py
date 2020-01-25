@@ -1,130 +1,102 @@
-class medicMenuEnt(tk.Tk):
-    def __init__(self, master, ent):
+import tkinter as tk
+import db as db
+
+class dogPERECardiologicalAnalysisListBoxEnt(tk.Tk):
+    def __init__(self, master, ent,inputFrame):
         self.master = master
         self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
-        self.frames = list()
-        self.menuValue = list()
+        self.mainWidgetFrame = tk.Frame(inputFrame)
         self.widgets = list()
-        self.widgetsInput = list()
+        self.value = [db.getFieldValues(183,self.master.master.path),\
+        db.getFieldValues(184,self.master.master.path),\
+        db.getFieldValues(185,self.master.master.path),\
+        db.getFieldValues(186,self.master.master.path)]
+        self.values = {"weight" : tk.StringVar(value = "+++"),\
+        "age" : tk.StringVar(value = "+++"),\
+        "time" : tk.StringVar(value = "+++"),\
+        "dcm" : tk.StringVar(value = "+++"),\
+        "cardFail" : tk.StringVar(value = "+++"),\
+        "effusion" : tk.StringVar(value = "+++")}
 
-        self.createWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+        widgetLabel = tk.Label(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(widgetLabel)
 
-    def createWidgets(self):
-        widgetFrame = tk.Frame(self.mainWidgetFrame)
-        self.frames.append(widgetFrame)
+        menuTime =  tk.Menubutton(self.mainWidgetFrame, text = "Αρ.επισκεψης")
+        self.widgets.append(menuTime)
+        self.applyValues(0)
 
-        addButton = tk.Button(widgetFrame, text = "+", command = self.createWidgets)
-        destroyButton = tk.Button(widgetFrame, text = "-", command = lambda x = widgetFrame: self.destroyButtonAction(x))
+        entryTime = tk.Entry(self.mainWidgetFrame, variable = self.values["time"])
+        self.widgets.append(entryTime)
 
-        values = db.getFieldValues(self.field,self.master.master.path)
+        menuDcm =  tk.Menubutton(self.mainWidgetFrame, text = "dcm")
+        self.widgets.append(menuDcm)
+        self.applyValues(1)
 
-        menuWidget = tk.Menubutton(widgetFrame, text = self.text)
-        menuWidget.menu = tk.Menu(menuWidget)
-        menuWidget["menu"] = menuWidget.menu
+        entryDmc = tk.Entry(self.mainWidgetFrame, variable = self.values["dmc"])
+        self.widgets.append(entryDmc)
 
-        temp = len(self.menuValue)
-        self.menuValue.append(tk.StringVar())
+        menuCardFail =  tk.Menubutton(self.mainWidgetFrame, text = "cardFail")
+        self.widgets.append(menuCardFail)
+        self.applyValues(2)
 
-        for val in values:
-            menuWidget.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[temp])
+        entryCardFail = tk.Entry(self.mainWidgetFrame, variable = self.values["cardFail"])
+        self.widgets.append(entryCardFail)
 
-        menuEntry = tk.Entry(widgetFrame, text = self.menuValue[temp])
+        menuEffusion =  tk.Menubutton(self.mainWidgetFrame, text = "effusion")
+        self.widgets.append(menuEffusion)
+        self.applyValues(3)
 
-        spinBoxWidget = tk.Spinbox(widgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f")
-
-        values3 = db.getFieldValues(25,self.master.master.path)
-
-        menuWidget3 = tk.Menubutton(widgetFrame, text = "Μονάδα μέτρησης")
-        menuWidget3.menu = tk.Menu(menuWidget3)
-        menuWidget3["menu"] = menuWidget3.menu
-
-        temp = len(self.menuValue)
-        self.menuValue.append(tk.StringVar())
-
-        for val in values3:
-            menuWidget3.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[temp])
-
-        menuEntry3 = tk.Entry(widgetFrame, text = self.menuValue[temp])
-
-        values2 = db.getFieldValues(26,self.master.master.path)
-
-        menuWidget2 = tk.Menubutton(widgetFrame, text = "Δοσολογία")
-        menuWidget2.menu = tk.Menu(menuWidget2)
-        menuWidget2["menu"] = menuWidget2.menu
-
-        temp = len(self.menuValue)
-        self.menuValue.append(tk.StringVar())
-
-        for val in values2:
-            menuWidget2.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[temp])
-
-        menuEntry2 = tk.Entry(widgetFrame, text = self.menuValue[temp])
-
-        tempListWidgets = list()
-        tempListWidgetsInput = list()
-
-        tempListWidgets.append(addButton)
-        tempListWidgets.append(destroyButton)
-
-        tempListWidgets.append(menuWidget)
-
-        tempListWidgets.append(menuEntry)
-        tempListWidgetsInput.append(menuEntry)
-
-        tempListWidgets.append(spinBoxWidget)
-        tempListWidgetsInput.append(spinBoxWidget)
-
-        tempListWidgets.append(menuWidget3)
-
-        tempListWidgets.append(menuEntry3)
-        tempListWidgetsInput.append(menuEntry3)
-
-        tempListWidgets.append(menuWidget2)
-
-        tempListWidgets.append(menuEntry2)
-        tempListWidgetsInput.append(menuEntry2)
-
-        self.widgets.append(tempListWidgets)
-        self.widgetsInput.append(tempListWidgetsInput)
+        entryEffusion = tk.Entry(self.mainWidgetFrame, variable = self.values["effusion"])
+        self.widgets.append(entryEffusion)
 
         self.gridWidgets()
-        widgetFrame.grid()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def checkSelf(self):
+        pass
+
+
+    def refreshVar(self):
+        self.values["weight"].set(self.master.entries["weight"].giveValues())
+        self.values["age"].set(self.master.entries["age"].giveValues())
+
+    def applyValues(self,pos):
+        self.widgets[pos].menu = tk.Menu(self.widgets[pos])
+        self.widgets[pos]["menu"] = self.widgets[pos].menu
+        for val in self.value[pos]:
+            if pos == 0:
+                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["time"])
+            elif pos == 2:
+                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["dcm"])
+            elif pos == 3:
+                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["cardFail"])
+            else:
+                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["effusion"])
 
     def gridWidgets(self):
-        for frame in self.widgets:
-            column = 0
-            for ent in frame:
-                ent.grid(column = column, row = 0)
-                column += 1
-
-    def destroyButtonAction(self,frameForDel):
-        if len(self.frames) == 1:
-            print("no more frames available for delete")
-        else:
-            counter = 0
-            for frame in self.frames:
-                if frame == frameForDel:
-                    break
-                else:
-                    counter += 1
-
-            self.frames[counter].destroy()
-            del self.frames[counter]
-            del self.menuValue[counter]
-            del self.widgets[counter]
-            del self.widgetsInput[counter]
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
 
     def getWidgetValues(self):
-        values = list()
-        for ent in self.widgetsInput:
-            groupValue = list()
-            groupValue.append(ent[0].get())
-            groupValue.append(" (" + ent[1].get() + " " + ent[2].get()+ " " + ent[3].get() + "), ")
-            values.append(groupValue)
+        self.refreshVar()
+        for val in self.values:
+            if self.values[val].get() == "+++" or self.values[val].get() == None :
+                return None
+        return self.values["time"].get()  +" καρδιολογικός έλεγχος σε " + \
+        self.values["weight"].get() + " " + self.values["age"].get() + \
+        " σκύλο "+self.values["dmc"].get() + \
+        self.values["cardFail"].get() + " " + self.values["effusion"].get() + "."
 
-        values[-1][1] = values[-1][1][:-2]
-        return values
+
+def main():
+    window = tk.Tk()
+    window.title("Sophi's Loyal Assistant Veterinarian Edition")
+    window.geometry("1024x512")
+    inputFrame = tk.Frame(window)
+    widget = dogPERECardiologicalAnalysisListBoxEnt(window,("a","a","a"),inputFrame)
+
+main()
