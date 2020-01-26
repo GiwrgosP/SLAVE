@@ -17,6 +17,185 @@ def buildNumber(num, formWindow):
             num = num.replace(".",",")
     return num
 
+class dogSASRECardiologicalAnalysisListBoxEnt(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.value = [db.getFieldValues(183,self.master.master.path),\
+        db.getFieldValues(196,self.master.master.path)]
+        self.values = {"time" : tk.StringVar(value = "+++"),\
+        "sas" : tk.StringVar(value = "+++"),\
+        "weight" : tk.StringVar(value = "+++"),\
+        "age" : tk.StringVar(value = "+++")}
+
+        widgetLabel = tk.Label(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(widgetLabel)
+
+        menuTime =  tk.Menubutton(self.mainWidgetFrame, text = "Αρ.επισκεψης")
+        self.widgets.append(menuTime)
+        self.applyValues(1)
+
+        entryTime = tk.Entry(self.mainWidgetFrame, textvariable = self.values["time"])
+        self.widgets.append(entryTime)
+
+        menuSas =  tk.Menubutton(self.mainWidgetFrame, text = "sas")
+        self.widgets.append(menuSas)
+        self.applyValues(3)
+
+        entrySas = tk.Entry(self.mainWidgetFrame, textvariable = self.values["sas"])
+        self.widgets.append(entrySas)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def checkSelf(self):
+        for i in range(len(self.value)):
+            flagFound = False
+            if i == 0:
+                tag = "time"
+            elif i == 1:
+                tag = "sas"
+            else:
+                break
+            for j in range(len(self.value[i])):
+                if self.value[i][j][0] == self.values[tag].get() or self.values[tag].get() == "+++" :
+                    flagFound = True
+                    j = len(self.value[i])-1
+
+            if flagFound == False:
+                if tag == "time":
+                    field = 183
+                else:
+                    field = 196
+                db.createFieldValue(self.master.master.path,self.values[tag].get(),field)
+
+    def refreshVar(self):
+        self.values["weight"].set(self.master.entries["weight"].giveValues())
+        self.values["age"].set(self.master.entries["age"].giveValues())
+
+    def applyValues(self,pos):
+        self.widgets[pos].menu = tk.Menu(self.widgets[pos])
+        self.widgets[pos]["menu"] = self.widgets[pos].menu
+
+        if pos == 1:
+            tag = "time"
+            pos2 = 0
+        elif pos == 3:
+            tag = "sas"
+            pos2 = 1
+
+        for val in self.value[pos2]:
+            self.widgets[pos].menu.add_radiobutton(label = val[0], value = val[0],variable = self.values[tag])
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        self.refreshVar()
+        for val in self.values:
+            if self.values[val].get() == "+++" or self.values[val].get() == None :
+                return None
+        self.checkSelf()
+        return self.values["time"].get()  +" καρδιολογικός έλεγχος σε " + \
+        self.values["weight"].get() + " " + self.values["age"].get() + \
+        " σκύλο " + self.values["sas"].get() + "."
+
+
+class dogPSRECardiologicalAnalysisListBoxEnt(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.value = [db.getFieldValues(183,self.master.master.path),\
+        db.getFieldValues(194,self.master.master.path)]
+        self.values = {"time" : tk.StringVar(value = "+++"),\
+        "ps" : tk.StringVar(value = "+++"),\
+        "weight" : tk.StringVar(value = "+++"),\
+        "age" : tk.StringVar(value = "+++")}
+
+        widgetLabel = tk.Label(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(widgetLabel)
+
+        menuTime =  tk.Menubutton(self.mainWidgetFrame, text = "Αρ.επισκεψης")
+        self.widgets.append(menuTime)
+        self.applyValues(1)
+
+        entryTime = tk.Entry(self.mainWidgetFrame, textvariable = self.values["time"])
+        self.widgets.append(entryTime)
+
+        menuPs =  tk.Menubutton(self.mainWidgetFrame, text = "ps")
+        self.widgets.append(menuPs)
+        self.applyValues(3)
+
+        entryPs = tk.Entry(self.mainWidgetFrame, textvariable = self.values["ps"])
+        self.widgets.append(entryPs)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def checkSelf(self):
+        for i in range(len(self.value)):
+            flagFound = False
+            if i == 0:
+                tag = "time"
+            elif i == 1:
+                tag = "ps"
+            else:
+                break
+            for j in range(len(self.value[i])):
+                if self.value[i][j][0] == self.values[tag].get() or self.values[tag].get() == "+++" :
+                    flagFound = True
+                    j = len(self.value[i])-1
+
+            if flagFound == False:
+                if tag == "time":
+                    field = 183
+                else:
+                    field = 194
+                db.createFieldValue(self.master.master.path,self.values[tag].get(),field)
+
+    def refreshVar(self):
+        self.values["weight"].set(self.master.entries["weight"].giveValues())
+        self.values["age"].set(self.master.entries["age"].giveValues())
+
+    def applyValues(self,pos):
+        self.widgets[pos].menu = tk.Menu(self.widgets[pos])
+        self.widgets[pos]["menu"] = self.widgets[pos].menu
+
+        if pos == 1:
+            tag = "time"
+            pos2 = 0
+        elif pos == 3:
+            tag = "ps"
+            pos2 = 1
+
+        for val in self.value[pos2]:
+            self.widgets[pos].menu.add_radiobutton(label = val[0], value = val[0],variable = self.values[tag])
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        self.refreshVar()
+        for val in self.values:
+            if self.values[val].get() == "+++" or self.values[val].get() == None :
+                return None
+        self.checkSelf()
+        return self.values["time"].get()  +" καρδιολογικός έλεγχος σε " + \
+        self.values["weight"].get() + " " + self.values["age"].get() + \
+        " σκύλο " + self.values["ps"].get() + "."
+
 class dogPHRECardiologicalAnalysisListBoxEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
