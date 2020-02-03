@@ -32,8 +32,8 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.entryEnt(self,ent)
             elif ent[3] == "mediMenu":
                 self.entries[ent[2]] = formEntries.medicMenuEnt(self,ent)
-            elif ent[3] == "dogAgeSpinBoxEnt":
-                self.entries[ent[2]] = formEntries.dogAgeSpinBoxEnt(self,ent)
+            elif ent[3] == "ageSpinBoxEnt":
+                self.entries[ent[2]] = formEntries.ageSpinBoxEnt(self,ent)
             elif ent[3] == "ecgMenuEnt":
                 self.entries[ent[2]] = formEntries.ecgMenuEnt(self,ent)
             elif ent[3] == "flowButtonEnt":
@@ -46,8 +46,8 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.bodyWeightSpinBoxEnt(self,ent)
             elif ent[3] == "dogDMVD1CardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "dogWeightSpinBoxEnt":
-                self.entries[ent[2]] = formEntries.dogWeightSpinBoxEnt(self,ent)
+            elif ent[3] == "weightSpinBoxEnt":
+                self.entries[ent[2]] = formEntries.weightSpinBoxEnt(self,ent)
             elif ent[3] == "pdfReader":
                 self.entries[ent[2]] = formEntries.pdfReader(self,ent)
             elif ent[3] == "auditoryFindingsMenuEnt":
@@ -78,7 +78,7 @@ class formWindow(tk.Tk):
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)
 
-        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1] + " " + self.master.fileSelected[-2])
+        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1] + " " + self.master.fileSelected[-2] + self.master.fileSelected[-1])
         self.fileSelectedLabel.pack(side = tk.TOP)
 
         self.enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
