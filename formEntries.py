@@ -106,7 +106,6 @@ class dogSASRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.values["weight"].get() + " " + self.values["age"].get() + \
         " σκύλο " + self.values["sas"].get() + "."
 
-
 class dogPSRECardiologicalAnalysisListBoxEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
@@ -757,7 +756,9 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
-        self.value = [db.getFieldValues(183,self.master.master.path),db.getFieldValues(57,self.master.master.path)]
+        self.value = [db.getFieldValues(183,self.master.master.path),\
+        db.getFieldValues(197,self.master.master.path),\
+        db.getFieldValues(57,self.master.master.path)]
         self.values = {"weight" : tk.StringVar(value = "+++"),\
         "age" : tk.StringVar(value = "+++"),\
         "time" : tk.StringVar(value = "+++"),\
@@ -767,16 +768,17 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         widgetLabel = tk.Label(self.mainWidgetFrame, text = self.text)
         self.widgets.append(widgetLabel)
 
-        spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, text = "Αρ. επισκεψης",from_ = 2, to = 1000, increment=1, command = lambda: self.values["time"].set(str(self.widgets[1].get())) )
-        self.widgets.append(spinBoxWidget)
+        menuTime = tk.Menubutton(self.mainWidgetFrame, text = "Αρ. επισκεψης" )
+        self.widgets.append(menuTime)
+        self.applyValues(1)
 
         menuYg =  tk.Menubutton(self.mainWidgetFrame, text = "Υ/Γ")
         self.widgets.append(menuYg)
-        self.applyValues(0)
+        self.applyValues(2)
 
         menuClinicalState = tk.Menubutton(self.mainWidgetFrame, text = "Κλινικό στάδιο")
         self.widgets.append(menuClinicalState)
-        self.applyValues(1)
+        self.applyValues(3)
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
@@ -788,11 +790,13 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
     def applyValues(self,pos):
         self.widgets[pos].menu = tk.Menu(self.widgets[pos])
         self.widgets[pos]["menu"] = self.widgets[pos].menu
-        for val in self.value[pos]:
-            if pos == 0:
-                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["yG"])
+        for val in self.value[pos-1]:
+            if pos == 1:
+                self.widgets[pos].menu.add_radiobutton(label = val[0], value = val[0],variable = self.values["time"])
+            elif pos == 2:
+                self.widgets[pos].menu.add_radiobutton(label = val[0], value = val[0],variable = self.values["yG"])
             else:
-                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["clinicalstage"])
+                self.widgets[pos].menu.add_radiobutton(label = val[0], value = val[0],variable = self.values["clinicalstage"])
 
     def gridWidgets(self):
         column = 0
@@ -805,10 +809,10 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         for val in self.values:
             if self.values[val].get() == "+++" or self.values[val].get() == None :
                 return None
-        return self.values["time"].get()  +"ος καρδιολογικός έλεγχος σε " + \
-         self.values["weight"].get() + " " + self.values["age"].get() + \
-         " σκύλο με εκφυλιστική νόσο της μιτροειδούς βαλβίδας "+self.values["yG"].get() + \
-         " Υ/Γ σταδίου – " + self.values["clinicalstage"].get() + " κλινικού σταδίου (ACVIM Consensus 2019)."
+        return self.values["time"].get()  +" καρδιολογικός έλεγχος σε " + \
+        self.values["weight"].get() + " " + self.values["age"].get() + \
+        " σκύλο με εκφυλιστική νόσο της μιτροειδούς βαλβίδας "+self.values["yG"].get() + \
+        " Υ/Γ σταδίου – " + self.values["clinicalstage"].get() + " κλινικού σταδίου (ACVIM Consensus 2019)."
 
 class auditoryFindingsMenuEnt(tk.Tk):
     systolic = ["ολοσυστολικό", "διαστολικό", "συνεχές"]
@@ -894,7 +898,7 @@ class auditoryFindingsMenuEnt(tk.Tk):
             ent.grid(column = column, row = 0)
             column += 1
 
-class dogWeightSpinBoxEnt(tk.Tk):
+class weightSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
         self.text = ent[1]
@@ -997,16 +1001,25 @@ class nameAitEntryEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
+        self.value = tk.StringVar(value = "+++")
+
+        self.master.entries["petName"].widgets[1].bind("<Key>",lambda _: self.callback(self))
 
         entryLabel = tk.Label(self.mainWidgetFrame, text = self.text)
         self.widgets.append(entryLabel)
 
-        entryWidget = tk.Entry(self.mainWidgetFrame)
+        entryWidget = tk.Entry(self.mainWidgetFrame, textvariable = self.value)
         self.widgets.append(entryWidget)
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
 
+    def callback(event,self):
+        petName = self.master.entries["petName"].widgets[1].get()
+        if petName == "":
+            pass
+        else:
+            self.value.set(petName)
     def gridWidgets(self):
         column = 0
         for ent in self.widgets:
@@ -1014,9 +1027,9 @@ class nameAitEntryEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        input = self.widgets[1].get()
-        if input == "":
-            input = self.master.entries["petName"].getWidgetValues()
+        input = self.value.get()
+        if input == "+++" or input == "":
+            return None
         return input
 
 class checkUpSpinBoxEnt(tk.Tk):
@@ -1128,10 +1141,9 @@ class ecgMenuEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.frames = list()
-        self.menuValues = list()
+        self.menuValues = db.getFieldValues(self.field,self.master.master.path)
         self.menuValue = list()
         self.widgets = list()
-        self.widgetsInput = list()
 
         self.createWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
@@ -1143,16 +1155,13 @@ class ecgMenuEnt(tk.Tk):
         addButton = tk.Button(widgetFrame, text = "+", command = self.createWidgets)
         destroyButton = tk.Button(widgetFrame, text = "-", command = lambda x = widgetFrame: self.destroyButtonAction(x))
 
-        values = db.getFieldValues(self.field,self.master.master.path)
-        self.menuValues.append(values)
-
         menuWidget = tk.Menubutton(widgetFrame, text = self.text)
         menuWidget.menu = tk.Menu(menuWidget)
         menuWidget["menu"] = menuWidget.menu
 
-        self.menuValue.append(tk.StringVar(""))
+        self.menuValue.append(tk.StringVar(value = ""))
 
-        for val in values:
+        for val in self.menuValues:
             menuWidget.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[-1])
 
         menuEntry = tk.Entry(widgetFrame, text = self.menuValue[-1])
@@ -1166,10 +1175,8 @@ class ecgMenuEnt(tk.Tk):
         tempListWidgets.append(menuWidget)
 
         tempListWidgets.append(menuEntry)
-        tempListWidgetsInput.append(menuEntry)
 
         self.widgets.append(tempListWidgets)
-        self.widgetsInput.append(tempListWidgetsInput)
 
         self.gridWidgets()
         widgetFrame.grid(column = 0, row = len(self.frames)-1)
@@ -1196,7 +1203,6 @@ class ecgMenuEnt(tk.Tk):
             del self.frames[counter]
             del self.menuValue[counter]
             del self.widgets[counter]
-            del self.widgetsInput[counter]
 
     def getWidgetValues(self):
         values = list()
@@ -1205,8 +1211,8 @@ class ecgMenuEnt(tk.Tk):
             if groupValue == "":
                 return None
             else:
-                self.checkSelf()
                 values.append(groupValue)
+        #self.checkSelf()
         return values
 
     def checkSelf(self):
@@ -1219,7 +1225,7 @@ class ecgMenuEnt(tk.Tk):
             if flagFound == False:
                 db.createFieldValue(self.master.master.path,self.menuValue[i].get(),self.field)
 
-class dogAgeSpinBoxEnt(tk.Tk):
+class ageSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
         self.text = ent[1]
@@ -1308,7 +1314,7 @@ class dogAgeSpinBoxEnt(tk.Tk):
 
         return str(age)+textTimeAproximation
 
-#Update
+#checkself not working
 class medicMenuEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
@@ -1317,98 +1323,62 @@ class medicMenuEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.frames = list()
-        self.menuValue = list()
-        self.menuValues = list()
+        self.value = list()
+        self.values = list()
         self.widgets = list()
-        self.widgetsInput = list()
 
         self.createWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
 
     def createWidgets(self):
+        tempListWidgets = list()
+
         widgetFrame = tk.Frame(self.mainWidgetFrame)
         self.frames.append(widgetFrame)
 
         addButton = tk.Button(widgetFrame, text = "+", command = self.createWidgets)
         destroyButton = tk.Button(widgetFrame, text = "-", command = lambda x = widgetFrame: self.destroyButtonAction(x))
 
-        values = db.getFieldValues(self.field,self.master.master.path)
-        self.menuValues.append(values)
-
-        menuWidget = tk.Menubutton(widgetFrame, text = self.text)
-        menuWidget.menu = tk.Menu(menuWidget)
-        menuWidget["menu"] = menuWidget.menu
-
-        self.menuValue.append(tk.StringVar(value = ""))
-
-        for val in values:
-            menuWidget.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[-1])
-
-        menuEntry = tk.Entry(widgetFrame, text = self.menuValue[-1])
-
-        spinBoxWidget = tk.Spinbox(widgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f")
-
-        values = db.getFieldValues(25,self.master.master.path)
-        self.menuValues.append(values)
-
-        menuWidget3 = tk.Menubutton(widgetFrame, text = "Μονάδα μέτρησης")
-        menuWidget3.menu = tk.Menu(menuWidget3)
-        menuWidget3["menu"] = menuWidget3.menu
-
-        self.menuValue.append(tk.StringVar(value = ""))
-
-        for val in values:
-            menuWidget3.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[-1])
-
-        menuEntry3 = tk.Entry(widgetFrame, text = self.menuValue[-1])
-
-        values = db.getFieldValues(26,self.master.master.path)
-        self.menuValues.append(values)
-
-        menuWidget2 = tk.Menubutton(widgetFrame, text = "Δοσολογία")
-        menuWidget2.menu = tk.Menu(menuWidget2)
-        menuWidget2["menu"] = menuWidget2.menu
-
-        self.menuValue.append(tk.StringVar( value = ""))
-
-        for val in values:
-            menuWidget2.menu.add_radiobutton(label = val[0], value = val[0],variable = self.menuValue[-1])
-
-        menuEntry2 = tk.Entry(widgetFrame, text = self.menuValue[-1])
-
-        tempListWidgets = list()
-        tempListWidgetsInput = list()
-
         tempListWidgets.append(addButton)
         tempListWidgets.append(destroyButton)
 
+        menuWidget = tk.Menubutton(widgetFrame, text = self.text)
+        self.applyValues(self.field,menuWidget)
         tempListWidgets.append(menuWidget)
 
+        menuEntry = tk.Entry(widgetFrame, textvariable = self.value[-1])
         tempListWidgets.append(menuEntry)
-        tempListWidgetsInput.append(menuEntry)
 
+        self.value.append(tk.StringVar())
+        spinBoxWidget = tk.Spinbox(widgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f",textvariable = self.value[-1])
         tempListWidgets.append(spinBoxWidget)
-        tempListWidgetsInput.append(spinBoxWidget)
 
-        tempListWidgets.append(menuWidget3)
+        menuWidget = tk.Menubutton(widgetFrame, text = "Μονάδα μέτρησης")
+        self.applyValues(25,menuWidget)
+        tempListWidgets.append(menuWidget)
 
-        tempListWidgets.append(menuEntry3)
-        tempListWidgetsInput.append(menuEntry3)
+        menuWidget = tk.Menubutton(widgetFrame, text = "Δοσολογία")
+        self.applyValues(26,menuWidget)
+        tempListWidgets.append(menuWidget)
 
-        tempListWidgets.append(menuWidget2)
-
-        tempListWidgets.append(menuEntry2)
-        tempListWidgetsInput.append(menuEntry2)
+        menuEntry = tk.Entry(widgetFrame, text = self.value[-1])
+        tempListWidgets.append(menuEntry)
 
         self.widgets.append(tempListWidgets)
-        self.widgetsInput.append(tempListWidgetsInput)
 
         self.gridWidgets()
         widgetFrame.grid(column = 0, row = len(self.widgets)-1)
 
-    #pass
-    def applyValues():
-        pass
+    def applyValues(self,field,menuWidget):
+        values = db.getFieldValues(field,self.master.master.path)
+        self.values.append(values)
+        self.value.append(tk.StringVar(value = ""))
+
+        menuWidget.menu = tk.Menu(menuWidget)
+        menuWidget["menu"] = menuWidget.menu
+
+        for val in values:
+            menuWidget.menu.add_radiobutton(label = val[0], value = val[0],variable = self.value[-1])
 
     def gridWidgets(self):
         for frame in self.widgets:
@@ -1430,18 +1400,19 @@ class medicMenuEnt(tk.Tk):
 
             self.frames[counter].destroy()
             del self.frames[counter]
-            del self.menuValue[counter]
+            del self.value[counter]
             del self.widgets[counter]
-            del self.widgetsInput[counter]
 
     def getWidgetValues(self):
         values = list()
-        for ent in self.widgetsInput:
+        for i in range(0,len(self.value),4):
+            print(i)
             groupValue = list()
-            groupValue.append(ent[0].get())
-            if ent[0].get() != "ουδεμία" and ent[0].get() != "δεν συστήνεται":
-                num = buildNumber(float(ent[1].get()),self.master)
-                groupValue.append(" (" + num + " " + ent[2].get()+ " " + ent[3].get() + "), ")
+            input = self.value[i].get()
+            groupValue.append(input)
+            if input != "ουδεμία" and input != "δεν συστήνεται" and input != "":
+                num = buildNumber(float(self.value[i+1].get()),self.master)
+                groupValue.append(" (" + num + " " + self.value[i+2].get()+ " " + self.value[i + 3].get() + "), ")
                 values.append(groupValue)
             else:
                 return None
@@ -1451,21 +1422,7 @@ class medicMenuEnt(tk.Tk):
         return values
 
     def checkSelf(self):
-        flagFound = False
-        for i in range(len(self.menuValues)):
-            for j in range(len(self.menuValues[i])):
-                if self.menuValues[i][j] == self.menuValue[i].get() or self.menuValue[i].get() == "" :
-                    flagFound = True
-                    j = len(self.menuValues[i])-1
-
-            if flagFound == False:
-                if i == 0:
-                    field = self.field
-                elif i == 1:
-                    field == 25
-                else:
-                    field == 26
-                db.createFieldValue(self.master.master.path,self.menuValue[i].get(),field)
+        pass
 
 class pdfReader(tk.Tk):
     def __init__(self, master, ent):
@@ -1539,14 +1496,14 @@ class menuEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
-        self.currentValue =  tk.StringVar("")
+        self.value =  tk.StringVar("")
         self.values = db.getFieldValues(self.field,self.master.master.path)
 
         menuWidget =  tk.Menubutton(self.mainWidgetFrame, text = self.text)
         self.widgets.append(menuWidget)
         self.applyValues()
 
-        menuEntry = tk.Entry(self.mainWidgetFrame, text = self.currentValue)
+        menuEntry = tk.Entry(self.mainWidgetFrame, text = self.value)
         self.widgets.append(menuEntry)
 
         self.gridWidgets()
@@ -1556,11 +1513,11 @@ class menuEnt(tk.Tk):
         self.widgets[0].menu =   tk.Menu(self.widgets[0])
         self.widgets[0]["menu"] = self.widgets[0].menu
         for val in self.values:
-            self.widgets[0].menu.add_radiobutton(label = val[0], value = val[0],variable = self.currentValue)
+            self.widgets[0].menu.add_radiobutton(label = val[0], value = val[0],variable = self.value)
 
     def checkSelf(self):
         flagFound = False
-        value = self.currentValue.get()
+        value = self.value.get()
         for ent in self.values:
             if value == ent[0]:
                 flagFound = True
@@ -1575,11 +1532,11 @@ class menuEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        if self.currentValue.get() == "":
+        if self.value.get() == "":
             return None
         else:
             self.checkSelf()
-            return self.currentValue.get()
+            return self.value.get()
 
 class spinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
@@ -1588,14 +1545,12 @@ class spinBoxEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
-        self.widgetsInput = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
         self.widgets.append(spinBoxLabel)
 
         spinBoxWidget = tk.Spinbox(self.mainWidgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f")
         self.widgets.append(spinBoxWidget)
-        self.widgetsInput.append(spinBoxWidget)
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
@@ -1607,7 +1562,7 @@ class spinBoxEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        input = float(self.widgetsInput[0].get())
+        input = float(self.widgets[1].get())
         return buildNumber(input,self.master)
 
 class entryEnt(tk.Tk):
@@ -1617,14 +1572,12 @@ class entryEnt(tk.Tk):
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
-        self.widgetsInput = list()
 
         entryLabel = tk.Label(self.mainWidgetFrame, text = self.text)
         self.widgets.append(entryLabel)
 
         entryWidget = tk.Entry(self.mainWidgetFrame)
         self.widgets.append(entryWidget)
-        self.widgetsInput.append(entryWidget)
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
@@ -1636,7 +1589,7 @@ class entryEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        input = self.widgetsInput[0].get()
+        input = self.widgets[1].get()
         if input == "":
-            input = None
+            return None
         return input
