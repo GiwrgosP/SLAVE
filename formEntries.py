@@ -16,6 +16,64 @@ def buildNumber(num, formWindow):
         if formWindow.master.fileSelected[-2] == "greek":
             num = num.replace(".",",")
     return num
+class breedMenuEnt(tk.TK):
+    def __init__(self, master, ent):
+        self.master = master
+        self.field = ent[0]
+        self.text = ent[1]
+        self.name = ent[2]
+        self.pet = self.master.master.fileSelected[-1]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.widgets = list()
+        self.value =  tk.StringVar("")
+        if self.pet = "dog":
+            self.values = db.getFieldValues(self.field,self.master.master.path)
+        elif self.pet == "cat":
+            self.values = db.getFieldValues(199,self.master.master.path)
+        else:
+            print("error with breed")
+
+        menuWidget =  tk.Menubutton(self.mainWidgetFrame, text = self.text)
+        self.widgets.append(menuWidget)
+        self.applyValues()
+
+        menuEntry = tk.Entry(self.mainWidgetFrame, text = self.value)
+        self.widgets.append(menuEntry)
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def applyValues(self):
+        self.widgets[0].menu =   tk.Menu(self.widgets[0])
+        self.widgets[0]["menu"] = self.widgets[0].menu
+        for val in self.values:
+            self.widgets[0].menu.add_radiobutton(label = val[0], value = val[0],variable = self.value)
+
+    def checkSelf(self):
+        flagFound = False
+        value = self.value.get()
+        for ent in self.values:
+            if value == ent[0]:
+                flagFound = True
+                break
+        if flagFound == False:
+            if self.pet = "dog":
+                db.createFieldValue(self.master.master.path,value,self.field)
+            else:
+                db.createFieldValue(self.master.master.path,value,199)
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        if self.value.get() == "":
+            return None
+        else:
+            self.checkSelf()
+            return self.value.get()
 
 class preTestsMenuEnt(tk.Tk):
     def __init__(self, master, ent):
