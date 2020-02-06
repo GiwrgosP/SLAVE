@@ -19,19 +19,18 @@ def buildNumber(num, formWindow):
 class breedMenuEnt(tk.TK):
     def __init__(self, master, ent):
         self.master = master
-        self.field = ent[0]
+        if self.pet = "dog":
+            self.field = ent[0]
+        elif self.pet == "cat":
+            self.field = 199
+        self.values = db.getFieldValues(self.field,self.master.master.path)
         self.text = ent[1]
         self.name = ent[2]
-        self.pet = self.master.master.fileSelected[-1]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
         self.widgets = list()
         self.value =  tk.StringVar("")
-        if self.pet = "dog":
-            self.values = db.getFieldValues(self.field,self.master.master.path)
-        elif self.pet == "cat":
-            self.values = db.getFieldValues(199,self.master.master.path)
-        else:
-            print("error with breed")
+
+
 
         menuWidget =  tk.Menubutton(self.mainWidgetFrame, text = self.text)
         self.widgets.append(menuWidget)
@@ -57,10 +56,7 @@ class breedMenuEnt(tk.TK):
                 flagFound = True
                 break
         if flagFound == False:
-            if self.pet = "dog":
-                db.createFieldValue(self.master.master.path,value,self.field)
-            else:
-                db.createFieldValue(self.master.master.path,value,199)
+            db.createFieldValue(self.master.master.path,value,self.field)
 
     def gridWidgets(self):
         column = 0
