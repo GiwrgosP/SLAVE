@@ -17,6 +17,74 @@ def buildNumber(num, formWindow):
             num = num.replace(".",",")
     return num
 
+class preTestsMenuEnt(tk.Tk):
+    def __init__(self, master, ent):
+        self.master = master
+        self.text = ent[1]
+        self.name = ent[2]
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.frames = list()
+        self.value = list()
+        self.widgets = list()
+
+        self.createWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1)
+
+    def createWidgets(self):
+        widgetFrame = tk.Frame(self.mainWidgetFrame)
+        self.frames.append(widgetFrame)
+
+        tempList = list()
+
+        addButton = tk.Button(widgetFrame, text = "+", command = self.createWidgets)
+        destroyButton = tk.Button(widgetFrame, text = "-", command = lambda x = widgetFrame: self.destroyButtonAction(x))
+        tempList.append(addButton)
+        tempList.append(destroyButton)
+
+        self.value.append(tk.StringVar(value = self.text))
+
+        entryWidget = tk.Entry(widgetFrame, width = 100 ,textvariable = self.value[-1])
+
+        tempList.append(entryWidget)
+
+        self.widgets.append(tempList)
+
+        self.gridWidgets()
+        widgetFrame.grid(column = 0, row = len(self.frames)-1)
+
+    def gridWidgets(self):
+        for frame in self.widgets:
+            column = 0
+            for ent in frame:
+                ent.grid(column = column, row = 0)
+                column += 1
+
+    def destroyButtonAction(self,frameForDel):
+        if len(self.frames) == 1:
+            print("no more frames available for delete")
+        else:
+            counter = 0
+            for frame in self.frames:
+                if frame == frameForDel:
+                    break
+                else:
+                    counter += 1
+
+            self.frames[counter].destroy()
+            del self.frames[counter]
+            del self.value[counter]
+            del self.widgets[counter]
+
+    def getWidgetValues(self):
+        values = list()
+        for ent in self.value:
+            val = ent.get()
+            if val == self.text or val == "" :
+                pass
+            else:
+                values.append(val)
+        return values
+
 class dogSASRECardiologicalAnalysisListBoxEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
@@ -1115,7 +1183,7 @@ class flowButtonEnt(tk.Tk):
         self.state = not self.state
 
         if self.state == True:
-            self.buttonValue.set("Αντιστροφή διαμιτροειδικής ροής (Ε<Α κύμα), συμβατή με διαστολική δυσλειτουργία μυοκαρδίου.")
+            self.buttonValue.set("Αντιστροφή Ε & Α κύματος διαμιτροειδικής ροής, εύρημα συμβατό με  1ου βαθμού διαστολική δυσλειτουργία του μυοκαρδίου.")
             self.widgets[0].configure(bg = "red")
         else:
             self.buttonValue.set("")

@@ -68,6 +68,8 @@ class formWindow(tk.Tk):
                 self.entries[ent[2]] = formEntries.dogPSRECardiologicalAnalysisListBoxEnt(self,ent)
             elif ent[3] == "dogSASRECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogSASRECardiologicalAnalysisListBoxEnt(self,ent)
+            elif ent[3] == "preTestsMenuEnt":
+                self.entries[ent[2]] = formEntries.preTestsMenuEnt(self,ent)
             else:
                 print("Error with widget")
 
