@@ -85,7 +85,7 @@ class formWindow(tk.Tk):
             else:
                 print("Error with widget")
 
-        self.inputFrame.pack()
+        self.inputFrame.pack(fill = "x")
         self.createScrollbar()
         self.createButtonFrame()
 
