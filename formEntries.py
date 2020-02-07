@@ -97,7 +97,7 @@ class preTestsMenuEnt(tk.Tk):
 
         self.value.append(tk.StringVar(value = self.text))
 
-        entryWidget = tk.Entry(widgetFrame, width = 100 ,textvariable = self.value[-1])
+        entryWidget = tk.Entry(widgetFrame, width = 150 ,textvariable = self.value[-1])
 
         tempList.append(entryWidget)
 
