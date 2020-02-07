@@ -22,7 +22,7 @@ class formWindow(tk.Tk):
         self.entryEntities = sorted(self.entryEntities,key = lambda x: x[5])
         self.canvas = tk.Canvas(self.master.window)
 
-        self.inputFrame = tk.Frame(self.canvas)
+        self.inputFrame = tk.Frame(self.canvas, background = "grey50" )
 
         # switch
         #
@@ -85,7 +85,7 @@ class formWindow(tk.Tk):
             else:
                 print("Error with widget")
 
-        self.inputFrame.pack(fill = "x")
+        self.inputFrame.pack()
         self.createScrollbar()
         self.createButtonFrame()
 

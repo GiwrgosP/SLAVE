@@ -6,6 +6,16 @@ from tika import parser
 import re
 from decimal import *
 
+def frameBgColor(ent):
+    if ent == 0:
+        return "grey90"
+    else:
+        temp = ent % 2
+        if temp == 0:
+            return "grey90"
+        else:
+            return "grey70"
+
 def buildNumber(num, formWindow):
     if num % 1 == 0:
         num = str(int(num))
@@ -28,7 +38,7 @@ class breedMenuEnt(tk.Tk):
         self.values = db.getFieldValues(self.field,self.master.master.path)
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value =  tk.StringVar("")
 
@@ -40,7 +50,7 @@ class breedMenuEnt(tk.Tk):
         self.widgets.append(menuEntry)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def applyValues(self):
         self.widgets[0].menu =   tk.Menu(self.widgets[0])
@@ -76,13 +86,13 @@ class preTestsMenuEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.frames = list()
         self.value = list()
         self.widgets = list()
 
         self.createWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we", padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we", padx = 5, pady = 5)
 
     def createWidgets(self):
         widgetFrame = tk.Frame(self.mainWidgetFrame)
@@ -147,7 +157,7 @@ class dogSASRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(196,self.master.master.path)]
@@ -174,7 +184,7 @@ class dogSASRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets.append(entrySas)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
         for i in range(len(self.value)):
@@ -236,7 +246,7 @@ class dogPSRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(194,self.master.master.path)]
@@ -263,7 +273,7 @@ class dogPSRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets.append(entryPs)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
         for i in range(len(self.value)):
@@ -325,7 +335,7 @@ class dogPHRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(55,self.master.master.path)]
@@ -356,7 +366,7 @@ class dogPHRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets.append(spinBoxPg)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
         for i in range(len(self.value)):
@@ -421,7 +431,7 @@ class catHOCMREardiologicalAnalysisListBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(191,self.master.master.path)]
@@ -448,7 +458,7 @@ class catHOCMREardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets.append(entryDmc)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
         for i in range(len(self.value)):
@@ -507,7 +517,7 @@ class catHCMRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(188,self.master.master.path),\
@@ -552,7 +562,7 @@ class catHCMRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets.append(entryEffusion)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
         for i in range(len(self.value)):
@@ -627,7 +637,7 @@ class dogPERECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(186,self.master.master.path)]
@@ -654,7 +664,7 @@ class dogPERECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets.append(entryEffusion)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
         for i in range(len(self.value)):
@@ -714,7 +724,7 @@ class dogDCMRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(184,self.master.master.path),\
@@ -759,7 +769,7 @@ class dogDCMRECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets.append(entryEffusion)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
         for i in range(len(self.value)):
@@ -828,7 +838,7 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
         self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.weightAgeValues = {"weight" : tk.StringVar(value = "+++"), "age" : tk.StringVar(value = "+++"), "currentValue" : tk.StringVar(value = "")}
 
@@ -840,7 +850,7 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
 
         self.applyValues()
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def buttonAction(self):
         self.refreshVar()
@@ -878,7 +888,7 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = [db.getFieldValues(183,self.master.master.path),\
         db.getFieldValues(197,self.master.master.path),\
@@ -905,7 +915,7 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.applyValues(3)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def refreshVar(self):
         self.values["weight"].set(self.master.entries["weight"].giveValues())
@@ -950,7 +960,7 @@ class auditoryFindingsMenuEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
 
         self.menuValues = list()
         self.menuValues.append(self.systolic)
@@ -994,7 +1004,7 @@ class auditoryFindingsMenuEnt(tk.Tk):
         self.applyValues()
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def getWidgetValues(self):
         input = list()
@@ -1029,7 +1039,7 @@ class weightSpinBoxEnt(tk.Tk):
         self.name = ent[2]
         self.pet = self.master.master.fileSelected[-1]
 
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
@@ -1039,7 +1049,7 @@ class weightSpinBoxEnt(tk.Tk):
         self.widgets.append(spinBoxWidget)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def giveValues(self):
         val = float(self.widgets[1].get())
@@ -1084,7 +1094,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
@@ -1094,7 +1104,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
         self.widgets.append(spinBoxWidget)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def getWidgetValues(self):
         num = float(self.widgets[1].get())
@@ -1123,7 +1133,7 @@ class nameAitEntryEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value = tk.StringVar(value = "+++")
 
@@ -1136,7 +1146,7 @@ class nameAitEntryEnt(tk.Tk):
         self.widgets.append(entryWidget)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def callback(event,self):
         petName = self.master.entries["petName"].widgets[1].get()
@@ -1161,7 +1171,7 @@ class checkUpSpinBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
@@ -1171,7 +1181,7 @@ class checkUpSpinBoxEnt(tk.Tk):
         self.widgets.append(spinBoxWidget)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def getWidgetValues(self):
         monthCounter = {
@@ -1224,7 +1234,7 @@ class flowButtonEnt(tk.Tk):
         self.text = ent[1]
         self.name = ent[2]
         self.state = False
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.buttonValue = tk.StringVar(value = "")
         self.widgets = list()
 
@@ -1233,7 +1243,7 @@ class flowButtonEnt(tk.Tk):
 
         self.gridWidgets()
 
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def buttonAction(self):
         self.state = not self.state
@@ -1263,14 +1273,14 @@ class ecgMenuEnt(tk.Tk):
         self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.frames = list()
         self.menuValues = db.getFieldValues(self.field,self.master.master.path)
         self.menuValue = list()
         self.widgets = list()
 
         self.createWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def createWidgets(self):
         widgetFrame = tk.Frame(self.mainWidgetFrame)
@@ -1356,7 +1366,7 @@ class ageSpinBoxEnt(tk.Tk):
         self.name = ent[2]
         self.pet = self.master.master.fileSelected[-1]
         self.value = tk.IntVar()
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
@@ -1373,7 +1383,7 @@ class ageSpinBoxEnt(tk.Tk):
         self.widgets.append(radioButton2)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
 
     def checkSelf(self):
@@ -1445,14 +1455,14 @@ class medicMenuEnt(tk.Tk):
         self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.frames = list()
         self.value = list()
         self.values = list()
         self.widgets = list()
 
         self.createWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def createWidgets(self):
         tempListWidgets = list()
@@ -1554,7 +1564,7 @@ class pdfReader(tk.Tk):
         self.text = ent[1]
         self.name = ent[2]
         self.currentValue =  tk.StringVar(value = "")
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
 
         button = tk.Button(self.mainWidgetFrame, text = self.text, command = self.buttonAction)
@@ -1564,7 +1574,7 @@ class pdfReader(tk.Tk):
         self.widgets.append(buttonEntry)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def buttonAction(self):
         fileName = filedialog.askopenfilename(filetypes = (("pdf files","*.pdf"),))
@@ -1617,7 +1627,7 @@ class menuEnt(tk.Tk):
         self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
         self.value =  tk.StringVar("")
         self.values = db.getFieldValues(self.field,self.master.master.path)
@@ -1630,7 +1640,7 @@ class menuEnt(tk.Tk):
         self.widgets.append(menuEntry)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def applyValues(self):
         self.widgets[0].menu =   tk.Menu(self.widgets[0])
@@ -1666,7 +1676,7 @@ class spinBoxEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
 
         spinBoxLabel = tk.Label(self.mainWidgetFrame, text = self.text)
@@ -1676,7 +1686,7 @@ class spinBoxEnt(tk.Tk):
         self.widgets.append(spinBoxWidget)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def gridWidgets(self):
         column = 0
@@ -1693,7 +1703,7 @@ class entryEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame)
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.widgets = list()
 
         entryLabel = tk.Label(self.mainWidgetFrame, text = self.text)
@@ -1703,7 +1713,7 @@ class entryEnt(tk.Tk):
         self.widgets.append(entryWidget)
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 10, pady = 10)
+        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def gridWidgets(self):
         column = 0
