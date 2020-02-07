@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 import db as db
 from tkinter import messagebox
 from docxtpl import DocxTemplate
@@ -22,6 +23,15 @@ class formWindow(tk.Tk):
         self.canvas = tk.Canvas(self.master.window)
 
         self.inputFrame = tk.Frame(self.canvas)
+
+        # switch
+        #
+        #
+        #
+        #
+        #
+        #
+
 
         for ent in self.entryEntities:
             if ent[3] == "listbox":
@@ -82,19 +92,19 @@ class formWindow(tk.Tk):
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)
 
-        self.fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1] + " " + self.master.fileSelected[-2] + self.master.fileSelected[-1])
-        self.fileSelectedLabel.pack(side = tk.TOP)
+        fileSelectedLabel = tk.Label(self.buttonFrame, text = self.master.fileSelected[1] + " " + self.master.fileSelected[-2] + self.master.fileSelected[-1])
+        fileSelectedLabel.pack(anchor = "n")
 
-        self.enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
-        self.enterData.pack(side = tk.BOTTOM)
+        enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
+        enterData.pack(anchor = "center")
 
-        self.clearButton =  tk.Button(self.buttonFrame, text = "Clear Form", command = self.clearForm)
-        self.clearButton.pack(side = tk.BOTTOM)
+        clearButton =  tk.Button(self.buttonFrame, text = "Clear Form", command = self.clearForm)
+        clearButton.pack(anchor = "center")
 
-        self.quitButton =  tk.Button(self.buttonFrame, text="Back to form selection", command = self.quit)
-        self.quitButton.pack(side = tk.BOTTOM)
+        quitButton =  tk.Button(self.buttonFrame, text="Back to form selection", command = self.quit)
+        quitButton.pack(anchor = "s")
 
-        self.buttonFrame.pack(side = tk.RIGHT)
+        self.buttonFrame.pack(anchor = "s")
 
     def createScrollbar(self):
         self.canvas.update_idletasks()
@@ -150,12 +160,18 @@ class formWindow(tk.Tk):
         doc = DocxTemplate(filePath)
         context = {}
 
+        self.loadingBar = ttk.Progressbar(self.buttonFrame, orient = "horizontal", length = 100, mode = 'determinate')
+        self.loadingBar.pack(anchor = "s")
+
+        loadingBarValue = 100/len(self.entries)
         for ent in self.entries:
             input = self.entries[ent].getWidgetValues()
+            self.loadingBarProgress(loadingBarValue)
 
             if input == "" or input == "0.0" or input == [['', ' (0  )']] or input == None : # or ' (0.0 mg/kg po )'
                 pass
             else:
+
                 context[ent] = input
 
         print(context)
@@ -173,3 +189,6 @@ class formWindow(tk.Tk):
                 self.clearWidgets()
             else:
                 self.goBack()
+    def loadingBarProgress(self,val):
+        self.loadingBar['value'] = self.loadingBar['value'] + val
+        self.buttonFrame.update_idletasks()
