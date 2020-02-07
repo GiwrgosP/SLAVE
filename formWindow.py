@@ -104,7 +104,7 @@ class formWindow(tk.Tk):
         quitButton =  tk.Button(self.buttonFrame, text="Back to form selection", command = self.quit)
         quitButton.pack(anchor = "s")
 
-        self.buttonFrame.pack(anchor = "s")
+        self.buttonFrame.pack(anchor = "s", fill = "both", expand = True)
 
     def createScrollbar(self):
         self.canvas.update_idletasks()
@@ -180,7 +180,7 @@ class formWindow(tk.Tk):
         filePath = filedialog.asksaveasfilename(title = "Select file",filetypes = [("docx files","*.docx")])
         print(filePath)
         if filePath == "":
-            pass
+            self.loadingBar.destroy()
         else:
             filePath += ".docx"
             doc.save(filePath)
