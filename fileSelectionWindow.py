@@ -36,7 +36,7 @@ class fileSelectionWindow(tk.Tk):
         row = 0
         column = 0
         for ent in frameButtons:
-            frameButtons[ent].grid(column = column, row = row)
+            frameButtons[ent].grid(column = column, row = row, sticky = "w")
             column += 1
             if column == 5:
                 column = 0
