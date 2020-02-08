@@ -43,6 +43,7 @@ class fileSelectionWindow(tk.Tk):
                 row += 1
 
     def openTemplate(self,ent):
+        print(ent)
         if ent[2] != None:
             str = self.master.path + "\\Protipa\\" + ent[2]
             print(ent[2])

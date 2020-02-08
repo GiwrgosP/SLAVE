@@ -22,7 +22,7 @@ class formWindow(tk.Tk):
         self.entryEntities = sorted(self.entryEntities,key = lambda x: x[5])
         self.canvas = tk.Canvas(self.master.window)
 
-        self.inputFrame = tk.Frame(self.canvas, background = "grey50" )
+        self.inputFrame = tk.Frame(self.canvas, background = "bisque" )
 
         # switch
         #

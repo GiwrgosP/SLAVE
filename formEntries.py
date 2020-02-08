@@ -8,13 +8,13 @@ from decimal import *
 
 def frameBgColor(ent):
     if ent == 0:
-        return "grey90"
+        return "goldenrod2"
     else:
         temp = ent % 2
         if temp == 0:
-            return "grey90"
+            return "goldenrod2"
         else:
-            return "grey70"
+            return "chocolate1"
 
 def buildNumber(num, formWindow):
     if num % 1 == 0:
@@ -1411,9 +1411,9 @@ class ageSpinBoxEnt(tk.Tk):
                 if approx == 1:
                     return "νεαρό"
                 else:
-                    if num<= 4:
+                    if num< 4:
                         return "νεαρό"
-                    elif num <= 8:
+                    elif num < 8:
                         return "ενήλικο"
                     else:
                         return "υπερήλικο"
