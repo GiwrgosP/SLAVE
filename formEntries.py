@@ -81,13 +81,15 @@ class breedMenuEnt(tk.Tk):
             self.checkSelf()
             return self.value.get()
 
-class preTestsMenuEnt(tk.Tk):
+class historyMenuEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
+        self.field = ent[0]
         self.text = ent[1]
         self.name = ent[2]
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
         self.frames = list()
+        self.values = db.getFieldValues(self.field,self.master.master.path)
         self.value = list()
         self.widgets = list()
 
@@ -105,7 +107,16 @@ class preTestsMenuEnt(tk.Tk):
         tempList.append(addButton)
         tempList.append(destroyButton)
 
-        self.value.append(tk.StringVar(value = self.text))
+        self.value.append(tk.StringVar(value = "+++"))
+
+        menuWidget = tk.Menubutton(widgetFrame, text = self.text)
+        menuWidget.menu = tk.Menu(menuWidget)
+        menuWidget["menu"] = menuWidget.menu
+
+        for val in self.values:
+            menuWidget.menu.add_radiobutton(label = val[0], value = val[0],variable = self.value[-1])
+
+        tempList.append(menuWidget)
 
         entryWidget = tk.Entry(widgetFrame, width = 120 ,textvariable = self.value[-1])
 
@@ -143,7 +154,7 @@ class preTestsMenuEnt(tk.Tk):
         values = list()
         for ent in self.value:
             val = ent.get()
-            if val == self.text or val == "" :
+            if val == "+++" or val == "" :
                 pass
             else:
                 values.append(val)
@@ -949,7 +960,7 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         " Υ/Γ σταδίου – " + self.values["clinicalstage"].get() + " κλινικού σταδίου (ACVIM Consensus 2019)."
 
 class auditoryFindingsMenuEnt(tk.Tk):
-    systolic = ["ολοσυστολικό", "διαστολικό", "συνεχές"]
+    systolic = ["ολοσυστολικό", "διαστολικό", "συνεχές","συστολικό"]
     degree = ["1ου βαθμού (1/6)", "2ου βαθμού (2/6)", "3ου βαθμού (3/6)", "4ου βαθμού (4/6)", "5ου βαθμού (5/6)", "6ου βαθμού (6/6)"]
     ausculation = ["αναγωγικού τύπου φύσημα", "προωθητικού τύπου φύσημα"]
     auditory = ["αριστερό", "δεξιό", "αριστερό και δεξιό"]
