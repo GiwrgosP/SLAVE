@@ -8,13 +8,13 @@ from decimal import *
 
 def frameBgColor(ent):
     if ent == 0:
-        return "goldenrod2"
+        return "sky blue"
     else:
         temp = ent % 2
         if temp == 0:
-            return "goldenrod2"
+            return "sky blue"
         else:
-            return "chocolate1"
+            return "light cyan"
 
 def buildNumber(num, formWindow):
     if num % 1 == 0:
