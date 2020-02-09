@@ -34,7 +34,7 @@ class formWindow(tk.Tk):
 
 
         for ent in self.entryEntities:
-            if ent[3] == "listbox":
+            if ent[3] == "menuEnt":
                 self.entries[ent[2]] = formEntries.menuEnt(self,ent)
             elif ent[3] == "spinbox":
                 self.entries[ent[2]] = formEntries.spinBoxEnt(self,ent)
