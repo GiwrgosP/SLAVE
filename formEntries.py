@@ -1361,7 +1361,7 @@ class ecgMenuEnt(tk.Tk):
                     flagFound = True
                     break
             if flagFound == False:
-                db.createFieldValue(self.master.master.path,self.menuValue[i].get(),self.field)
+                db.createFieldValue(self.master.master.path,val.get(),self.field)
 
 class ageSpinBoxEnt(tk.Tk):
     def __init__(self, master, ent):
