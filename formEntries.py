@@ -30,6 +30,7 @@ def buildNumber(num, formWindow):
 class breedMenuEnt(tk.Tk):
     def __init__(self, master, ent):
         self.master = master
+        self.field = ent[0]
         self.pet = self.master.master.fileSelected[-1]
         if self.pet == "dog":
             self.field = ent[0]

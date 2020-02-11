@@ -156,7 +156,7 @@ class formWindow(tk.Tk):
         del self
 
     def enterdata(self):
-        filePath = self.master.path+"\\Protipa\\" + "DMVD-1-report.docx"
+        filePath = self.master.path+"\\Protipa\\" + self.master.fileSelected[2]
         doc = DocxTemplate(filePath)
         context = {}
 
