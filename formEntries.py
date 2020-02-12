@@ -961,7 +961,7 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         " Υ/Γ σταδίου – " + self.values["clinicalstage"].get() + " κλινικού σταδίου (ACVIM Consensus 2019)."
 
 class auditoryFindingsMenuEnt(tk.Tk):
-    systolic = ["ολοσυστολικό", "διαστολικό", "συνεχές","συστολικό"]
+    systolic = ["ολοσυστολικό", "διαστολικό", "συνεχές", "συστολικό"]
     degree = ["1ου βαθμού (1/6)", "2ου βαθμού (2/6)", "3ου βαθμού (3/6)", "4ου βαθμού (4/6)", "5ου βαθμού (5/6)", "6ου βαθμού (6/6)"]
     ausculation = ["αναγωγικού τύπου φύσημα", "προωθητικού τύπου φύσημα"]
     auditory = ["αριστερό", "δεξιό", "αριστερό και δεξιό"]
@@ -1261,7 +1261,7 @@ class flowButtonEnt(tk.Tk):
         self.state = not self.state
 
         if self.state == True:
-            self.buttonValue.set("Αντιστροφή Ε & Α κύματος διαμιτροειδικής ροής, εύρημα συμβατό με  1ου βαθμού διαστολική δυσλειτουργία του μυοκαρδίου.")
+            self.buttonValue.set("Αντιστροφή Ε & Α κύματος διαμιτροειδικής ροής, εύρημα συμβατό με 1ου βαθμού διαστολική δυσλειτουργία του μυοκαρδίου.")
             self.widgets[0].configure(bg = "red")
         else:
             self.buttonValue.set("")
