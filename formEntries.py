@@ -1127,7 +1127,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
         elif num <= 4.0:
             input = "Κανονικό σωματικό βάρος (BS: "
         elif num <= 5:
-            input = "Παχύσαρκο (BS: "
+            input = "Παχυσαρκία (BS: "
 
         temp = buildNumber(num, self.master)
         input += temp + "/5)"
@@ -1495,7 +1495,7 @@ class medicMenuEnt(tk.Tk):
         menuEntry = tk.Entry(widgetFrame, textvariable = self.value[-1])
         tempListWidgets.append(menuEntry)
 
-        self.value.append(tk.StringVar())
+        self.value.append(tk.StringVar(value = "0.0"))
         spinBoxWidget = tk.Spinbox(widgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f",textvariable = self.value[-1])
         tempListWidgets.append(spinBoxWidget)
 
