@@ -1023,6 +1023,9 @@ class auditoryFindingsMenuEnt(tk.Tk):
         self.value.append(tk.StringVar(value = "+++"))
         widget.menu = tk.Menu(widget)
         widget["menu"] = widget.menu
+
+        widget.menu.add_radiobutton(label = "+++", value = "+++",variable = self.value[-1])
+
         for val in self.values[pos]:
                 widget.menu.add_radiobutton(label = val[0], value = val[0],variable = self.value[-1])
 
@@ -1151,11 +1154,9 @@ class nameAitEntryEnt(tk.Tk):
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def callback(event,self):
-        petName = self.master.entries["petName"].widgets[1].get()
-        if petName == "":
-            pass
-        else:
-            self.value.set(petName)
+        petName = self.master.entries["petName"].value["petName"].get()
+        self.value.set(petName)
+
     def gridWidgets(self):
         column = 0
         for ent in self.widgets:
@@ -1702,17 +1703,16 @@ class entryEnt(tk.Tk):
         self.master = master
         self.text = ent[1]
         self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
+        self.sort = ent[5]
+        self.value = { self.name : tk.StringVar(value = "+++")}
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
 
-        entryLabel = tk.Label(self.mainWidgetFrame, text = self.text)
-        self.widgets.append(entryLabel)
-
-        entryWidget = tk.Entry(self.mainWidgetFrame)
-        self.widgets.append(entryWidget)
+        self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.text, textvariable = self.value[self.name]))
+        self.widgets.append(tk.Entry(self.mainWidgetFrame))
 
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
+        self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
 
     def gridWidgets(self):
         column = 0
@@ -1721,7 +1721,7 @@ class entryEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        input = self.widgets[1].get()
-        if input == "":
+        input = self.value[self.name].get()
+        if len(input.split()) == 0 or input == "+++":
             return None
         return input

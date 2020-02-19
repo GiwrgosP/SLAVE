@@ -8,10 +8,32 @@ import formEntries
 
 
 class formWindow(tk.Tk):
+    objectList = {"menuEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "spinbox": lambda self,ent:formEntries.spinBox(self,ent),\
+    "entry": lambda self,ent:formEntries.entry(self,ent),\
+    "mediMenu": lambda self,ent:formEntries.medicMenuEnt(self,ent),\
+    "ageSpinBoxEnt": lambda self,ent:formEntries.ageSpinBoxEnt(self,ent),\
+    "ecgMenuEnt": lambda self,ent:formEntries.ecgMenuEnt(self,ent),\
+    "flowButtonEnt": lambda self,ent:formEntries.flowButtonEnt(self,ent),\
+    "checkUpSpinBoxEn": lambda self,ent:formEntries.checkUpSpinBoxEn(self,ent),\
+    "nameAitEntryEnt": lambda self,ent:formEntries.nameAitEntryEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "dogDMVD1CardiologicalAnalysisListBoxEnt": lambda self,ent:formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+
+    "menuEnt": lambda self,ent:formEntries.menuEnt(self,ent)}
 
     def __init__(self,master):
         self.master = master
-        self.entries = {}
+        self.entries = {
+
+        }
         self.createInputFrame()
 
     def __del__(self):
@@ -24,63 +46,55 @@ class formWindow(tk.Tk):
 
         self.inputFrame = tk.Frame(self.canvas, background = "bisque" )
 
-        # switch
-        #
-        #
-        #
-        #
-        #
-        #
-
 
         for ent in self.entryEntities:
-            if ent[3] == "menuEnt":
+            if ent[4] == "menuEnt":
                 self.entries[ent[2]] = formEntries.menuEnt(self,ent)
-            elif ent[3] == "spinbox":
+            elif ent[4] == "spinbox":
                 self.entries[ent[2]] = formEntries.spinBoxEnt(self,ent)
-            elif ent[3] == "entry":
+            elif ent[4] == "entry":
                 self.entries[ent[2]] = formEntries.entryEnt(self,ent)
-            elif ent[3] == "mediMenu":
+            elif ent[4] == "mediMenu":
                 self.entries[ent[2]] = formEntries.medicMenuEnt(self,ent)
-            elif ent[3] == "ageSpinBoxEnt":
+            elif ent[4] == "ageSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.ageSpinBoxEnt(self,ent)
-            elif ent[3] == "ecgMenuEnt":
+            elif ent[4] == "ecgMenuEnt":
                 self.entries[ent[2]] = formEntries.ecgMenuEnt(self,ent)
-            elif ent[3] == "flowButtonEnt":
+            elif ent[4] == "flowButtonEnt":
                 self.entries[ent[2]] = formEntries.flowButtonEnt(self,ent)
-            elif ent[3] == "checkUpSpinBoxEnt":
+            elif ent[4] == "checkUpSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.checkUpSpinBoxEnt(self,ent)
-            elif ent[3] == "nameAitEntryEnt":
+            elif ent[4] == "nameAitEntryEnt":
                 self.entries[ent[2]] = formEntries.nameAitEntryEnt(self,ent)
-            elif ent[3] == "bodyWeightSpinBoxEnt":
+            elif ent[4] == "bodyWeightSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.bodyWeightSpinBoxEnt(self,ent)
-            elif ent[3] == "dogDMVD1CardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "dogDMVD1CardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "weightSpinBoxEnt":
+            elif ent[4] == "weightSpinBoxEnt":
                 self.entries[ent[2]] = formEntries.weightSpinBoxEnt(self,ent)
-            elif ent[3] == "pdfReader":
+            elif ent[4] == "pdfReader":
                 self.entries[ent[2]] = formEntries.pdfReader(self,ent)
-            elif ent[3] == "auditoryFindingsMenuEnt":
+            elif ent[4] == "auditoryFindingsMenuEnt":
                 self.entries[ent[2]] = formEntries.auditoryFindingsMenuEnt(self,ent)
-            elif ent[3] == "dogDMVD1RECardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "dogDMVD1RECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "dogDCMRECardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "dogDCMRECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogDCMRECardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "dogPERECardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "dogPERECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogPERECardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "catHCMRECardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "catHCMRECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.catHCMRECardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "catHOCMREardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "catHOCMREardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.catHOCMREardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "dogPHRECardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "dogPHRECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogPHRECardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "dogPSRECardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "dogPSRECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogPSRECardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "dogSASRECardiologicalAnalysisListBoxEnt":
+            elif ent[4] == "dogSASRECardiologicalAnalysisListBoxEnt":
                 self.entries[ent[2]] = formEntries.dogSASRECardiologicalAnalysisListBoxEnt(self,ent)
-            elif ent[3] == "historyMenuEnt":
+            elif ent[4] == "historyMenuEnt":
                 self.entries[ent[2]] = formEntries.historyMenuEnt(self,ent)
-            elif ent[3] == "breedMenuEnt":
+            elif ent[4] == "breedMenuEnt":
                 self.entries[ent[2]] = formEntries.breedMenuEnt(self,ent)
             else:
                 print("Error with widget")

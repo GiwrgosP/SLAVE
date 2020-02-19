@@ -4,32 +4,50 @@ from docxtpl import DocxTemplate
 from docx import Document
 import os
 
+def divideOptions(optionsList):
+    teams = { "greek" : { "dog" : list(), "cat" : list()}, "english" : { "dog" : list(), "cat" : list()}}
+
+    for option in optionsList:
+        teams[option[2]][option[3]].append((option[1],option[4]))
+
+    return teams
+
+
+
 class fileSelectionWindow(tk.Tk):
     def __init__(self,master):
         self.master = master
-        self.entryEntities = db.getFirstFields(self.master.path)
+        self.files = db.getFirstFields(self.master.path)
+        self.mainFrame = tk.Frame(self.master.window, background = "grey40")
 
-        self.leftFrameButtons = {}
-        self.rightFrameButtons = {}
+        teams = divideOptions(self.files)
 
-        self.leftFrame = tk.Frame(self.master.window)
-        self.rightFrame = tk.Frame(self.master.window)
+        for lang in teams:
+            frame = tk.Frame(self.mainFrame,background = "grey60")
+            label = tk.Label(frame, text = lang)
+            label.pack()
 
-        self.leftFrameButtons["labelGreek"] = tk.Label(self.leftFrame, text = "greek")
-        self.rightFrameButtons["labelEnglish"] = tk.Label(self.rightFrame, text = "english")
+            for pet in teams[lang]:
+                frame2 = tk.Frame(frame,background = "gray80")
+                label2 = tk.Label(frame2, text = pet)
+                label2.grid(column = 0, row = 0)
+                row2 = column2 = 1
+                for i in teams[lang][pet]:
+                    if column2 == 15:
+                        row2 += 1
+                        column2 = 0
+                    button = tk.Button(frame2,text = i[0], command = lambda x = i[1]:self.openTemplate(x))
+                    if i[1] == None:
+                        button.configure(state = "disabled")
+                    button.grid(column = column2,row = row2)
+                    column2 += 1
 
+                frame2.pack()
 
-        for ent in self.entryEntities:
+            frame.pack()
 
-            if ent[3] == "greek":
-                self.leftFrameButtons[ent[0]] = tk.Button(self.leftFrame, bg = "white", text = ent[1], command = lambda ent = ent: self.openTemplate(ent))
-            elif ent[3] == "english":
-                self.rightFrameButtons[ent[0]] = tk.Button(self.rightFrame, bg = "white", text = ent[1], command = lambda ent = ent: self.openTemplate(ent))
+        self.mainFrame.pack(fill='both')
 
-        self.gridFrame(self.leftFrameButtons)
-        self.gridFrame(self.rightFrameButtons)
-        self.leftFrame.pack(anchor = "w")
-        self.rightFrame.pack(anchor = "e")
         self.master.window.mainloop()
 
     def gridFrame(self,frameButtons):
@@ -44,16 +62,9 @@ class fileSelectionWindow(tk.Tk):
 
     def openTemplate(self,ent):
         print(ent)
-        if ent[2] != None:
-            str = self.master.path + "\\Protipa\\" + ent[2]
-            print(ent[2])
+        str = self.master.path + "\\Protipa\\" + ent
             #try:
-            doc = DocxTemplate(str)
-            self.master.fileSelected = ent
-            self.master.window.destroy()
-            self.master.createWindow()
-
-            #except:
-                #print("error with file path name")
-        else:
-            print("file name is none in datebase")
+        doc = DocxTemplate(str)
+        self.master.fileSelected = ent
+        self.master.window.destroy()
+        self.master.createWindow()

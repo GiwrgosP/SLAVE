@@ -3,14 +3,14 @@ import sqlite3
 
 
 def conn(path):
-    str = path +"\\db.db"
+    str = path +"\\dataBase.db"
     con = sqlite3.connect(str)
     c = con.cursor()
     return con,c
 
 def getFirstFields(path):
     con,c = conn(path)
-    c.execute("SELECT * FROM firstWindowButtons")
+    c.execute("SELECT * FROM files")
     rows = c.fetchall()
     con.close()
     return rows
