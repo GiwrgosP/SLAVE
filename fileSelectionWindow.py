@@ -8,7 +8,7 @@ def divideOptions(optionsList):
     teams = { "greek" : { "dog" : list(), "cat" : list()}, "english" : { "dog" : list(), "cat" : list()}}
 
     for option in optionsList:
-        teams[option[2]][option[3]].append((option[1],option[4]))
+        teams[option[2]][option[3]].append((option[0],option[1],option[4]))
 
     return teams
 
@@ -17,7 +17,7 @@ def divideOptions(optionsList):
 class fileSelectionWindow(tk.Tk):
     def __init__(self,master):
         self.master = master
-        self.files = db.getFirstFields(self.master.path)
+        self.files = db.getFile(self.master.path)
         self.mainFrame = tk.Frame(self.master.window, background = "grey40")
 
         teams = divideOptions(self.files)
@@ -36,10 +36,10 @@ class fileSelectionWindow(tk.Tk):
                     if column2 == 15:
                         row2 += 1
                         column2 = 0
-                    button = tk.Button(frame2,text = i[0], command = lambda x = i[1]:self.openTemplate(x))
-                    if i[1] == None:
+                    button = tk.Button(frame2,text = i[1], command = lambda x = i :self.openTemplate(x))
+                    if i[2] == None:
                         button.configure(state = "disabled")
-                    button.grid(column = column2,row = row2)
+                    button.grid(column = column2,row = row2, padx = 5, pady = 5, sticky = "we")
                     column2 += 1
 
                 frame2.pack()
@@ -47,24 +47,15 @@ class fileSelectionWindow(tk.Tk):
             frame.pack()
 
         self.mainFrame.pack(fill='both')
-
         self.master.window.mainloop()
-
-    def gridFrame(self,frameButtons):
-        row = 0
-        column = 0
-        for ent in frameButtons:
-            frameButtons[ent].grid(column = column, sticky = "we", row = row, padx = 5, pady = 5)
-            column += 1
-            if column == 5:
-                column = 0
-                row += 1
 
     def openTemplate(self,ent):
         print(ent)
-        str = self.master.path + "\\Protipa\\" + ent
-            #try:
+        str = self.master.path + "\\Protipa\\" + ent[2]
+        #try:
         doc = DocxTemplate(str)
         self.master.fileSelected = ent
         self.master.window.destroy()
         self.master.createWindow()
+        #except:
+        print("error opening file")

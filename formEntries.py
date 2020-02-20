@@ -1649,12 +1649,12 @@ class pdfReader(tk.Tk):
         return input
 
 class menuEnt(tk.Tk):
-    def __init__(self, master, ent):
+    def __init__(self, master, name,widgetId,sort):
         self.master = master
-        self.field = ent[0]
-        self.text = ent[1]
-        self.name = ent[2]
-        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(ent[5]))
+        self.field = widgetId
+        self.name = name
+        self.sort = sort
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
         self.value =  tk.StringVar(value = "+++")
         self.values = db.getFieldValues(self.field,self.master.master.path)
@@ -1699,16 +1699,15 @@ class menuEnt(tk.Tk):
             return self.value.get()
 
 class entryEnt(tk.Tk):
-    def __init__(self, master, ent):
+    def __init__(self, master, name, widgetId,sort):
         self.master = master
-        self.text = ent[1]
-        self.name = ent[2]
-        self.sort = ent[5]
+        self.name = name
+        self.sort = sort
         self.value = { self.name : tk.StringVar(value = "+++")}
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
 
-        self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.text, textvariable = self.value[self.name]))
+        self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.name, textvariable = self.value[self.name]))
         self.widgets.append(tk.Entry(self.mainWidgetFrame))
 
         self.gridWidgets()
