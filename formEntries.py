@@ -1724,3 +1724,30 @@ class entryEnt(tk.Tk):
         if len(input.split()) == 0 or input == "+++":
             return None
         return input
+
+class entryEnt(tk.Tk):
+    def __init__(self, master, name, widgetId,sort):
+        self.master = master
+        self.name = name
+        self.sort = sort
+        self.value = { self.name : tk.StringVar(value = "+++")}
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
+        self.widgets = list()
+
+        self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.name, textvariable = self.value[self.name]))
+        self.widgets.append(tk.Entry(self.mainWidgetFrame))
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        input = self.value[self.name].get()
+        if len(input.split()) == 0 or input == "+++":
+            return None
+        return input
