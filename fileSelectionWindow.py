@@ -58,4 +58,4 @@ class fileSelectionWindow(tk.Tk):
         self.master.window.destroy()
         self.master.createWindow()
         #except:
-        print("error opening file")
+        #print("error opening file")
