@@ -30,10 +30,24 @@ def getWidget(path,widget):
 
 def getWidgetName(path,name):
     con,c = conn(path)
-    c.execute("SELECT nameVal FROM widgetName WHERE nameId = ?", (name,))
+    c.execute("SELECT nameVal FROM widgetNames WHERE nameId = ?", (name,))
     rows = c.fetchall()
     con.close()
     return rows[0]
+
+def getWidgetMenus(path,widgetId):
+    con,c = conn(path)
+    c.execute("SELECT * FROM widgetMenus WHERE widgetId = ?", (widgetId,))
+    rows = c.fetchall()
+    con.close()
+    return rows
+
+def getValues(path,widgetMenuId):
+    con,c = conn(path)
+    c.execute("SELECT value FROM menuValues WHERE widgetMenuId = ?", (widgetMenuId,))
+    rows = c.fetchall()
+    con.close()
+    return rows
 
 def getEksetasi(path):
     con,c = conn(path)
@@ -42,9 +56,9 @@ def getEksetasi(path):
     con.close()
     return rows
 
-def createFieldValue(path,value,field):
+def createValue(path,value,field):
     con,c = conn(path)
-    c.execute("INSERT INTO valuesFields (field,value) VALUES(?,?)", (field,value))
+    c.execute("INSERT INTO values (menuWidgetId,value) VALUES(?,?)", (field,value))
 
     con.commit()
     con.close()
