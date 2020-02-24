@@ -8,7 +8,7 @@ def divideOptions(optionsList):
     teams = { "greek" : { "dog" : list(), "cat" : list()}, "english" : { "dog" : list(), "cat" : list()}}
 
     for option in optionsList:
-        teams[option[2]][option[3]].append((option[0],option[1],option[4]))
+        teams[option[2]][option[3]].append((option[0],option[1],option[4],option[2],option[3]))
 
     return teams
 

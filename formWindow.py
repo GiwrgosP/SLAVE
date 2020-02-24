@@ -43,9 +43,10 @@ class formWindow(tk.Tk):
 
     def createInputFrame(self):
         self.canvas = tk.Canvas(self.master.window)
+
         self.inputFrame = tk.Frame(self.canvas, background = "bisque" )
-        self.form = db.getForm(self.master.path,self.fileId)
-        #self.entryEntities = sorted(self.entryEntities,key = lambda x: x[5])
+        self.form = sorted(db.getForm(self.master.path,self.fileId),key = lambda x: x[-1])
+
         sort = 0
         for widget in self.form:
             widgetId = widget[1]
@@ -70,7 +71,7 @@ class formWindow(tk.Tk):
                 self.entries[nameId] = formEntries.nameAitEntryEnt(self,name,widgetId,sort)
             elif obj == "bodyWeightSpinBoxEnt":
                 self.entries[nameId] = formEntries.bodyWeightSpinBoxEnt(self,name,widgetId,sort)
-            elif obj == "dogDMVD1CardiologicalAnalysisListBoxEnt":
+            elif obj == "dogDMVDCardiologicalAnalysisEnt":
                 self.entries[nameId] = formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
             elif obj == "weightSpinBoxEnt":
                 self.entries[nameId] = formEntries.weightSpinBoxEnt(self,name,widgetId,sort)
@@ -80,8 +81,8 @@ class formWindow(tk.Tk):
                 self.entries[nameId] = formEntries.auditoryFindingsMenuEnt(self,name,widgetId,sort)
             elif obj == "dogDMVD1RECardiologicalAnalysisListBoxEnt":
                 self.entries[nameId] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
-            elif obj == "dogDCMRECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.dogDCMRECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+            elif obj == "photoReader":
+                self.entries[nameId] = formEntries.photoReader(self,name,widgetId,sort)
             elif obj == "dogPERECardiologicalAnalysisListBoxEnt":
                 self.entries[nameId] = formEntries.dogPERECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
             elif obj == "catHCMRECardiologicalAnalysisListBoxEnt":
