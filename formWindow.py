@@ -45,12 +45,11 @@ class formWindow(tk.Tk):
         self.canvas = tk.Canvas(self.master.window)
 
         self.inputFrame = tk.Frame(self.canvas, background = "bisque" )
-        self.form = sorted(db.getForm(self.master.path,self.fileId),key = lambda x: x[-1])
+        self.form = db.getForm(self.master.path,self.fileId)
 
-        sort = 0
         for widget in self.form:
             widgetId = widget[1]
-            obj,nameId = db.getWidget(self.master.path,widgetId)
+            obj,nameId,sort = db.getWidget(self.master.path,widgetId)
             name = db.getWidgetName(self.master.path,nameId)
 
             if obj == "menuEnt":

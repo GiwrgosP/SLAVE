@@ -23,7 +23,7 @@ def getForm(path,file):
 
 def getWidget(path,widget):
     con,c = conn(path)
-    c.execute("SELECT objectId,nameId FROM widget WHERE widgetId = ?", (widget,))
+    c.execute("SELECT objectId,nameId,sort FROM widget WHERE widgetId = ?", (widget,))
     rows = c.fetchall()
     con.close()
     return rows[0]
