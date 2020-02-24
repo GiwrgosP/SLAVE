@@ -30,9 +30,11 @@ def getWidget(path,widget):
 
 def getWidgetName(path,name):
     con,c = conn(path)
+    print(name)
     c.execute("SELECT nameVal FROM widgetNames WHERE nameId = ?", (name,))
     rows = c.fetchall()
     con.close()
+    print(rows)
     return rows[0]
 
 def getWidgetMenus(path,widgetId):
@@ -47,7 +49,10 @@ def getValues(path,widgetMenuId):
     c.execute("SELECT value FROM menuValues WHERE widgetMenuId = ?", (widgetMenuId,))
     rows = c.fetchall()
     con.close()
-    return rows
+    temp = list()
+    for row in rows:
+        temp.append(row[0])
+    return temp
 
 def getEksetasi(path):
     con,c = conn(path)
@@ -58,7 +63,20 @@ def getEksetasi(path):
 
 def createValue(path,value,field):
     con,c = conn(path)
-    c.execute("INSERT INTO values (menuWidgetId,value) VALUES(?,?)", (field,value))
-
+    c.execute("INSERT INTO menuValues (widgetMenuId,value) VALUES(?,?)", (field,value,))
     con.commit()
     con.close()
+
+def getPetWeightIndex(path,petId):
+    con,c = conn(path)
+    c.execute("SELECT average,tooMuch FROM petWeightIndex WHERE petId = ?", (petId,))
+    rows = c.fetchall()
+    con.close()
+    return rows[0]
+
+def getPetAgeIndex(path,petId):
+    con,c = conn(path)
+    c.execute("SELECT adult,elder FROM petAgeIndex WHERE petId = ?", (petId,))
+    rows = c.fetchall()
+    con.close()
+    return rows[0]
