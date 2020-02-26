@@ -80,3 +80,10 @@ def getPetAgeIndex(path,petId):
     rows = c.fetchall()
     con.close()
     return rows[0]
+
+def getCardioAnalisVal(path,testId):
+    con,c = conn(path)
+    c.execute("SELECT value FROM cardiologicalAnalysisVal WHERE testId = ?", (testId,))
+    rows = c.fetchall()
+    con.close()
+    return rows

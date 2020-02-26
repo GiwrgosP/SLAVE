@@ -6,23 +6,6 @@ from tika import parser
 import re
 from decimal import *
 
-def calcWeight(path,pet,weight):
-    indexes = db.getPetWeightIndex(path,pet)
-    if weight <= indexes[0]:
-        return "μικρόσωμο"
-    elif weight <= indexes[1]:
-        return "μεγαλόσωμο"
-    else:
-        return "γιαγαντόσωμο"
-
-def calcAge(path,pet,age):
-    indexes = db.getPetAgeIndex(path,pet)
-    if age < indexes[0]:
-        return "νεαρό"
-    elif age < indexes[1]:
-        return "ενήλικο"
-    else:
-        return "υπερήλικο"
 
 def frameBgColor(ent):
     if ent == 0:
@@ -34,16 +17,16 @@ def frameBgColor(ent):
         else:
             return "light cyan"
 
-def buildNumber(num, formWindow):
-    if num % 1 == 0:
-        num = str(int(num))
-    else:
-        if num % 0.1 == 0:
-            num = round(num,1)
-        num = str(num)
-        if formWindow.master.fileSelected[-2] == "greek":
-            num = num.replace(".",",")
-    return num
+def replaceValues(values,value):
+    result = list()
+    for sentence in values:
+        temp = sentence[0]
+        for word in value:
+            temp = temp.replace(word[::-1],value[word].get())
+
+        result.append(temp)
+
+    return result
 
 class breedMenuEnt(tk.Tk):
     def __init__(self, master, name, widgetId, sort):
@@ -51,7 +34,7 @@ class breedMenuEnt(tk.Tk):
         self.field = db.getWidgetMenus(self.master.master.path,widgetId)
         self.name = name[0]
         self.sort = sort
-        self.pet = self.master.master.fileSelected[2]
+        self.pet = self.master.pet
         self.value =  { self.field[0][2] : tk.StringVar(value = "+++") }
         self.values = { self.field[0][2] : db.getValues(self.master.master.path,self.field[0][0]) }
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
@@ -852,7 +835,7 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
         self.name = name[0]
         self.sort = sort
         self.state = False
-        self.pet = self.master.master.fileSelected[2]
+        self.pet = self.master.pet
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
         self.value = {"weight" : tk.StringVar(value = "+++"), "age" : tk.StringVar(value = "+++"), "cardiologicalAnalysis" : tk.StringVar(value = "")}
@@ -888,7 +871,7 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
         if val == 0.0:
             self.value["weight"].set("+++")
         else:
-            self.value["weight"].set(calcWeight(self.master.master.path,self.master.master.fileSelected[-1],val))
+            self.value["weight"].set(self.master.calcWeight(val))
         self.updateState()
 
     def updateValueAge(self, *args):
@@ -898,20 +881,16 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
         if approx == 1:
             self.value["age"].set("νεαρο")
         else:
-            self.value["age"].set(calcAge(self.master.master.path,self.master.master.fileSelected[-1],age))
+            self.value["age"].set(self.master.calcAge(age))
 
         self.updateState()
 
     def applyValues(self):
         try:
-            self.widget[1].menu.destroy()
+            self.widgets[1].menu.destroy()
         except:
             pass
-
-        self.values = ("Καρδιολογικός έλεγχος σε "+self.value["weight"].get()+" "+self.value["age"].get()+" σκύλο με υποψία καρδιακής νόσου.",\
-                    "Προεγχειρητικός καρδιολογικός έλεγχος σε "+self.value["weight"].get()+" "+self.value["age"].get()+" σκύλο.",\
-                    "Προληπτικός καρδιολογικός έλεγχος σε "+self.value["weight"].get()+" "+self.value["age"].get()+" σκύλο.",\
-                    "Προεγχειρητικό ς και προληπτικός  καρδιολογικός έλεγχος σε "+self.value["weight"].get()+" "+self.value["age"].get()+" σκύλο.")
+        self.values = replaceValues(db.getCardioAnalisVal(self.master.master.path,self.master.testName),self.value)
 
         self.widgets[1].menu =   tk.Menu(self.widgets[1])
         self.widgets[1]["menu"] = self.widgets[1].menu
@@ -1069,7 +1048,7 @@ class weightSpinBoxEnt(tk.Tk):
         input = float(self.widgets[1].get())
         if input == 0.0:
             return None
-        return buildNumber(input,self.master)
+        return self.master.buildNumber(input)
 
 class bodyWeightSpinBoxEnt(tk.Tk):
     def __init__(self, master, name, widgetId,sort):
@@ -1099,7 +1078,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
         else:
             return None
 
-        temp = buildNumber(num, self.master)
+        temp = self.master.buildNumber(num)
         input += temp + "/5)"
 
         return input
@@ -1177,7 +1156,7 @@ class checkUpSpinBoxEnt(tk.Tk):
         }
         input = list()
         curDate = self.master.entries["date"].getWidgetValues()
-        if curDate!= None:
+        if curDate!= None or self.widgets[1].get() == 0:
             curDate = curDate.split(".")
 
             curMonth = int(curDate[1])
@@ -1322,7 +1301,7 @@ class ageSpinBoxEnt(tk.Tk):
         self.master = master
         self.name = name[0]
         self.sort = sort
-        self.pet = self.master.master.fileSelected[2]
+        self.pet = self.master.pet
         self.value = {"age" : tk.StringVar(value = "0"), "ageAprox" : tk.IntVar(value = 2)}
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
@@ -1459,7 +1438,7 @@ class medicMenuEnt(tk.Tk):
             if flag == False:
                 pass
             else:
-                temp["doseNumber"] = buildNumber(float(temp["doseNumber"]),self.master)
+                temp["doseNumber"] = self.master.buildNumber(float(temp["doseNumber"]))
                 values.append(temp)
                 self.checkSelf(temp)
 
@@ -1583,7 +1562,7 @@ class pdfReader(tk.Tk):
                 else:
                     temp = float(result[i][0])
 
-                input[i] = buildNumber(temp,self.master)
+                input[i] = self.master.buildNumber(temp)
 
         return input
 

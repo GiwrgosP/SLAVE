@@ -32,10 +32,12 @@ class formWindow(tk.Tk):
     def __init__(self,master):
         self.master = master
         self.fileId = self.master.fileSelected[0]
-        self.fileName = self.master.fileSelected[1]
-        self.fileLocation = self.master.fileSelected[2]
+        self.testName = self.master.fileSelected[1]
+        self.language = self.master.fileSelected[2]
+        self.pet = self.master.fileSelected[3]
+        self.fileLocation = self.master.fileSelected[4]
         self.entries = {}
-
+        self.fileStructs()
         self.createInputFrame()
 
     def __del__(self):
@@ -108,7 +110,7 @@ class formWindow(tk.Tk):
     def createButtonFrame(self):
         self.buttonFrame = tk.Frame(self.master.window)
 
-        fileSelectedLabel = tk.Label(self.buttonFrame, text = self.fileName )
+        fileSelectedLabel = tk.Label(self.buttonFrame, text = self.testName + "\n" + self.language + "\n" + self.pet )
         fileSelectedLabel.pack(anchor = "n")
 
         enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
@@ -121,6 +123,60 @@ class formWindow(tk.Tk):
         quitButton.pack(anchor = "s")
 
         self.buttonFrame.pack(anchor = "s", fill = "both", expand = True)
+
+
+    def fileStructs(self):
+        if self.language == "greek":
+            self.weightApprox = { "small" : "μικρόσωμο",\
+            "average" : "μεγαλόσωμο",\
+            "tooMuch" : "γιγαντόσωμο"}
+
+            self.ageApprox = { "young" : "νεαρό",\
+            "adult" : "ενήλικο",\
+            "elder" : "υπερήλικο"}
+
+            #self.bodyWeightApprox = { }
+        elif self.language == "english":
+            self.weightApprox = { "small" : "small",\
+            "average" : "average",\
+            "tooMuch" : "huge"}
+
+            self.ageApprox = { "young" : "young",\
+            "adult" : "adult",\
+            "elder" : "elder"}
+
+            #self.bodyWeightApprox = { }
+        else:
+            print("Structures for this language have not be completed")
+
+    def calcWeight(self,weight):
+        indexes = db.getPetWeightIndex(self.master.path,self.pet)
+        if weight <= indexes[0]:
+            return self.weightApprox["small"]
+        elif weight <= indexes[1]:
+            return self.weightApprox["average"]
+        else:
+            return self.weightApprox["tooMuch"]
+
+    def calcAge(self,age):
+        indexes = db.getPetAgeIndex(self.master.path,self.pet)
+        if age < indexes[0]:
+            return self.ageApprox["young"]
+        elif age < indexes[1]:
+            return self.ageApprox["adult"]
+        else:
+            return self.ageApprox["elder"]
+
+    def buildNumber(self,num):
+        if num % 1 == 0:
+            num = str(int(num))
+        else:
+            if num % 0.1 == 0:
+                num = round(num,1)
+            num = str(num)
+            if self.language == "greek":
+                num = num.replace(".",",")
+        return num
 
     def createScrollbar(self):
         self.canvas.update_idletasks()

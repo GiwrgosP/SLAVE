@@ -3,16 +3,15 @@ import db as db
 from docxtpl import DocxTemplate
 from docx import Document
 import os
+from tkinter import filedialog
 
 def divideOptions(optionsList):
     teams = { "greek" : { "dog" : list(), "cat" : list()}, "english" : { "dog" : list(), "cat" : list()}}
 
     for option in optionsList:
-        teams[option[2]][option[3]].append((option[0],option[1],option[4],option[2],option[3]))
+        teams[option[2]][option[3]].append((option[0],option[1],option[2],option[3],option[4]))
 
     return teams
-
-
 
 class fileSelectionWindow(tk.Tk):
     def __init__(self,master):
@@ -37,7 +36,7 @@ class fileSelectionWindow(tk.Tk):
                         row2 += 1
                         column2 = 0
                     button = tk.Button(frame2,text = i[1], command = lambda x = i :self.openTemplate(x))
-                    if i[2] == None:
+                    if i[4] == None:
                         button.configure(state = "disabled")
                     button.grid(column = column2,row = row2, padx = 5, pady = 5, sticky = "we")
                     column2 += 1
@@ -51,11 +50,11 @@ class fileSelectionWindow(tk.Tk):
 
     def openTemplate(self,ent):
         print(ent)
-        str = self.master.path + "\\Protipa\\" + ent[2]
-        #try:
-        doc = DocxTemplate(str)
-        self.master.fileSelected = ent
-        self.master.window.destroy()
-        self.master.createWindow()
-        #except:
-        #print("error opening file")
+        str = self.master.path + "\\Protipa\\" + ent[4]
+        try:
+            doc = DocxTemplate(str)
+            self.master.fileSelected = ent
+            self.master.window.destroy()
+            self.master.createWindow()
+        except:
+            messagebox.showerror(title = "Slave could not complete your request", message = "Slave encounterred an error while trying to open the file asked")
