@@ -1,6 +1,5 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-import db as db
 from tkinter import messagebox
 from docxtpl import DocxTemplate
 from tkinter import filedialog
@@ -8,26 +7,9 @@ import formEntries
 
 
 class formWindow(tk.Tk):
-    objectList = {"menuEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "spinbox": lambda self,ent:formEntries.spinBox(self,ent),\
-    "entry": lambda self,ent:formEntries.entry(self,ent),\
-    "mediMenu": lambda self,ent:formEntries.medicMenuEnt(self,ent),\
-    "ageSpinBoxEnt": lambda self,ent:formEntries.ageSpinBoxEnt(self,ent),\
-    "ecgMenuEnt": lambda self,ent:formEntries.ecgMenuEnt(self,ent),\
-    "flowButtonEnt": lambda self,ent:formEntries.flowButtonEnt(self,ent),\
-    "checkUpSpinBoxEn": lambda self,ent:formEntries.checkUpSpinBoxEn(self,ent),\
-    "nameAitEntryEnt": lambda self,ent:formEntries.nameAitEntryEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "dogDMVD1CardiologicalAnalysisListBoxEnt": lambda self,ent:formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
-    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
 
-    "menuEnt": lambda self,ent:formEntries.menuEnt(self,ent)}
+    def __del__(self):
+        print("Ending formWindow")
 
     def __init__(self,master):
         self.master = master
@@ -37,69 +19,67 @@ class formWindow(tk.Tk):
         self.pet = self.master.fileSelected[3]
         self.fileLocation = self.master.fileSelected[4]
         self.entries = {}
+        self.mainFrame = tk.Frame(self.master.window)
         self.fileStructs()
         self.createInputFrame()
-
-    def __del__(self):
-        pass
+        self.mainFrame.pack(fill = "both", expand = True)
 
     def createInputFrame(self):
-        self.canvas = tk.Canvas(self.master.window)
+        self.canvas = tk.Canvas(self.mainFrame)
 
         self.inputFrame = tk.Frame(self.canvas, background = "bisque" )
-        self.form = db.getForm(self.master.path,self.fileId)
+        self.form = self.master.getForm(self.fileId)
 
         for widget in self.form:
-            widgetId = widget[1]
-            obj,nameId,sort = db.getWidget(self.master.path,widgetId)
-            name = db.getWidgetName(self.master.path,nameId)
+            widgetId = widget[0]
+            obj,name,nameVal,sort = self.master.getWidget(widgetId)
 
             if obj == "menuEnt":
-                self.entries[nameId] = formEntries.menuEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.menuEnt(self,nameVal,widgetId,sort)
             elif obj == "entry":
-                self.entries[nameId] = formEntries.entryEnt(self,name,nameId,widgetId,sort)
+                self.entries[name] = formEntries.entryEnt(self,nameVal,widgetId,sort)
             elif obj == "mediMenu":
-                self.entries[nameId] = formEntries.medicMenuEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.medicMenuEnt(self,nameVal,widgetId,sort)
             elif obj == "ageSpinBoxEnt":
-                self.entries[nameId] = formEntries.ageSpinBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.ageSpinBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "ecgMenuEnt":
-                self.entries[nameId] = formEntries.ecgMenuEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.ecgMenuEnt(self,nameVal,widgetId,sort)
             elif obj == "flowButtonEnt":
-                self.entries[nameId] = formEntries.flowButtonEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.flowButtonEnt(self,nameVal,widgetId,sort)
             elif obj == "checkUpSpinBoxEnt":
-                self.entries[nameId] = formEntries.checkUpSpinBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.checkUpSpinBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "nameAitEntryEnt":
-                self.entries[nameId] = formEntries.nameAitEntryEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.nameAitEntryEnt(self,nameVal,widgetId,sort)
             elif obj == "bodyWeightSpinBoxEnt":
-                self.entries[nameId] = formEntries.bodyWeightSpinBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.bodyWeightSpinBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "dogDMVDCardiologicalAnalysisEnt":
-                self.entries[nameId] = formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "weightSpinBoxEnt":
-                self.entries[nameId] = formEntries.weightSpinBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.weightSpinBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "pdfReader":
-                self.entries[nameId] = formEntries.pdfReader(self,name,widgetId,sort)
+                self.entries[name] = formEntries.pdfReader(self,nameVal,widgetId,sort)
             elif obj == "auditoryFindingsMenuEnt":
-                self.entries[nameId] = formEntries.auditoryFindingsMenuEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.auditoryFindingsMenuEnt(self,nameVal,widgetId,sort)
             elif obj == "dogDMVD1RECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "photoReader":
-                self.entries[nameId] = formEntries.photoReader(self,name,widgetId,sort)
+                self.entries[name] = formEntries.photoReader(self,nameVal,widgetId,sort)
             elif obj == "dogPERECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.dogPERECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.dogPERECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "catHCMRECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.catHCMRECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[nameId] = formEntries.catHCMRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "catHOCMREardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.catHOCMREardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.catHOCMREardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "dogPHRECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.dogPHRECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.dogPHRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "dogPSRECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.dogPSRECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.dogPSRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "dogSASRECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.dogSASRECardiologicalAnalysisListBoxEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.dogSASRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "historyMenuEnt":
-                self.entries[nameId] = formEntries.historyMenuEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.historyMenuEnt(self,nameVal,widgetId,sort)
             elif obj == "breedMenuEnt":
-                self.entries[nameId] = formEntries.breedMenuEnt(self,name,widgetId,sort)
+                self.entries[name] = formEntries.breedMenuEnt(self,nameVal,widgetId,sort)
             else:
                 print("Error with widget ",obj)
             sort += 1
@@ -108,7 +88,7 @@ class formWindow(tk.Tk):
         self.createButtonFrame()
 
     def createButtonFrame(self):
-        self.buttonFrame = tk.Frame(self.master.window)
+        self.buttonFrame = tk.Frame(self.mainFrame)
 
         fileSelectedLabel = tk.Label(self.buttonFrame, text = self.testName + "\n" + self.language + "\n" + self.pet )
         fileSelectedLabel.pack(anchor = "n")
@@ -123,7 +103,6 @@ class formWindow(tk.Tk):
         quitButton.pack(anchor = "s")
 
         self.buttonFrame.pack(anchor = "s", fill = "both", expand = True)
-
 
     def fileStructs(self):
         if self.language == "greek":
@@ -150,7 +129,7 @@ class formWindow(tk.Tk):
             print("Structures for this language have not be completed")
 
     def calcWeight(self,weight):
-        indexes = db.getPetWeightIndex(self.master.path,self.pet)
+        indexes = self.master.getPetWeightIndex(self.pet)
         if weight <= indexes[0]:
             return self.weightApprox["small"]
         elif weight <= indexes[1]:
@@ -159,7 +138,7 @@ class formWindow(tk.Tk):
             return self.weightApprox["tooMuch"]
 
     def calcAge(self,age):
-        indexes = db.getPetAgeIndex(self.master.path,self.pet)
+        indexes = self.master.getPetAgeIndex(self.pet)
         if age < indexes[0]:
             return self.ageApprox["young"]
         elif age < indexes[1]:
@@ -217,15 +196,12 @@ class formWindow(tk.Tk):
 
     def clearWidgets(self):
         self.canvas.destroy()
-        self.buttonFrame.destroy()
-
         self.createInputFrame()
 
     def goBack(self):
         self.master.fileSelected = None
-        self.master.window.destroy()
-        self.master.createWindow()
-        del self
+        self.mainFrame.destroy()
+        self.master.checkState()
 
     def enterdata(self):
         filePath = self.master.path+"\\Protipa\\" + self.fileLocation

@@ -13,33 +13,23 @@ def getFile(path):
     con.close()
     return rows
 
-
-def getForm(path,file):
+def getForm(path,widgetId):
     con,c = conn(path)
-    c.execute("SELECT * FROM form WHERE fileId = ?", (file,))
+    c.execute("SELECT widgetId FROM form WHERE fileId = ?", (widgetId,))
     rows = c.fetchall()
     con.close()
     return rows
 
 def getWidget(path,widget):
     con,c = conn(path)
-    c.execute("SELECT objectId,nameId,sort FROM widget WHERE widgetId = ?", (widget,))
+    c.execute("SELECT objectId,name,nameVal,sort FROM widget WHERE widgetId = ?", (widget,))
     rows = c.fetchall()
     con.close()
-    return rows[0]
-
-def getWidgetName(path,name):
-    con,c = conn(path)
-    print(name)
-    c.execute("SELECT nameVal FROM widgetNames WHERE nameId = ?", (name,))
-    rows = c.fetchall()
-    con.close()
-    print(rows)
     return rows[0]
 
 def getWidgetMenus(path,widgetId):
     con,c = conn(path)
-    c.execute("SELECT * FROM widgetMenus WHERE widgetId = ?", (widgetId,))
+    c.execute("SELECT menuId FROM widgetMenus WHERE widgetId = ?", (widgetId,))
     rows = c.fetchall()
     con.close()
     return rows
@@ -87,3 +77,27 @@ def getCardioAnalisVal(path,testId):
     rows = c.fetchall()
     con.close()
     return rows
+
+
+
+
+    objectList = {"menuEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "spinbox": lambda self,ent:formEntries.spinBox(self,ent),\
+    "entry": lambda self,ent:formEntries.entry(self,ent),\
+    "mediMenu": lambda self,ent:formEntries.medicMenuEnt(self,ent),\
+    "ageSpinBoxEnt": lambda self,ent:formEntries.ageSpinBoxEnt(self,ent),\
+    "ecgMenuEnt": lambda self,ent:formEntries.ecgMenuEnt(self,ent),\
+    "flowButtonEnt": lambda self,ent:formEntries.flowButtonEnt(self,ent),\
+    "checkUpSpinBoxEn": lambda self,ent:formEntries.checkUpSpinBoxEn(self,ent),\
+    "nameAitEntryEnt": lambda self,ent:formEntries.nameAitEntryEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "dogDMVD1CardiologicalAnalysisListBoxEnt": lambda self,ent:formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+    "bodyWeightSpinBoxEnt": lambda self,ent:formEntries.menuEnt(self,ent),\
+
+    "menuEnt": lambda self,ent:formEntries.menuEnt(self,ent)}
