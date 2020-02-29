@@ -974,7 +974,7 @@ class auditoryFindingsMenuEnt(tk.Tk):
         self.name = name
         self.sort = sort
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
-        self.field = {}
+        self.fields = {}
         self.value = {}
         self.values = {}
         for menu in self.widgetMenus:
@@ -988,12 +988,12 @@ class auditoryFindingsMenuEnt(tk.Tk):
 
         for menuId in self.values:
             self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = menuId ))
-            self.widget[-1].menu = tk.Menu(self.widget[-1])
-            self.widget[-1]["menu"] = self.widget[-1].menu
+            self.widgets[-1].menu = tk.Menu(self.widgets[-1])
+            self.widgets[-1]["menu"] = self.widgets[-1].menu
 
-            self.widget[-1].menu.add_radiobutton(label = "+++", value = "+++",variable = self.value[menuId])
-            for val in self.values[menu]:
-                self.widget[-1].menu.add_radiobutton(label = val, value = val,variable = self.value[menuId])
+            self.widgets[-1].menu.add_radiobutton(label = "+++", value = "+++",variable = self.value[menuId])
+            for val in self.values[menuId]:
+                self.widgets[-1].menu.add_radiobutton(label = val, value = val,variable = self.value[menuId])
 
 
         self.gridWidgets()
