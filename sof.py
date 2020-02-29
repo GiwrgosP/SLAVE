@@ -50,7 +50,7 @@ class window(tk.Tk):
         return rows
 
     def getValues(self,widgetMenuId):
-        self.c.execute("SELECT value FROM menuValues WHERE widgetMenuId = ?", (widgetMenuId,))
+        self.c.execute("SELECT value FROM menuValues WHERE menuId = ?", (widgetMenuId,))
         rows = self.c.fetchall()
         temp = list()
         for row in rows:
@@ -73,7 +73,7 @@ class window(tk.Tk):
         return rows[0]
 
     def createValue(self,value,field):
-        self.c.execute("INSERT INTO menuValues (widgetMenuId,value) VALUES(?,?)", (field,value,))
+        self.c.execute("INSERT INTO menuValues (menuId,value) VALUES(?,?)", (field,value,))
         self.con.commit()
 
     def checkState(self):

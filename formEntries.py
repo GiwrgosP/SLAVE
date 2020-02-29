@@ -18,7 +18,7 @@ def frameBgColor(ent):
 def replaceValues(values,value):
     result = list()
     for sentence in values:
-        temp = sentence[0]
+        temp = sentence
         for word in value:
             temp = temp.replace(word[::-1],value[word].get())
 
