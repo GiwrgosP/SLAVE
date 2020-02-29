@@ -78,7 +78,6 @@ class window(tk.Tk):
 
     def checkState(self):
         try:
-            print(self.selection)
             del self.selection
         except:
             pass
