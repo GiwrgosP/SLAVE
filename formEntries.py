@@ -1215,12 +1215,12 @@ class flowButtonEnt(tk.Tk):
 class ecgMenuEnt(tk.Tk):
     def __init__(self, master, name,widgetId,sort):
         self.master = master
-        self.field = self.master.master.getWidgetMenus(widgetId)
+        self.field = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = name
         self.sort = sort
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.frames = list()
-        self.values = {self.field[0] : self.master.master.getValues(self.field[0][0])}
+        self.values = {self.field[0] : self.master.master.getValues(self.field[0])}
         self.value = {self.field[0] : list()}
         self.widgets = list()
 
@@ -1361,7 +1361,6 @@ class medicMenuEnt(tk.Tk):
             self.fields [menu[0]] = menu[0]
         self.value["doseNumber"] = list()
         self.widgets = list()
-
         self.createWidgets()
         self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
 
@@ -1373,6 +1372,7 @@ class medicMenuEnt(tk.Tk):
 
         tempListWidgets.append(tk.Button(widgetFrame, text = "+", command = self.createWidgets))
         tempListWidgets.append(tk.Button(widgetFrame, text = "-", command = lambda x = widgetFrame: self.destroyButtonAction(x)))
+        tempListWidgets.append(tk.Label(widgetFrame, text = self.name))
 
         for menuId in self.values:
             tempListWidgets.append(tk.Menubutton(widgetFrame, text = menuId))
