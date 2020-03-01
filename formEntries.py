@@ -1001,13 +1001,16 @@ class auditoryFindingsMenuEnt(tk.Tk):
 
     def getWidgetValues(self):
         flag = True
+        temp = {}
         for menu in self.value:
-            if self.value[menu] == "+++" :
+            if self.value[menu].get() == "+++" :
                 flag = False
                 break
+            else:
+                temp[menu] = self.value[menu].get()
 
         if flag == True:
-            return self.value
+            return temp
         else:
             return None
 
