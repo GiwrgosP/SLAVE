@@ -912,44 +912,71 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.state = False
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
-        self.values = {"weight" : tk.StringVar(value = "+++"),\
-        "age" : tk.StringVar(value = "+++"),\
-        "time" : tk.StringVar(value = "+++"),\
-        "yG" : tk.StringVar(value = "+++"),\
-        "clinicalstage" : tk.StringVar(value = "+++")}
+        self.value = {"weight" : tk.StringVar(value = "+++"),\
+        "age" : tk.StringVar(value = "+++")}
+        self.values = {}
 
-        widgetLabel = tk.Label(self.mainWidgetFrame, text = self.text)
-        self.widgets.append(widgetLabel)
+        self.master.entries["weight"].value["weight"].trace_add("write",  self.updateValueWeight)
+        self.master.entries["age"].value["age"].trace_add("write", self.updateValueAge)
+        self.master.entries["age"].value["ageAprox"].trace_add("write", self.updateValueAge)
 
-        menuTime = tk.Menubutton(self.mainWidgetFrame, text = "Αρ. επισκεψης" )
-        self.widgets.append(menuTime)
-        self.applyValues(1)
+        self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.name))
+        for menu in self.widgetMenus:
+            self.value [menu] = tk.StringVar(value = "+++")
+            self.values [menu] = self.master.master.getValues(menu)
 
-        menuYg =  tk.Menubutton(self.mainWidgetFrame, text = "Υ/Γ")
-        self.widgets.append(menuYg)
-        self.applyValues(2)
+            self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = menu ))
+            self.widgets[-1].menu = tk.Menu(self.widgets[-1])
+            self.widgets[-1]["menu"] = self.widgets[-1].menu
 
-        menuClinicalState = tk.Menubutton(self.mainWidgetFrame, text = "Κλινικό στάδιο")
-        self.widgets.append(menuClinicalState)
-        self.applyValues(3)
-
+            self.widgets[-1].menu.add_radiobutton(label = "+++", value = "+++",variable = self.value[menu])
+            for val in self.values[menu]:
+                self.widgets[-1].menu.add_radiobutton(label = val, value = val,variable = self.value[menu])
+        self.updateState()
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
-    def refreshVar(self):
-        self.values["weight"].set(self.master.entries["weight"].giveValues())
-        self.values["age"].set(self.master.entries["age"].giveValues())
+    def updateValueWeight(self, *args):
+        val = float(self.master.entries["weight"].value["weight"].get())
 
-    def applyValues(self,pos):
-        self.widgets[pos].menu = tk.Menu(self.widgets[pos])
-        self.widgets[pos]["menu"] = self.widgets[pos].menu
-        for val in self.value[pos-1]:
-            if pos == 1:
-                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["time"])
-            elif pos == 2:
-                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["yG"])
-            else:
-                self.widgets[pos].menu.add_radiobutton(label = val, value = val,variable = self.values["clinicalstage"])
+        if val == 0.0:
+            self.value["weight"].set("+++")
+        else:
+            self.value["weight"].set(self.master.calcWeight(val))
+        self.updateState()
+
+    def updateValueAge(self, *args):
+        age = int(self.master.entries["age"].value["age"].get())
+        approx = self.master.entries["age"].value["ageAprox"].get()
+
+        if approx == 1:
+            self.value["age"].set("νεαρο")
+        else:
+            self.value["age"].set(self.master.calcAge(age))
+
+        self.updateState()
+
+    def applyValues(self):
+        try:
+            self.widgets[1].menu.destroy()
+        except:
+            pass
+        self.values = replaceValues(self.master.master.getValues(self.widgetMenus[0]),self.value)
+
+        self.widgets[1].menu =   tk.Menu(self.widgets[1])
+        self.widgets[1]["menu"] = self.widgets[1].menu
+        self.widgets[1].menu.add_radiobutton(label = "+++", value ="+++",variable = self.value["cardiologicalAnalysis"])
+
+        for val in self.values:
+            self.widgets[1].menu.add_radiobutton(label = val, value = val,variable = self.value["cardiologicalAnalysis"])
+
+    def updateState(self):
+        if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
+            self.widgets[-1].configure(state = "disabled")
+        else:
+            self.widgets[-1].configure(state = "normal")
+            self.applyValues()
+
 
     def gridWidgets(self):
         column = 0
@@ -1158,7 +1185,7 @@ class checkUpSpinBoxEnt(tk.Tk):
         }
         input = list()
         curDate = self.master.entries["date"].getWidgetValues()
-        if curDate!= None and self.widgets[1].get() != 0:
+        if curDate!= None and self.widgets[1].get() != "0":
             curDate = curDate.split(".")
 
             curMonth = int(curDate[1])
