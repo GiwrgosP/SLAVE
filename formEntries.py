@@ -278,10 +278,10 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
 
     def updateState(self):
         if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
-            for i in range(len(self.widget.[1:])-1) :
+            for i in range(len(self.widget[1:])-1) :
                 self.widgets[i].configure(state = "disabled")
         else:
-            for i in range(len(self.widget.[1:])-1) :
+            for i in range(len(self.widget[1:])-1) :
                 self.widgets[i].configure(state = "normal")
 
     def gridWidgets(self):
@@ -293,8 +293,12 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
     def getWidgetValues(self):
         flag = False
         for menu in self.value:
-            if self.value[menu].get() != "+++"
-
+            if self.value[menu].get() != "+++":
+                flag = True
+        if flag == False:
+            return self.value
+        else:
+            return None
 class auditoryFindingsMenuEnt(tk.Tk):
     def __init__(self, master, name, widgetId, sort):
         self.master = master
