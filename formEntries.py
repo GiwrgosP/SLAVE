@@ -254,7 +254,7 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
                 self.widgets[-1].menu.add_radiobutton(label = val, value = val,variable = self.value[menu])
         self.updateState()
         self.gridWidgets()
-        self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
+        self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
 
     def updateValueWeight(self, *args):
         val = float(self.master.entries["weight"].value["weight"].get())
@@ -278,10 +278,10 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
 
     def updateState(self):
         if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
-            for i in range(len(self.widget[1:])-1) :
+            for i in range(1,len(self.widgets)-1) :
                 self.widgets[i].configure(state = "disabled")
         else:
-            for i in range(len(self.widget[1:])-1) :
+            for i in range(1,len(self.widgets)-1) :
                 self.widgets[i].configure(state = "normal")
 
     def gridWidgets(self):
@@ -292,13 +292,16 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
 
     def getWidgetValues(self):
         flag = False
+        temp = {}
         for menu in self.value:
-            if self.value[menu].get() != "+++":
+            temp[menu] = self.value[menu].get()
+            if self.value[menu].get() == "+++":
                 flag = True
         if flag == False:
-            return self.value
+            return temp
         else:
             return None
+
 class auditoryFindingsMenuEnt(tk.Tk):
     def __init__(self, master, name, widgetId, sort):
         self.master = master
