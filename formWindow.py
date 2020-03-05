@@ -20,7 +20,6 @@ class formWindow(tk.Tk):
         self.fileLocation = self.master.fileSelected[4]
         self.entries = {}
         self.mainFrame = tk.Frame(self.master.window)
-        self.fileStructs()
         self.createInputFrame()
         self.mainFrame.pack(fill = "both", expand = True)
 
@@ -104,47 +103,23 @@ class formWindow(tk.Tk):
 
         self.buttonFrame.pack(anchor = "s", fill = "both", expand = True)
 
-    def fileStructs(self):
-        if self.language == "greek":
-            self.weightApprox = { "small" : "μικρόσωμο",\
-            "average" : "μεγαλόσωμο",\
-            "tooMuch" : "γιγαντόσωμο"}
-
-            self.ageApprox = { "young" : "νεαρό",\
-            "adult" : "ενήλικο",\
-            "elder" : "υπερήλικο"}
-
-            #self.bodyWeightApprox = { }
-        elif self.language == "english":
-            self.weightApprox = { "small" : "small",\
-            "average" : "average",\
-            "tooMuch" : "huge"}
-
-            self.ageApprox = { "young" : "young",\
-            "adult" : "adult",\
-            "elder" : "elder"}
-
-            #self.bodyWeightApprox = { }
-        else:
-            print("Structures for this language have not be completed")
-
     def calcWeight(self,weight):
         indexes = self.master.getPetWeightIndex(self.pet)
         if weight <= indexes[0]:
-            return self.weightApprox["small"]
+            return "small"
         elif weight <= indexes[1]:
-            return self.weightApprox["average"]
+            return "average"
         else:
-            return self.weightApprox["tooMuch"]
+            return "tooMuch"
 
     def calcAge(self,age):
         indexes = self.master.getPetAgeIndex(self.pet)
         if age < indexes[0]:
-            return self.ageApprox["young"]
+            return "young"
         elif age < indexes[1]:
-            return self.ageApprox["adult"]
+            return "adult"
         else:
-            return self.ageApprox["elder"]
+            return "elder"
 
     def buildNumber(self,num):
         if num % 1 == 0:

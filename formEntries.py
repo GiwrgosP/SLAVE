@@ -147,6 +147,7 @@ class historyMenuEnt(tk.Tk):
             return values
 
 class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
+
     def __init__(self, master, name, widgetId,sort):
         self.master = master
         self.widgetMenus = self.master.master.getWidgetMenus(widgetId)[0]
@@ -156,7 +157,11 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
         self.value = {"weight" : tk.StringVar(value = "+++"), "age" : tk.StringVar(value = "+++"), "cardiologicalAnalysis" : tk.StringVar(value = "")}
+        self.fileStructAge = { "greek" : {"young" : "νεαρό", "adult" : "ενήλικο", "elder" : "υπερήλικο"},\
+                            "english" : { "young" : "young", "adult" : "adult", "elder" : "elder"}}
 
+        self.fileStructWeight = { "greek" : { "small" : "μικρόσωμο", "average" : "μεγαλόσωμο", "υπέρβαρο" : "huge"},\
+                                "english" : {  "small" : "small", "average" : "average", "tooMuch" : "huge"}}
         self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.name))
 
         self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = self.widgetMenus[0]))
@@ -183,22 +188,38 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
         return input
 
     def updateValueWeight(self, *args):
-        val = float(self.master.entries["weight"].value["weight"].get())
-
-        if val == 0.0:
-            self.value["weight"].set("+++")
+        val = self.master.entries["weight"].value["weight"].get()
+        if val != "":
+            weight = float(val)
         else:
-            self.value["weight"].set(self.master.calcWeight(val))
+            weight = 0.0
+
+        if weight == 0.0:
+            temp = "+++"
+        else:
+            temp = self.fileStructWeight[self.master.language][self.master.calcWeight(weight)]
+
+        self.value["weight"].set(temp)
         self.updateState()
 
     def updateValueAge(self, *args):
-        age = int(self.master.entries["age"].value["age"].get())
+        val = self.master.entries["age"].value["age"].get()
+        if val != "":
+            age = int(val)
+        else:
+            age = 0
+
         approx = self.master.entries["age"].value["ageAprox"].get()
 
         if approx == 1:
-            self.value["age"].set("νεαρο")
+            temp = self.fileStructAge[self.master.language]["young"]
         else:
-            self.value["age"].set(self.master.calcAge(age))
+            if age == 0:
+                temp = "+++"
+            else:
+                temp = self.fileStructAge[self.master.language][self.master.calcAge(age)]
+
+        self.value["age"].set(temp)
 
         self.updateState()
 
@@ -234,6 +255,11 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets = list()
         self.value = {"weight" : tk.StringVar(value = "+++"),\
         "age" : tk.StringVar(value = "+++")}
+        self.fileStructAge = { "greek" : {"young" : "νεαρό", "adult" : "ενήλικο", "elder" : "υπερήλικο"},\
+                            "english" : { "young" : "young", "adult" : "adult", "elder" : "elder"}}
+
+        self.fileStructWeight = { "greek" : { "small" : "μικρόσωμο", "average" : "μεγαλόσωμο", "υπέρβαρο" : "huge"},\
+                                "english" : {  "small" : "small", "average" : "average", "tooMuch" : "huge"}}
         self.values = {}
 
         self.master.entries["weight"].value["weight"].trace_add("write",  self.updateValueWeight)
@@ -257,23 +283,38 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1,sticky = "we",padx = 5, pady = 5)
 
     def updateValueWeight(self, *args):
-        val = float(self.master.entries["weight"].value["weight"].get())
-
-        if val == 0.0:
-            self.value["weight"].set("+++")
+        val = self.master.entries["weight"].value["weight"].get()
+        if val != "":
+            weight = float(val)
         else:
-            self.value["weight"].set(self.master.calcWeight(val))
+            weight = 0.0
+
+        if weight == 0.0:
+            temp = "+++"
+        else:
+            temp = self.fileStructWeight[self.master.language][self.master.calcWeight(weight)]
+
+        self.value["weight"].set(temp)
         self.updateState()
 
     def updateValueAge(self, *args):
-        age = int(self.master.entries["age"].value["age"].get())
+        val = self.master.entries["age"].value["age"].get()
+        if val != "":
+            age = int(val)
+        else:
+            age = 0
+
         approx = self.master.entries["age"].value["ageAprox"].get()
 
         if approx == 1:
-            self.value["age"].set("νεαρο")
+            temp = self.fileStructAge[self.master.language]["young"]
         else:
-            self.value["age"].set(self.master.calcAge(age))
+            if age == 0:
+                temp = "+++"
+            else:
+                temp = self.fileStructAge[self.master.language][self.master.calcAge(age)]
 
+        self.value["age"].set(temp)
         self.updateState()
 
     def updateState(self):
@@ -297,8 +338,15 @@ class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
                 flag = True
         if flag == False:
             return self.value
+
+
+
+
+
+
         else:
             return None
+
 class auditoryFindingsMenuEnt(tk.Tk):
     def __init__(self, master, name, widgetId, sort):
         self.master = master
