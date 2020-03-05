@@ -146,7 +146,203 @@ class historyMenuEnt(tk.Tk):
         else:
             return values
 
-class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
+class catDMVDRECardiologicalAnalysisListBoxEnt(tk.Tk):
+    def __init__(self, master, name, widgetId, sort):
+        self.master = master
+        self.widgetMenus = self.master.master.getWidgetMenus(widgetId)[0]
+        self.name = name
+        self.sort = sort
+        self.state = False
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
+        self.widgets = list()
+        self.value = {"age" : tk.StringVar(value = "+++"), "sex" : tk.StringVar(value = "+++")}
+        self.fileStructAge = { "greek" : {"γάτο" : {"young" : "νεαρό", "adult" : "ενήλικο", "elder" : "υπερήλικο"},\
+                                        "γάτα" : {"young" : "νεαρή", "adult" : "ενήλικη", "elder" : "υπερήλικη"}},\
+                            "english" : {"cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"},\
+                                        "cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"}}}
+
+        self.fileStructSex = { "greek" : {"αρσενικό" : "γάτο", "θηλύκό" : "γάτα"},\
+                                "english" : {"male" : "cat", "female" : "cat"}}
+        self.values = {}
+
+        self.master.entries["sex"].value["sex"].trace_add("write",  self.updateValueSex)
+        self.master.entries["age"].value["age"].trace_add("write", self.updateValueAge)
+        self.master.entries["age"].value["ageAprox"].trace_add("write", self.updateValueAge)
+
+        self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.name))
+        for menu in self.widgetMenus:
+            self.value [menu] = tk.StringVar(value = "+++")
+            self.values [menu] = self.master.master.getValues(menu)
+
+            self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = menu ))
+            self.widgets[-1].menu = tk.Menu(self.widgets[-1])
+            self.widgets[-1]["menu"] = self.widgets[-1].menu
+
+            self.widgets[-1].menu.add_radiobutton(label = "+++", value = "+++",variable = self.value[menu])
+            for val in self.values[menu]:
+                self.widgets[-1].menu.add_radiobutton(label = val, value = val,variable = self.value[menu])
+        self.updateState()
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
+
+    def updateValueSex(self, *args):
+        val = self.master.entries["sex"].value["sex"].get()
+        if val != "+++" or val != "":
+            sex = self.fileStructSex[self.master.language][val]
+        else:
+            sex = "+++"
+
+        self.value["sex"].set(sex)
+        self.updateState()
+
+    def updateValueAge(self, *args):
+        val = self.master.entries["age"].value["age"].get()
+        if val != "":
+            age = int(val)
+        else:
+            age = 0
+
+        approx = self.master.entries["age"].value["ageAprox"].get()
+        sex = self.value["sex"]
+        if sex != "+++":
+            if approx == 1:
+                temp = self.fileStructAge[self.master.language][sex]["young"]
+            else:
+                if age == 0:
+                    temp = "+++"
+                else:
+                    temp = self.fileStructAge[self.master.language][sex][self.master.calcAge(age)]
+        else:
+            temp = "+++"
+
+        self.value["age"].set(temp)
+
+        self.updateState()
+
+
+    def updateState(self):
+        if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
+            for i in range(1,len(self.widgets)-1) :
+                self.widgets[i].configure(state = "disabled")
+        else:
+            for i in range(1,len(self.widgets)-1) :
+                self.widgets[i].configure(state = "normal")
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        flag = False
+        for menu in self.value:
+            if self.value[menu].get() != "+++":
+                flag = True
+        if flag == False:
+            return self.value
+        else:
+            return None
+
+class catDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
+
+    def __init__(self, master, name, widgetId,sort):
+        self.master = master
+        self.widgetMenus = self.master.master.getWidgetMenus(widgetId)[0]
+        self.name = name
+        self.sort = sort
+        self.state = False
+        self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
+        self.widgets = list()
+        self.value = {"age" : tk.StringVar(value = "+++"), "sex" : tk.StringVar(value = "+++"), "cardiologicalAnalysis" : tk.StringVar(value = "")}
+        self.fileStructAge = { "greek" : {"γάτο" : {"young" : "νεαρό", "adult" : "ενήλικο", "elder" : "υπερήλικο"},\
+                                        "γάτα" : {"young" : "νεαρή", "adult" : "ενήλικη", "elder" : "υπερήλικη"}},\
+                            "english" : {"cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"},\
+                                        "cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"}}}
+
+        self.fileStructSex = { "greek" : {"αρσενικό" : "γάτο", "θηλύκό" : "γάτα"},\
+                                "english" : {"male" : "cat", "female" : "cat"}}
+        self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.name))
+
+        self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = self.widgetMenus[0]))
+
+        self.master.entries["sex"].value["sex"].trace_add("write",  self.updateValueSex)
+        self.master.entries["age"].value["age"].trace_add("write", self.updateValueAge)
+        self.master.entries["age"].value["ageAprox"].trace_add("write", self.updateValueAge)
+
+        self.updateState()
+
+        self.gridWidgets()
+        self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
+
+    def gridWidgets(self):
+        column = 0
+        for ent in self.widgets:
+            ent.grid(column = column, row = 0)
+            column += 1
+
+    def getWidgetValues(self):
+        input = self.value["cardiologicalAnalysis"].get()
+        if input == "+++" or input == "":
+            return None
+        return input
+
+    def updateValueSex(self, *args):
+        val = self.master.entries["sex"].value["sex"].get()
+        if val != "+++" or val != "":
+            sex = self.fileStructSex[self.master.language][val]
+        else:
+            sex = "+++"
+
+        self.value["sex"].set(sex)
+        self.updateState()
+
+    def updateValueAge(self, *args):
+        val = self.master.entries["age"].value["age"].get()
+        if val != "":
+            age = int(val)
+        else:
+            age = 0
+
+        approx = self.master.entries["age"].value["ageAprox"].get()
+        sex = self.value["sex"]
+        if sex != "+++":
+            if approx == 1:
+                temp = self.fileStructAge[self.master.language][sex]["young"]
+            else:
+                if age == 0:
+                    temp = "+++"
+                else:
+                    temp = self.fileStructAge[self.master.language][sex][self.master.calcAge(age)]
+        else:
+            temp = "+++"
+
+        self.value["age"].set(temp)
+
+        self.updateState()
+
+    def applyValues(self):
+        try:
+            self.widgets[1].menu.destroy()
+        except:
+            pass
+        self.values = replaceValues(self.master.master.getValues(self.widgetMenus[0]),self.value)
+
+        self.widgets[1].menu =   tk.Menu(self.widgets[1])
+        self.widgets[1]["menu"] = self.widgets[1].menu
+        self.widgets[1].menu.add_radiobutton(label = "+++", value ="+++",variable = self.value["cardiologicalAnalysis"])
+
+        for val in self.values:
+            self.widgets[1].menu.add_radiobutton(label = val, value = val,variable = self.value["cardiologicalAnalysis"])
+
+    def updateState(self):
+        if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
+            self.widgets[-1].configure(state = "disabled")
+        else:
+            self.widgets[-1].configure(state = "normal")
+            self.applyValues()
+
+class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
 
     def __init__(self, master, name, widgetId,sort):
         self.master = master
@@ -244,7 +440,7 @@ class dogDMVD1CardiologicalAnalysisListBoxEnt(tk.Tk):
             self.widgets[-1].configure(state = "normal")
             self.applyValues()
 
-class dogDMVD1RECardiologicalAnalysisListBoxEnt(tk.Tk):
+class dogDMVDRECardiologicalAnalysisListBoxEnt(tk.Tk):
     def __init__(self, master, name, widgetId, sort):
         self.master = master
         self.widgetMenus = self.master.master.getWidgetMenus(widgetId)[0]

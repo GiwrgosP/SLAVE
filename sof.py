@@ -42,7 +42,6 @@ class window(tk.Tk):
     def getWidget(self,widgetId):
         self.c.execute("SELECT objectId,name,nameVal,sort FROM widget WHERE widgetId = ?", (widgetId,))
         rows = self.c.fetchall()
-        print(rows)
         return rows[0]
 
     def getWidgetMenus(self,widgetId):

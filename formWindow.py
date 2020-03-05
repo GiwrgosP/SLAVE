@@ -52,7 +52,7 @@ class formWindow(tk.Tk):
             elif obj == "bodyWeightSpinBoxEnt":
                 self.entries[name] = formEntries.bodyWeightSpinBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "dogDMVDCardiologicalAnalysisEnt":
-                self.entries[name] = formEntries.dogDMVD1CardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
+                self.entries[name] = formEntries.dogDMVDCardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "weightSpinBoxEnt":
                 self.entries[name] = formEntries.weightSpinBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "pdfReader":
@@ -60,21 +60,9 @@ class formWindow(tk.Tk):
             elif obj == "auditoryFindingsMenuEnt":
                 self.entries[name] = formEntries.auditoryFindingsMenuEnt(self,nameVal,widgetId,sort)
             elif obj == "RECardiologicalAnalysisListBoxEnt":
-                self.entries[name] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
+                self.entries[name] = formEntries.dogDMVDRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "photoReader":
                 self.entries[name] = formEntries.photoReader(self,nameVal,widgetId,sort)
-            elif obj == "dogPERECardiologicalAnalysisListBoxEnt":
-                self.entries[name] = formEntries.dogPERECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
-            elif obj == "catHCMRECardiologicalAnalysisListBoxEnt":
-                self.entries[nameId] = formEntries.catHCMRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
-            elif obj == "catHOCMREardiologicalAnalysisListBoxEnt":
-                self.entries[name] = formEntries.catHOCMREardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
-            elif obj == "dogPHRECardiologicalAnalysisListBoxEnt":
-                self.entries[name] = formEntries.dogPHRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
-            elif obj == "dogPSRECardiologicalAnalysisListBoxEnt":
-                self.entries[name] = formEntries.dogPSRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
-            elif obj == "dogSASRECardiologicalAnalysisListBoxEnt":
-                self.entries[name] = formEntries.dogSASRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "historyMenuEnt":
                 self.entries[name] = formEntries.historyMenuEnt(self,nameVal,widgetId,sort)
             elif obj == "breedMenuEnt":
