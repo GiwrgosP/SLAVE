@@ -59,7 +59,7 @@ class formWindow(tk.Tk):
                 self.entries[name] = formEntries.pdfReader(self,nameVal,widgetId,sort)
             elif obj == "auditoryFindingsMenuEnt":
                 self.entries[name] = formEntries.auditoryFindingsMenuEnt(self,nameVal,widgetId,sort)
-            elif obj == "dogDMVD1RECardiologicalAnalysisListBoxEnt":
+            elif obj == "RECardiologicalAnalysisListBoxEnt":
                 self.entries[name] = formEntries.dogDMVD1RECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             elif obj == "photoReader":
                 self.entries[name] = formEntries.photoReader(self,nameVal,widgetId,sort)
