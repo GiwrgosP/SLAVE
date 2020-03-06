@@ -9,6 +9,8 @@ import formEntries
 class formWindow(tk.Tk):
 
     def __del__(self):
+        for ent in self.entries:
+            self.entries[ent].destroy()
         print("Ending formWindow")
 
     def __init__(self,master):
@@ -34,7 +36,7 @@ class formWindow(tk.Tk):
             obj,name,nameVal,sort = self.master.getWidget(widgetId)
 
             if obj == "menuEnt":
-                self.entries[name] = formEntries.menuEnt(self,nameVal,widgetId,sort)
+                self.entries[name] = formEntries.menuEnt(self,nameVal,name,widgetId,sort)
             elif obj == "entry":
                 self.entries[name] = formEntries.entryEnt(self,nameVal,widgetId,sort)
             elif obj == "mediMenu":
@@ -67,6 +69,10 @@ class formWindow(tk.Tk):
                 self.entries[name] = formEntries.historyMenuEnt(self,nameVal,widgetId,sort)
             elif obj == "breedMenuEnt":
                 self.entries[name] = formEntries.breedMenuEnt(self,nameVal,widgetId,sort)
+            elif obj == "catHCMRECardiologicalAnalysisListBoxEnt":
+                self.entries[name] = formEntries.catHCMRECardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
+            elif obj == "catKfCardiologicalAnalysisListBoxEnt":
+                self.entries[name] = formEntries.catKfCardiologicalAnalysisListBoxEnt(self,nameVal,widgetId,sort)
             else:
                 print("Error with widget ",obj)
             sort += 1

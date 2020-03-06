@@ -146,7 +146,7 @@ class historyMenuEnt(tk.Tk):
         else:
             return values
 
-class catDMVDRECardiologicalAnalysisListBoxEnt(tk.Tk):
+class catHCMRECardiologicalAnalysisListBoxEnt(tk.Tk):
     def __init__(self, master, name, widgetId, sort):
         self.master = master
         self.widgetMenus = self.master.master.getWidgetMenus(widgetId)[0]
@@ -161,7 +161,7 @@ class catDMVDRECardiologicalAnalysisListBoxEnt(tk.Tk):
                             "english" : {"cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"},\
                                         "cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"}}}
 
-        self.fileStructSex = { "greek" : {"αρσενικό" : "γάτο", "θηλύκό" : "γάτα"},\
+        self.fileStructSex = { "greek" : {"αρσενικό" : "γάτο", "θηλυκό" : "γάτα"},\
                                 "english" : {"male" : "cat", "female" : "cat"}}
         self.values = {}
 
@@ -221,7 +221,7 @@ class catDMVDRECardiologicalAnalysisListBoxEnt(tk.Tk):
 
 
     def updateState(self):
-        if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
+        if self.value["sex"].get() == "+++" or self.value["age"].get() == "+++":
             for i in range(1,len(self.widgets)-1) :
                 self.widgets[i].configure(state = "disabled")
         else:
@@ -244,7 +244,7 @@ class catDMVDRECardiologicalAnalysisListBoxEnt(tk.Tk):
         else:
             return None
 
-class catDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
+class catKfCardiologicalAnalysisListBoxEnt(tk.Tk):
 
     def __init__(self, master, name, widgetId,sort):
         self.master = master
@@ -260,7 +260,7 @@ class catDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
                             "english" : {"cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"},\
                                         "cat" : { "young" : "young", "adult" : "adult", "elder" : "elder"}}}
 
-        self.fileStructSex = { "greek" : {"αρσενικό" : "γάτο", "θηλύκό" : "γάτα"},\
+        self.fileStructSex = { "greek" : {"αρσενικό" : "γάτο", "θηλυκό" : "γάτα"},\
                                 "english" : {"male" : "cat", "female" : "cat"}}
         self.widgets.append(tk.Label(self.mainWidgetFrame, text = self.name))
 
@@ -305,7 +305,7 @@ class catDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
             age = 0
 
         approx = self.master.entries["age"].value["ageAprox"].get()
-        sex = self.value["sex"]
+        sex = self.value["sex"].get()
         if sex != "+++":
             if approx == 1:
                 temp = self.fileStructAge[self.master.language][sex]["young"]
@@ -318,7 +318,6 @@ class catDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
             temp = "+++"
 
         self.value["age"].set(temp)
-
         self.updateState()
 
     def applyValues(self):
@@ -336,7 +335,7 @@ class catDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
             self.widgets[1].menu.add_radiobutton(label = val, value = val,variable = self.value["cardiologicalAnalysis"])
 
     def updateState(self):
-        if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
+        if self.value["sex"].get() == "+++" or self.value["age"].get() == "+++":
             self.widgets[-1].configure(state = "disabled")
         else:
             self.widgets[-1].configure(state = "normal")
@@ -534,12 +533,6 @@ class dogDMVDRECardiologicalAnalysisListBoxEnt(tk.Tk):
                 flag = True
         if flag == False:
             return self.value
-
-
-
-
-
-
         else:
             return None
 
@@ -1145,17 +1138,18 @@ class pdfReader(tk.Tk):
         return input
 
 class menuEnt(tk.Tk):
-    def __init__(self, master, name,widgetId,sort):
+    def __init__(self, master, name,nameId,widgetId,sort):
+        print(name)
         self.master = master
         self.field = self.master.master.getWidgetMenus(widgetId)[0]
-        self.name = name
+        self.name = nameId
         self.sort = sort
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
         self.value =  { self.name : tk.StringVar(value = "+++") }
         self.values = { self.name : self.master.master.getValues(self.field[0])}
 
-        self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = self.name))
+        self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = name))
 
         self.widgets[0].menu = tk.Menu(self.widgets[0])
         self.widgets[0]["menu"] = self.widgets[0].menu
