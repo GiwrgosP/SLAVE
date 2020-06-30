@@ -639,7 +639,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
             return None
         elif num <  1.5:
             input = self.values[self.name][0]
-        elif num < 2.5:
+        elif num <= 2.5:
             input = self.values[self.name][1]
         elif num <= 4.0:
             input = self.values[self.name][2]
@@ -772,7 +772,7 @@ class flowButtonEnt(tk.Tk):
         self.state = not self.state
 
         if self.state == True:
-            self.value[self.name].set("Αντιστροφή Ε & Α κύματος διαμιτροειδικής ροής, εύρημα συμβατό με  1ου βαθμού διαστολική δυσλειτουργία του μυοκαρδίου.")
+            self.value[self.name].set("Αντιστροφή Ε & Α κύματος διαμιτροειδικής ροής, εύρημα συμβατό με 1ου βαθμού διαστολική δυσλειτουργία του μυοκαρδίου.")
             self.widget[0].configure(bg = "red")
         else:
             self.value[self.name].set("+++")
