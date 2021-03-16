@@ -3,7 +3,7 @@ import tkinter as tk
 import os
 import sqlite3
 import formWindow
-import fileSelectionWindow
+import fileSelection
 
 class window(tk.Tk):
     def __del__(self):
@@ -29,8 +29,18 @@ class window(tk.Tk):
         except:
             print("Error While Connectiong To DataBase", str)
 
-    def getFile(self):
-        self.c.execute("SELECT * FROM files")
+    def getFile(self,text,value):
+        self.c.execute("SELECT * FROM files"+text,value)
+        rows = self.c.fetchall()
+        return rows
+
+    def getPets(self):
+        self.c.execute("SELECT * FROM pets")
+        rows = self.c.fetchall()
+        return rows
+
+    def getLangs(self):
+        self.c.execute("SELECT * FROM language")
         rows = self.c.fetchall()
         return rows
 
@@ -82,9 +92,9 @@ class window(tk.Tk):
         except:
             pass
         if self.fileSelected == None:
-            self.selection = fileSelectionWindow.fileSelectionWindow(self)
+            self.selection = fileSelection.fileSelectionWindow(self)
         else:
-            self.selection = formWindow.formWindow(self)
+            pass
 
 def main():
     root = window()
