@@ -87,12 +87,15 @@ class window(tk.Tk):
         self.con.commit()
 
     def checkState(self):
+        print(self.fileSelected)
         try:
             del self.selection
         except:
             pass
         if self.fileSelected == None:
             self.selection = fileSelection.fileSelectionWindow(self)
+        elif self.fileSelected == "form":
+            self.selection = fileForms.form(self)
         else:
             pass
 
