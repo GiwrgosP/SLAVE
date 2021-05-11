@@ -8,6 +8,5 @@ import fileForms
 class form(tk.Tk):
     def __init__(self,master):
         self.master = master
-        self.mainFrame = tk.Frame(self.master.window,background = "steel blue")
+        self.mainFrame = tk.Frame(self.master.window,background = "alice blue")
         self.mainFrame.pack()
-        

@@ -73,12 +73,12 @@ class window(tk.Tk):
         return rows
 
     def getPetWeightIndex(self,petId):
-        self.c.execute("SELECT average,tooMuch FROM petWeightIndex WHERE petId = ?", (petId,))
+        self.c.execute("SELECT small,average,tooMuch FROM petWeightIndex WHERE petId = ?", (petId,))
         rows = self.c.fetchall()
         return rows[0]
 
     def getPetAgeIndex(self,petId):
-        self.c.execute("SELECT adult,elder FROM petAgeIndex WHERE petId = ?", (petId,))
+        self.c.execute("SELECT young,adult,elder FROM petAgeIndex WHERE petId = ?", (petId,))
         rows = self.c.fetchall()
         return rows[0]
 

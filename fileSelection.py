@@ -27,7 +27,7 @@ class fileSelectionWindow(tk.Tk):
         def fileSelected(self,x):
             self.master.master.fileSelected = x
             self.master.master.checkState()
-            
+
         def __init__(self,master,name):
             self.master = master
             self.frame = tk.Frame(self.master.mainFrame)
@@ -39,7 +39,7 @@ class fileSelectionWindow(tk.Tk):
             self.frameButtons = list()
             self.canvas.grid(row = 1, column = 2)
             self.frame.grid(row = 1, column = 2)
-            
+
         def fillFrame(self,choices):
             print(len(self.frameButtons))
             if len(self.frameButtons) > 0:
@@ -54,12 +54,12 @@ class fileSelectionWindow(tk.Tk):
                 self.frameButtons.append(tk.Button(self.inputFrame,text = i[1], command = lambda x = i[4] : self.fileSelected (x)))
                 self.frameButtons[-1].grid(row = counterRow, column = counterColumn, padx = "5", pady = "5")
                 counterColumn += 1
-                if counterColumn == 6: 
+                if counterColumn == 6:
                     counterRow += 1
                     counterColumn = 1
-                 
-            self.canvas.create_window(0, 0, anchor = "nw", window=self.inputFrame)
 
+            self.canvas.create_window(0, 0, anchor = "nw", window=self.inputFrame)
+#παράθυρο για επιλογή προτύπου
 
         def createScrollbar(self):
             self.canvas.update_idletasks()
@@ -89,7 +89,7 @@ class fileSelectionWindow(tk.Tk):
         self.master = master
         self.petVar = tk.StringVar(value = "+++")
         self.langVar = tk.StringVar(value = "+++")
-        self.mainFrame =  tk.Frame(self.master.window, background = "steel blue")
+        self.mainFrame =  tk.Frame(self.master.window, background = "cornsilk")
         frame1 = self.filterFrame(self,"lang",1,self.master.getLangs(),self.langVar)
         frame2 = self.filterFrame(self,"pet",2,self.master.getPets(),self.petVar)
         self.frame3 = self.choiceFrame(self,"lang")
