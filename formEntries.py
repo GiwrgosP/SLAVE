@@ -1095,7 +1095,8 @@ class pdfReader(tk.Tk):
     def buttonAction(self):
         fileName = filedialog.askopenfilename(filetypes = (("pdf files","*.pdf"),))
         print(fileName)
-        if fileName != "" or fileName !="+++":
+        if fileName != "" and fileName !="+++":
+
             self.value.set(fileName)
 
     def gridWidgets(self):
