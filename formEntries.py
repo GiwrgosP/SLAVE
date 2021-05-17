@@ -728,15 +728,16 @@ class checkUpSpinBoxEnt(tk.Tk):
         input = list()
         curDate = self.master.entries["date"].getWidgetValues()
         if curDate!= None and self.widgets[1].get() != "0":
+            print(curDate)
+
             curDate = curDate.split(".")
 
             curMonth = int(curDate[1])
             curYear = int(curDate[2])
             endDate = int(self.widgets[1].get())
+            endMonth = monthCounter[(endDate % 12) + curMonth]
+            endYear = curYear +(endDate // 12)
 
-            endMonth = monthCounter[(curMonth + endDate) % 12]
-            endYear = (curMonth + endDate) // 12
-            endYear+= curYear
             temp = list()
             temp.append(str(endDate))
             temp.append(endMonth)
