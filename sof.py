@@ -77,7 +77,7 @@ class window(tk.Tk):
         self.con.commit()
 
     def getDefault(self,value):
-        self.c.execute("SELECT * FROM Default")
+        self.c.execute("SELECT value FROM firstValue")
         rows = self.c.fetchall()
         return rows[0]
 
