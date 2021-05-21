@@ -76,6 +76,11 @@ class window(tk.Tk):
         self.c.execute("INSERT INTO menuValues (menuId,value) VALUES(?,?)", (field,value,))
         self.con.commit()
 
+    def getDefault(self,value):
+        self.c.execute("SELECT * FROM Default")
+        rows = self.c.fetchall()
+        return rows[0]
+
     def checkState(self):
         try:
             del self.selection

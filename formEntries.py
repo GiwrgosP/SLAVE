@@ -1111,14 +1111,13 @@ class pdfReader(tk.Tk):
 
 class menuEnt(tk.Tk):
     def __init__(self, master, name,nameId,widgetId,sort):
-        print(name)
         self.master = master
         self.field = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = nameId
         self.sort = sort
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
-        self.value =  { self.name : tk.StringVar(value = "+++") }
+        self.value =  { self.name : tk.StringVar(value = self.master.master.getDefault(widgetId)) }
         self.values = { self.name : self.master.master.getValues(self.field[0])}
 
         self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = name))
