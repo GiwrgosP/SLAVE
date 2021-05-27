@@ -3,7 +3,7 @@ import tkinter as tk
 import os
 import sqlite3
 import formWindow
-import fileSelection
+import fileSelectionWindow
 
 class window(tk.Tk):
     def __del__(self):
@@ -29,18 +29,8 @@ class window(tk.Tk):
         except:
             print("Error While Connectiong To DataBase", str)
 
-    def getFile(self,text,value):
-        self.c.execute("SELECT * FROM files"+text,value)
-        rows = self.c.fetchall()
-        return rows
-
-    def getPets(self):
-        self.c.execute("SELECT * FROM pets")
-        rows = self.c.fetchall()
-        return rows
-
-    def getLangs(self):
-        self.c.execute("SELECT * FROM language")
+    def getFile(self):
+        self.c.execute("SELECT * FROM files")
         rows = self.c.fetchall()
         return rows
 
@@ -73,12 +63,12 @@ class window(tk.Tk):
         return rows
 
     def getPetWeightIndex(self,petId):
-        self.c.execute("SELECT small,average,tooMuch FROM petWeightIndex WHERE petId = ?", (petId,))
+        self.c.execute("SELECT average,tooMuch FROM petWeightIndex WHERE petId = ?", (petId,))
         rows = self.c.fetchall()
         return rows[0]
 
     def getPetAgeIndex(self,petId):
-        self.c.execute("SELECT young,adult,elder FROM petAgeIndex WHERE petId = ?", (petId,))
+        self.c.execute("SELECT adult,elder FROM petAgeIndex WHERE petId = ?", (petId,))
         rows = self.c.fetchall()
         return rows[0]
 
@@ -87,17 +77,14 @@ class window(tk.Tk):
         self.con.commit()
 
     def checkState(self):
-        print(self.fileSelected)
         try:
             del self.selection
         except:
             pass
         if self.fileSelected == None:
-            self.selection = fileSelection.fileSelectionWindow(self)
-        elif self.fileSelected == "form":
-            self.selection = fileForms.form(self)
+            self.selection = fileSelectionWindow.fileSelectionWindow(self)
         else:
-            pass
+            self.selection = formWindow.formWindow(self)
 
 def main():
     root = window()

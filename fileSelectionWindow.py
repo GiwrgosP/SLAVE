@@ -1,59 +1,62 @@
 import tkinter as tk
-import db as db
 from docxtpl import DocxTemplate
 from docx import Document
 import os
+from tkinter import filedialog,messagebox
+
+def divideOptions(optionsList):
+    teams = { "greek" : { "dog" : list(), "cat" : list()}, "english" : { "dog" : list(), "cat" : list()}}
+
+    for option in optionsList:
+        teams[option[2]][option[3]].append((option[0],option[1],option[2],option[3],option[4]))
+
+    return teams
 
 class fileSelectionWindow(tk.Tk):
+    def __del__(self):
+        print("Ending fileSelectionWindow")
+
     def __init__(self,master):
         self.master = master
-        self.entryEntities = db.getFirstFields(self.master.path)
+        self.files = self.master.getFile()
+        self.mainFrame = tk.Frame(self.master.window, background = "MediumPurple4")
 
-        self.leftFrameButtons = {}
-        self.rightFrameButtons = {}
+        teams = divideOptions(self.files)
 
-        self.leftFrame = tk.Frame(self.master.window)
-        self.rightFrame = tk.Frame(self.master.window)
+        for lang in teams:
+            frame = tk.Frame(self.mainFrame,background = "steel blue")
+            label = tk.Label(frame, text = lang)
+            label.pack()
 
-        self.leftFrameButtons["labelGreek"] = tk.Label(self.leftFrame, text = "greek")
-        self.rightFrameButtons["labelEnglish"] = tk.Label(self.rightFrame, text = "english")
+            for pet in teams[lang]:
+                frame2 = tk.Frame(frame,background = "grey60")
+                label2 = tk.Label(frame2, text = pet)
+                label2.grid(column = 0, row = 0)
+                row2 = column2 = 1
+                for i in teams[lang][pet]:
+                    if column2 == 15:
+                        row2 += 1
+                        column2 = 0
+                    button = tk.Button(frame2,text = i[1],background = "salmon2", command = lambda x = i :self.openTemplate(x))
+                    if i[4] == None:
+                        button.configure(state = "disabled")
+                    button.grid(column = column2,row = row2, padx = 5, pady = 5, sticky = "we")
+                    column2 += 1
 
+                frame2.pack()
 
-        for ent in self.entryEntities:
+            frame.pack()
 
-            if ent[3] == "greek":
-                self.leftFrameButtons[ent[0]] = tk.Button(self.leftFrame, bg = "white", text = ent[1], command = lambda ent = ent: self.openTemplate(ent))
-            elif ent[3] == "english":
-                self.rightFrameButtons[ent[0]] = tk.Button(self.rightFrame, bg = "white", text = ent[1], command = lambda ent = ent: self.openTemplate(ent))
+        self.mainFrame.pack(fill='both', expand = True)
 
-        self.gridFrame(self.leftFrameButtons)
-        self.gridFrame(self.rightFrameButtons)
-        self.leftFrame.pack(anchor = "w")
-        self.rightFrame.pack(anchor = "e")
-        self.master.window.mainloop()
-
-    def gridFrame(self,frameButtons):
-        row = 0
-        column = 0
-        for ent in frameButtons:
-            frameButtons[ent].grid(column = column, sticky = "we", row = row, padx = 5, pady = 5)
-            column += 1
-            if column == 5:
-                column = 0
-                row += 1
 
     def openTemplate(self,ent):
         print(ent)
-        if ent[2] != None:
-            str = self.master.path + "\\Protipa\\" + ent[2]
-            print(ent[2])
-            #try:
-            doc = DocxTemplate(str)
-            self.master.fileSelected = ent
-            self.master.window.destroy()
-            self.master.createWindow()
-
-            #except:
-                #print("error with file path name")
-        else:
-            print("file name is none in datebase")
+        str = self.master.path + "\\Protipa\\" + ent[4]
+        #try:
+        doc = DocxTemplate(str)
+        self.master.fileSelected = ent
+        self.mainFrame.destroy()
+        self.master.checkState()
+        #except:
+            #messagebox.showerror(title = "Slave could not complete your request", message = "Slave encounterred an error while trying to open the file asked or create the form")
