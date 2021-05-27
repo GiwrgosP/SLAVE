@@ -1087,8 +1087,8 @@ class pdfReader(tk.Tk):
             tags = self.master.master.getEksetasi()
             parsed = parser.from_file(fileName)
             tempDoc = parsed["content"].split("Status:")
-            tempDoc = tempDoc[0].split("N\xadMode")
-            tempDoc = re.sub("\n"," ", tempDoc[1])
+            tempDoc = tempDoc[0].split("M\xadMode")
+            tempDoc = re.sub("\n", " ", tempDoc[1])
             tempDoc = tempDoc.split(" ")
             doc = list()
             result = {}
