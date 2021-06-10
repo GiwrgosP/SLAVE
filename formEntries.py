@@ -1079,15 +1079,12 @@ class pdfReader(tk.Tk):
         if fileName == "+++":
             return None
         else:
-            #το αρχείο που έχει επιλεγεί από το κουμπί
-            #έχει κάποια στοιχεία
-            #χωρίζει αυτά τα στοιχεία σε λίστα
-            #αντικαθιστεί
-            #και ξαναχωρίζει
             tags = self.master.master.getEksetasi()
             parsed = parser.from_file(fileName)
             tempDoc = parsed["content"].split("Status:")
+
             tempDoc = tempDoc[0].split("M\xadMode")
+
             tempDoc = re.sub("\n", " ", tempDoc[1])
             tempDoc = tempDoc.split(" ")
             doc = list()
