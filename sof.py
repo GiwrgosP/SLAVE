@@ -76,14 +76,6 @@ class window(tk.Tk):
         self.c.execute("INSERT INTO menuValues (menuId,value) VALUES(?,?)", (field,value,))
         self.con.commit()
 
-    def getDefault(self,value):
-        self.c.execute("SELECT value FROM firstValue WHERE widgetId = ?", (value,))
-        rows = self.c.fetchall()
-        return rows
-
-    def joinValues():
-        self.c.execute("Select widgetId, value FROM firstValue LEFT JOIN form ON firstValue.fileId = form.fileId")
-
     def checkState(self):
         try:
             del self.selection

@@ -1,21 +1,16 @@
 import tika
 from tika import parser
-import database as db
+import sof as db
 import re
 
 from tkinter import filedialog
 
-def UploadAction(event=None):
-    filename = filedialog.askopenfilename()
-    print('Selected:', filename)
 
-UploadAction()
-result = {}
-tags = db.getEksetasi('C:\\Python37-64\\sof\\SLAVE')
+tags = db.getEksetasi()
 
-parsed = parser.from_file('C:\\Python37-64\\sof\\SLAVE\\pdf.pdf')
+parsed = parser.from_file('C:\\Users\\SKPar\\Desktop\\Report.pdf')
 
-tempDoc = parsed["content"].split("Status:")
+tempDoc = parsed["content"].split("Cardio Canine")
 
 tempDoc = tempDoc[0].split("M\xadMode")
 tempDoc = re.sub("\n", " ", tempDoc[1])

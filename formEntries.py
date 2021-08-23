@@ -1081,43 +1081,47 @@ class pdfReader(tk.Tk):
         else:
             tags = self.master.master.getEksetasi()
             parsed = parser.from_file(fileName)
-            tempDoc = parsed["content"].split("Status:")
-            tempDoc = tempDoc[0].split("M\xadMode")
+            tempDoc = parsed["content"]
+
+            tempDoc = tempDoc.split("M-Mode")
+            tempDoc = tempDoc[1].spit("Sphericity Index")
             tempDoc = re.sub("\n", " ", tempDoc[1])
-            tempDoc = tempDoc.split(" ")
-            doc = list()
-            result = {}
-            for i in tempDoc:
-                doc.append(re.sub("\xa0", " ", i))
+            result = list()
+            smatchPos = -1
+            ematchPos = -1
+            print(tempDoc)
             for tag in tags:
-                for i in range(len(doc)):
-                    if tag[0] == doc[i]:
-                        temp = list()
-                        for j in range(1,tag[2]+1):
-                            temp.append(re.sub("\xad", "",doc[i+j]))
-                        result[tag[1]] = temp
-                        break
+                print(tag[0])
 
-            input = {}
-            for i in result:
-                if len(result[i])==2 and result[i][1] == "cm":
-                    temp = float(Decimal(result[i][0]) * Decimal(10))
-                else:
-                    temp = float(result[i][0])
+                match = tempDoc.find(tag[0])
+                print(smatchPos,ematchPos)
+                if match!= -1:
+                    if smatchPos == -1:
+                        smatchPos = match
+                    else:
+                        ematchPos = match
+                        print(smatchPos,ematchPos)
+                        result.append(tempDoc[int(smatchPos):int(ematchPos)])
+                        smatchPos = match
 
-                input[i] = self.master.buildNumber(temp)
 
+
+
+
+        input = None
+        print(result)
         return input
 
 class menuEnt(tk.Tk):
     def __init__(self, master, name,nameId,widgetId,sort):
+        print(name)
         self.master = master
         self.field = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = nameId
         self.sort = sort
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
-        self.value =  { self.name : tk.StringVar(value = self.master.master.getDefault(widgetId)) }
+        self.value =  { self.name : tk.StringVar(value = "+++") }
         self.values = { self.name : self.master.master.getValues(self.field[0])}
 
         self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = name))
