@@ -1,6 +1,6 @@
 import tika
 from tika import parser
-import db as db
+import dataBase
 import re
 
 from tkinter import filedialog
@@ -8,7 +8,7 @@ from tkinter import filedialog
 def UploadAction(event=None):
     filename = filedialog.askopenfilename()
     print('Selected:', filename)
-    
+
 UploadAction()
 result = {}
 tags = db.getEksetasi('C:\\Python37-64\\sof\\SLAVE')

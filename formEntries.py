@@ -8,13 +8,13 @@ from decimal import *
 
 def frameBgColor(ent):
     if ent == 0:
-        return "sky blue"
+        return "alice blue"
     else:
         temp = ent % 2
         if temp == 0:
-            return "sky blue"
+            return "cornsilk"
         else:
-            return "light cyan"
+            return "light gray"
 
 def buildNumber(num, formWindow):
     if num % 1 == 0:
@@ -96,6 +96,7 @@ class historyMenuEnt(tk.Tk):
         self.createWidgets()
         self.mainWidgetFrame.grid(column = 0, row = ent[5]-1, sticky = "we", padx = 5, pady = 5)
 
+#προσθήκη ή διαγραφή επιπλέον κουμπιών
     def createWidgets(self):
         widgetFrame = tk.Frame(self.mainWidgetFrame)
         self.frames.append(widgetFrame)
@@ -1062,6 +1063,7 @@ class weightSpinBoxEnt(tk.Tk):
                 return "μεγαλόσωμο"
             else:
                 return "γιαγαντόσωμο"
+                #δεν χρειάζεται για τη γάτα!!!
         elif self.pet == "cat":
             if val == 0.0:
                 return "+++"

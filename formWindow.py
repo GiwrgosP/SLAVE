@@ -189,6 +189,7 @@ class formWindow(tk.Tk):
                 self.clearWidgets()
             else:
                 self.goBack()
+                
     def loadingBarProgress(self,val):
         self.loadingBar['value'] = self.loadingBar['value'] + val
         self.buttonFrame.update_idletasks()
