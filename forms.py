@@ -74,6 +74,7 @@ class forms(tk.Tk):
         scrollDir = int(event.delta/120)
         self.canvas.yview('scroll',-1*scrollDir, "units")
         self.updateScrollBar()
+    
 
     def __init__(self,master,widgets):
         self.master = master

@@ -84,6 +84,9 @@ class fileSelectionWindow(tk.Tk):
 
     def __del__(self):
         print("Ending fileSelectionWindow")
+        self.mainFrame.destroy()
+        self.frame3.destroy()
+        
 
     def __init__(self,master):
         self.master = master

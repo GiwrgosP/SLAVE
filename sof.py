@@ -89,6 +89,7 @@ class window(tk.Tk):
     def checkState(self):
         print(self.fileSelected)
         try:
+            print("delete selection")
             del self.selection
         except:
             pass
