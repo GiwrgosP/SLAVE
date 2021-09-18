@@ -1116,15 +1116,22 @@ class pdfReader(tk.Tk):
                 result[values[i][0]] = tempDoc[values[i][2]:endMatch].split()
                 endMatch = values[i][1]-1
 
-            input = {}
+            tempInput = {}
             for i in result:
                 if len(result[i])==2 and result[i][1] == "cm":
                     temp = float(Decimal(result[i][0]) * Decimal(10))
                 else:
                     temp = float(result[i][0])
 
-                input[i] = buildNumber(temp,self.master)
-            print(input)
+                tempInput[i] = buildNumber(temp,self.master)
+
+            input = {}
+            for i in tempInput:
+                for tag in tags:
+                    if i == tag[0]:
+                        input[tag[1]] = tempInput[i]
+
+
 
         return input
 
