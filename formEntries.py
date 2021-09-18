@@ -5,6 +5,16 @@ from tika import parser
 import re
 from decimal import *
 
+def buildNumber(num, formWindow):
+    if num % 1 == 0:
+        num = str(int(num))
+    else:
+        if num % 0.1 == 0:
+            num = round(num,1)
+        num = str(num)
+        if formWindow.master.fileSelected[-2] == "greek":
+            num = num.replace(".",",")
+    return num
 
 def frameBgColor(ent):
     if ent == 0:
@@ -1105,15 +1115,15 @@ class pdfReader(tk.Tk):
             for i in range(j,0,-1):
                 result[values[i][0]] = tempDoc[values[i][2]:endMatch].split()
                 endMatch = values[i][1]-1
+            input = {}
+            for i in result:
+                if len(result[i])==2 and result[i][1] == "cm":
+                    temp = float(Decimal(result[i][0]) * Decimal(10))
+                else:
+                    temp = float(result[i][0])
 
-            print(result)
-
-
-
-
-
-
-        return "+++"
+                input[i] = buildNumber(temp,self.master)
+        return input
 
 class menuEnt(tk.Tk):
     def __init__(self, master, name,nameId,widgetId,sort):
