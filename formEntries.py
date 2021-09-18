@@ -1103,8 +1103,7 @@ class pdfReader(tk.Tk):
             j = len(values)
             j-=1
             for i in range(j,0,-1):
-                tempDoc[values[i][2]:endMatch]
-                result[values[i][0]] = split(tempDoc[values[i][2]:endMatch])
+                result[values[i][0]] = tempDoc[values[i][2]:endMatch].split()
                 endMatch = values[i][1]-1
 
             print(result)
