@@ -6,13 +6,14 @@ import re
 from decimal import *
 
 def buildNumber(num, formWindow):
+    print(formWindow.master.fileSelected[2])
     if num % 1 == 0:
         num = str(int(num))
     else:
         if num % 0.1 == 0:
             num = round(num,1)
         num = str(num)
-        if formWindow.master.fileSelected[-2] == "greek":
+        if formWindow.master.fileSelected[2] == "greek":
             num = num.replace(".",",")
     return num
 
