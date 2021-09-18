@@ -6,7 +6,6 @@ import re
 from decimal import *
 
 def buildNumber(num, formWindow):
-    print(formWindow.master.fileSelected[2])
     if num % 1 == 0:
         num = str(int(num))
     else:
@@ -1118,10 +1117,12 @@ class pdfReader(tk.Tk):
                 endMatch = values[i][1]-1
 
             tempInput = {}
+            print(result)
             for i in result:
                 if len(result[i])==2 and result[i][1] == "cm":
                     temp = float(Decimal(result[i][0]) * Decimal(10))
                 else:
+
                     temp = float(result[i][0])
 
                 tempInput[i] = buildNumber(temp,self.master)
