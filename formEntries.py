@@ -1116,6 +1116,7 @@ class pdfReader(tk.Tk):
                 result[values[i][0]] = tempDoc[values[i][2]:endMatch].split()
                 endMatch = values[i][1]-1
             input = {}
+
             for i in result:
                 if len(result[i])==2 and result[i][1] == "cm":
                     temp = float(Decimal(result[i][0]) * Decimal(10))
@@ -1123,6 +1124,10 @@ class pdfReader(tk.Tk):
                     temp = float(result[i][0])
 
                 input[i] = buildNumber(temp,self.master)
+            print(result)
+            print("==============================")
+            print(input)
+
         return input
 
 class menuEnt(tk.Tk):
