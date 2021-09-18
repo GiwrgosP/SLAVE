@@ -1084,33 +1084,37 @@ class pdfReader(tk.Tk):
             tempDoc = parsed["content"]
 
             tempDoc = tempDoc.split("M-Mode")
-            tempDoc = tempDoc[1].spit("Sphericity Index")
-            tempDoc = re.sub("\n", " ", tempDoc[1])
-            result = list()
-            smatchPos = -1
-            ematchPos = -1
-            print(tempDoc)
+            tempDoc = tempDoc[1].split("Sphericity Index")
+            tempDoc = re.sub("\n", " ", tempDoc[0])
+            values = list()
             for tag in tags:
-                print(tag[0])
+                try:
+                    startMatch = tempDoc.index(tag[0])
+                except ValueError:
+                    pass
+                else:
+                    endMatch = startMatch+len(tag[0])
+                    values.append((tag[0],startMatch,endMatch))
 
-                match = tempDoc.find(tag[0])
-                print(smatchPos,ematchPos)
-                if match!= -1:
-                    if smatchPos == -1:
-                        smatchPos = match
-                    else:
-                        ematchPos = match
-                        print(smatchPos,ematchPos)
-                        result.append(tempDoc[int(smatchPos):int(ematchPos)])
-                        smatchPos = match
+            values = sorted(values, key=lambda x: x[2])
+            result = {}
+            endMatch = len(tempDoc)
+            endMatch -=1
+            j = len(values)
+            j-=1
+            for i in range(j,0,-1):
+                tempDoc[values[i][2]:endMatch]
+                result[values[i][0]] = split(tempDoc[values[i][2]:endMatch])
+                endMatch = values[i][1]-1
+
+            print(result)
 
 
 
 
 
-        input = None
-        print(result)
-        return input
+
+        return "+++"
 
 class menuEnt(tk.Tk):
     def __init__(self, master, name,nameId,widgetId,sort):
