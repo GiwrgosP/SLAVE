@@ -1136,7 +1136,7 @@ class pdfReader(tk.Tk):
             for i in tempTags:
                 tags.append(i[0])
 
-            parsed = parser.from_file('C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\Report1.pdf')
+            parsed = parser.from_file(self.master.master.path +'\\Report1.pdf')
             metaData = parsed["metadata"]
             doc = parsed["content"]
             doc = re.sub("\n", " ", doc)
@@ -1173,7 +1173,6 @@ class pdfReader(tk.Tk):
 
             for i in cardioCanine:
                 if len(cardioCanine[i])==2 and cardioCanine[i][1] == "cm":
-                    print(cardioCanine[i][0])
                     temp = float(Decimal(cardioCanine[i][0]) * Decimal(10))
                 else:
 
