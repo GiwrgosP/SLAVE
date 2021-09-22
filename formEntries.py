@@ -1136,7 +1136,7 @@ class pdfReader(tk.Tk):
             for i in tempTags:
                 tags.append(i[0])
 
-            parsed = parser.from_file('C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\Report1.pdf')
+            parsed = parser.from_file(self.master.master.path +'\\Report1.pdf')
             metaData = parsed["metadata"]
             doc = parsed["content"]
             doc = re.sub("\n", " ", doc)
