@@ -1184,7 +1184,11 @@ class pdfReader(tk.Tk):
             for i in cardioCanine:
                 for tag in tempTags:
                     if tag[0] == i:
-                        input[tag[1]] = cardioCanine[i]
+                        if "-" not in cardioCanine[i]:
+                            temp = cardioCanine[i]
+                        else:
+                            temp = cardioCanine[i].replace("-","")
+                        input[tag[1]] = temp
         return input
 
 class menuEnt(tk.Tk):
