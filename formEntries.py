@@ -5,6 +5,26 @@ from tika import parser
 import re
 from decimal import *
 
+def indexDoc(doc,tagList):
+    indexList = list()
+    stringList = {}
+    for tag in tagList:
+        try:
+            startIndex = doc.index(tag)
+        except ValueError:
+            pass
+        else:
+            endIndex = startIndex+len(tag)
+            indexList.append((startIndex,endIndex))
+
+    indexList = sorted(indexList, key = lambda x : x[1])
+    endIndex = len(doc)
+
+    for i in range(len(indexList)-1,-1,-1):
+        stringList[doc[indexList[i][0]:indexList[i][1]]] = doc[indexList[i][1]:endIndex]
+        endIndex = indexList[i][0]
+    return stringList
+
 def buildNumber(num, formWindow):
     if num % 1 == 0:
         num = str(int(num))
@@ -1056,6 +1076,28 @@ class photoReader(tk.Tk):
             return None
 
 class pdfReader(tk.Tk):
+
+    catDataList = ("Patient Data",\
+    "Cardio Canine"\
+    ,"Attached images")
+
+    catTitleList = ((),
+    ("M-Mode",\
+    "Doppler",\
+    "B-Mode"),\
+    ("Owner name",\
+    "Animal name",\
+    "Breed","Age",\
+    "Gender",\
+    "Weight",\
+    "Exam Date",\
+    "Report Data"))
+
+    subCatList = (("Aorta/LA","Sphericity Index","EF A-L", "EF SP (Simpson)","EF MOD"),\
+    ("Aorta","MV","MR","Pulmonary A","AVA (VTI)",\
+    "Pulmonary Capillary Wedge Pressure"),\
+    ("MV","Left Ventricle"))
+
     def __init__(self, master, name,widgetId,sort):
         self.master = master
         self.name = name
@@ -1089,55 +1131,61 @@ class pdfReader(tk.Tk):
         if fileName == "+++":
             return None
         else:
-            tags = self.master.master.getEksetasi()
-            parsed = parser.from_file(fileName)
-            tempDoc = parsed["content"]
+            tags = list()
+            tempTags = self.master.master.getEksetasi()
+            for i in tempTags:
+                tags.append(i[0])
 
-            tempDoc = tempDoc.split("M-Mode")
-            tempDoc = tempDoc[1].split("Sphericity Index")
-            tempDoc = re.sub("\n", " ", tempDoc[0])
-            values = list()
-            for tag in tags:
-                try:
-                    startMatch = tempDoc.index(tag[0])
-                except ValueError:
-                    pass
+            parsed = parser.from_file('C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\Report1.pdf')
+            metaData = parsed["metadata"]
+            doc = parsed["content"]
+            doc = re.sub("\n", " ", doc)
+
+            catData = indexDoc(doc,self.catDataList)
+
+            titleData = {}
+            j = 0
+            for i in catData:
+                data = indexDoc(catData[i],self.catTitleList[j])
+                j+=1
+                titleData[i] = data
+
+            j = 0
+            temp = {}
+            for i in titleData["Cardio Canine"]:
+                temp[i] = indexDoc(titleData["Cardio Canine"][i],self.subCatList[j])
+                j+=1
+
+
+            tempTitles = {}
+            for i in temp:
+                tempTitles[i] = {}
+                for j in temp[i]:
+                    tempTitles[i][j] = indexDoc(temp[i][j],tags)
+
+            patientData = titleData["Patient Data"]
+            cardioCanine = {}
+            for cat in tempTitles:
+                for title in tempTitles[cat]:
+                    for tag in tempTitles[cat][title]:
+                        if tag not in cardioCanine:
+                            cardioCanine[tag] = tempTitles[cat][title][tag].split()
+
+            for i in cardioCanine:
+                if len(cardioCanine[i])==2 and cardioCanine[i][1] == "cm":
+                    print(cardioCanine[i][0])
+                    temp = float(Decimal(cardioCanine[i][0]) * Decimal(10))
                 else:
-                    endMatch = startMatch+len(tag[0])
-                    values.append((tag[0],startMatch,endMatch))
 
-            values = sorted(values, key=lambda x: x[2])
-            result = {}
-            endMatch = len(tempDoc)
-            endMatch -=1
-            j = len(values)
-            j-=1
-            for i in range(j,-1,-1):
-                result[values[i][0]] = tempDoc[values[i][2]:endMatch].split()
-                endMatch = values[i][1]-1
-
-            tempInput = {}
-            print(values)
-            print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-            print(result)
-            for i in result:
-                if len(result[i])==2 and result[i][1] == "cm":
-                    temp = float(Decimal(result[i][0]) * Decimal(10))
-                else:
-                    if len(result[i])!=0:
-                        temp = float(result[i][0])
-                        tempInput[i] = buildNumber(temp,self.master)
-
-
+                    if len(cardioCanine[i])!=0:
+                        temp = float(cardioCanine[i][0])
+                cardioCanine[i] = buildNumber(temp,self.master)
 
             input = {}
-            for i in tempInput:
-                for tag in tags:
-                    if i == tag[0]:
-                        input[tag[1]] = tempInput[i]
-
-
-
+            for i in cardioCanine:
+                for tag in tempTags:
+                    if tag[0] == i:
+                        input[tag[1]] = cardioCanine[i]
         return input
 
 class menuEnt(tk.Tk):

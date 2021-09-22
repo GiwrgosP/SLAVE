@@ -1,31 +1,93 @@
 import tika
 from tika import parser
-import sof as db
 import re
+import sqlite3
 
-from tkinter import filedialog
+def conn():
+    str = "C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\dataBase.db"
+    try:
+        con = sqlite3.connect(str)
+        c = con.cursor()
+        return c,con
+    except:
+        print("Error While Connectiong To DataBase", str)
+
+def getEksetasi(c):
+    c.execute("SELECT PDF FROM Eksetasi")
+    row = c.fetchall()
+    rows = list()
+    for i in row:
+        rows.append(i[0])
+    return rows
+
+def indexDoc(doc,tagList):
+    indexList = list()
+    stringList = {}
+    for tag in tagList:
+        try:
+            startIndex = doc.index(tag)
+        except ValueError:
+            pass
+        else:
+            endIndex = startIndex+len(tag)
+            indexList.append((startIndex,endIndex))
+
+    indexList = sorted(indexList, key = lambda x : x[1])
+    endIndex = len(doc)
+
+    for i in range(len(indexList)-1,-1,-1):
+        stringList[doc[indexList[i][0]:indexList[i][1]]] = doc[indexList[i][1]:endIndex]
+        endIndex = indexList[i][0]
+    return stringList
 
 
-tags = db.getEksetasi()
+catDataList = ("Patient Data",\
+"Cardio Canine"\
+,"Attached images")
 
-parsed = parser.from_file('C:\\Users\\SKPar\\Desktop\\Report.pdf')
+catTitleList = ((),
+("M-Mode",\
+"Doppler",\
+"B-Mode"),\
+("Owner name",\
+"Animal name",\
+"Breed","Age",\
+"Gender",\
+"Weight",\
+"Exam Date",\
+"Report Data"))
 
-tempDoc = parsed["content"].split("Cardio Canine")
+subCatList = (("Aorta/LA","Sphericity Index","EF A-L", "EF SP (Simpson)","EF MOD"),\
+("Aorta","MV","MR","Pulmonary A","AVA (VTI)",\
+"Pulmonary Capillary Wedge Pressure"),\
+("MV","Left Ventricle"))
 
-tempDoc = tempDoc[0].split("M\xadMode")
-tempDoc = re.sub("\n", " ", tempDoc[1])
-tempDoc = tempDoc.split(" ")
-doc = list()
-for i in tempDoc:
-    doc.append(re.sub("\xa0", " ", i))
-for tag in tags:
-    for i in range(len(doc)):
-        print(tag[0],doc[i])
-        if tag[0] == doc[i]:
-            temp = list()
-            for j in range(1,tag[2]+1):
-                temp.append(re.sub("\xad", "-",doc[i+j]))
-            result[tag[0]] = temp
-            break
-print(doc)
-print(result)
+
+c,con = conn()
+tags = getEksetasi(c)
+parsed = parser.from_file('C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\Report1.pdf')
+metaData = parsed["metadata"]
+doc = parsed["content"]
+doc = re.sub("\n", " ", doc)
+catData = indexDoc(doc,catDataList)
+
+titleData = {}
+j = 0
+for i in catData:
+    data = indexDoc(catData[i],catTitleList[j])
+    j+=1
+    titleData[i] = data
+j = 0
+temp = {}
+for i in titleData["Cardio Canine"]:
+    temp[i] = indexDoc(titleData["Cardio Canine"][i],subCatList[j])
+    j+=1
+
+
+tempTitles = {}
+for i in temp:
+    tempTitles[i] = {}
+    for j in temp[i]:
+        tempTitles[i][j] = indexDoc(temp[i][j],tags)
+
+print(tempTitles)
