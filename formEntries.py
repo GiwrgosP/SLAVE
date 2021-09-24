@@ -1029,7 +1029,7 @@ class photoReader(tk.Tk):
         self.master = master
         self.name = name
         self.sort = sort
-        self.value =  { "filePath" : tk.StringVar(value = "+++"), "files" : {} }
+        self.value =  { "filePath" : tk.StringVar(value = "+++"), "files" : [] }
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
 
@@ -1061,8 +1061,8 @@ class photoReader(tk.Tk):
     def getWidgetValues(self):
         if self.value["filePath"] != "+++" and self.value["filePath"] != None:
             images = glob.glob(str(self.value["filePath"].get())+"/*.bmp")
-            for i in range(len(images)):
-                self.value["files"]["image"+str(i)] = str(self.value["filePath"].get()) + images[i]
+            for i in images:
+                self.value["files"].append(str(self.value["filePath"].get()) + i)
             return self.value["files"]
         else:
             return None
