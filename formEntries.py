@@ -644,9 +644,10 @@ class weightSpinBoxEnt(tk.Tk):
 
     def getWidgetValues(self):
         input = float(self.widgets[1].get())
+        print(input)
         if input == 0.0:
             return None
-        return self.master.buildNumber(input)
+        return buildNumber(input,self.master)
 
 class bodyWeightSpinBoxEnt(tk.Tk):
     def __init__(self, master, name, widgetId,sort):
@@ -680,7 +681,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
             print("Error with widget ", self.name, num)
             return None
 
-        temp = self.master.buildNumber(num)
+        temp = buildNumber(num,self.master)
         input += temp + "/5)"
 
         return input
@@ -759,7 +760,6 @@ class checkUpSpinBoxEnt(tk.Tk):
         input = list()
         curDate = self.master.entries["date"].getWidgetValues()
         if curDate!= None and self.widgets[1].get() != "0":
-            print(curDate)
 
             curDate = curDate.split(".")
 
@@ -767,7 +767,7 @@ class checkUpSpinBoxEnt(tk.Tk):
             curYear = int(curDate[2])
             endDate = int(self.widgets[1].get())
             endMonth = monthCounter[(endDate + curMonth) % 12]
-            endYear = curYear +(endDate // 12)
+            endYear = curYear + (endDate // 12)
 
             temp = list()
             temp.append(str(endDate))
@@ -1009,7 +1009,7 @@ class medicMenuEnt(tk.Tk):
             if flag == False:
                 pass
             else:
-                temp["doseNumber"] = self.master.buildNumber(float(temp["doseNumber"]))
+                temp["doseNumber"] = buildNumber(float(temp["doseNumber"]),self.master)
                 values.append(temp)
                 self.checkSelf(temp)
 
@@ -1062,7 +1062,7 @@ class photoReader(tk.Tk):
         if self.value["filePath"] != "+++" and self.value["filePath"] != None:
             images = glob.glob(str(self.value["filePath"].get())+"/*.bmp")
             for i in images:
-                self.value["files"].append(str(self.value["filePath"].get()) + i)
+                self.value["files"].append(i)
             return self.value["files"]
         else:
             return None
