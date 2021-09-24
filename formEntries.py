@@ -1070,7 +1070,6 @@ class photoReader(tk.Tk):
 
 class pdfReader(tk.Tk):
 
-
     def __init__(self, master, name,widgetId,sort):
         self.master = master
         self.name = name
@@ -1116,7 +1115,7 @@ class pdfReader(tk.Tk):
             doc = parsed["content"]
             doc = re.sub("\n", " ", doc)
 
-            thema = indexDoc(doc,self.catDataList)
+            thema = indexDoc(doc,catDataList)
 
             catData = {}
             for i in thema:
