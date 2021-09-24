@@ -1062,7 +1062,6 @@ class photoReader(tk.Tk):
     def getWidgetValues(self):
         if self.value["filePath"] != "+++" and self.value["filePath"] != None:
             images = glob.glob(self.value["filePath"]+"/*.bmp")
-            print(images)
             for i in range(len(images)):
                 self.value["files"]["image"+str(i)] = self.value["filePath"] + images[i]
             return self.value["files"]
