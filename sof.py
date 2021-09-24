@@ -62,6 +62,30 @@ class window(tk.Tk):
         rows = self.c.fetchall()
         return rows
 
+    def getThema(self):
+        self.c.execute("SELECT text FROM thema")
+        temp = self.c.fetchall()
+        rows = list()
+        for row in temp:
+            rows.append(row[0])
+        return rows
+
+    def getCategory(self,themaId):
+        self.c.execute("SELECT text FROM categoryThema WHERE id_thema = ?", (themaId,))
+        temp = self.c.fetchall()
+        rows = list()
+        for row in temp:
+            rows.append(row[0])
+        return rows
+
+    def getTitles(self,categoryId):
+        self.c.execute("SELECT text FROM titlesCategories WHERE id_thema = ?", (categoryId,))
+        temp = self.c.fetchall()
+        rows = list()
+        for row in temp:
+            rows.append(row[0])
+        return rows
+
     def getPetWeightIndex(self,petId):
         self.c.execute("SELECT average,tooMuch FROM petWeightIndex WHERE petId = ?", (petId,))
         rows = self.c.fetchall()
