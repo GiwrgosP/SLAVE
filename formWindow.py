@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import messagebox
-from docxtpl import DocxTemplate
+from docxtpl import DocxTemplate, InlineImage
 from tkinter import filedialog
 import formEntries
 
@@ -164,7 +164,8 @@ class formWindow(tk.Tk):
         filePath = self.master.path+"\\Protipa\\" + self.fileLocation
         doc = DocxTemplate(filePath)
         context = {}
-        img = {}
+        img = []
+
 
         self.loadingBar = ttk.Progressbar(self.buttonFrame, orient = "horizontal", length = 100, mode = 'determinate')
         self.loadingBar.pack(anchor = "s")
@@ -177,21 +178,20 @@ class formWindow(tk.Tk):
             if input == "" or input == "0.0" or input == [['', ' (0  )']] or input == None : # or ' (0.0 mg/kg po )'
                 pass
             else:
-                if ent == "PHOTO":
-                    i = 0
+                temp = []
+                if ent == "PHOTOS":
                     for image in input:
-                        myimage = InlineImage(doc, image_descriptor=image, width=Mm(20), height=Mm(10))
-                        img["image"+str(i)] = myimage
-                        i+=1
+                        myImage = InlineImage(doc, image, width = (5000),height = (5000))
+                        temp.append(myImage)
                 else:
-                    context[ent] = input
+                    temp = input
+                context[ent] = temp
 
-        print(context)
+
         doc.render(context)
-        doc.render(img)
+        print(context)
         filePath = ""
         filePath = filedialog.asksaveasfilename(title = "Select file",filetypes = [("docx files","*.docx")])
-        print(filePath)
         if filePath == "":
             self.loadingBar.destroy()
         else:
