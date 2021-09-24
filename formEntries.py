@@ -4,6 +4,7 @@ import tika
 from tika import parser
 import re
 from decimal import *
+import glob
 
 def indexDoc(doc,tagList):
     indexList = list()
@@ -765,7 +766,7 @@ class checkUpSpinBoxEnt(tk.Tk):
             curMonth = int(curDate[1])
             curYear = int(curDate[2])
             endDate = int(self.widgets[1].get())
-            endMonth = monthCounter[(endDate % 12) + curMonth]
+            endMonth = monthCounter[(endDate + curMonth) % 12]
             endYear = curYear +(endDate // 12)
 
             temp = list()
@@ -1034,7 +1035,7 @@ class photoReader(tk.Tk):
 
         self.widgets.append(tk.Button(self.mainWidgetFrame, text = self.name, command = self.buttonAction))
 
-        self.widgets.append(tk.Entry(self.mainWidgetFrame, text = self.value["filePath"], state = 'disabled' ))
+        self.widgets.append(tk.Entry(self.mainWidgetFrame, text = self.value["filePath"]))
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
@@ -1044,17 +1045,6 @@ class photoReader(tk.Tk):
         import os
         if fileName != None:
             self.value["files"] = os.listdir(fileName)
-            print()
-            if len(self.widgets) > 2:
-                for i in range(len(self.widgets)-1,2,-1):
-                    self.widgets[i].destroy()
-                    del self.widgets[i]
-
-            for file in self.value["files"]:
-                self.widgets.append(tk.Label(self.mainWidgetFrame, text = file))
-
-            self.gridWidgets()
-
         else:
             pass
 
@@ -1071,32 +1061,16 @@ class photoReader(tk.Tk):
 
     def getWidgetValues(self):
         if self.value["files"] != None and len(self.value["files"]) != 0:
+            images = glob.glob('C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\Fotos\\'+"/*.bmp")
+            print(images)
+            for image in range(len(images)):
+                self.value["files"]["image"+str(i)] = image[i]
             return self.value["files"]
         else:
             return None
 
 class pdfReader(tk.Tk):
 
-    catDataList = ("Patient Data",\
-    "Cardio Canine"\
-    ,"Attached images")
-
-    catTitleList = ((),
-    ("M-Mode",\
-    "Doppler",\
-    "B-Mode"),\
-    ("Owner name",\
-    "Animal name",\
-    "Breed","Age",\
-    "Gender",\
-    "Weight",\
-    "Exam Date",\
-    "Report Data"))
-
-    subCatList = (("Aorta/LA","Sphericity Index","EF A-L", "EF SP (Simpson)","EF MOD"),\
-    ("Aorta","MV","MR","Pulmonary A","AVA (VTI)",\
-    "Pulmonary Capillary Wedge Pressure"),\
-    ("MV","Left Ventricle"))
 
     def __init__(self, master, name,widgetId,sort):
         self.master = master
@@ -1131,6 +1105,8 @@ class pdfReader(tk.Tk):
         if fileName == "+++":
             return None
         else:
+            catDataList = self.master.master.getThema()
+
             tags = list()
             tempTags = self.master.master.getEksetasi()
             for i in tempTags:
@@ -1141,29 +1117,24 @@ class pdfReader(tk.Tk):
             doc = parsed["content"]
             doc = re.sub("\n", " ", doc)
 
-            catData = indexDoc(doc,self.catDataList)
+            thema = indexDoc(doc,self.catDataList)
 
-            titleData = {}
-            j = 0
-            for i in catData:
-                data = indexDoc(catData[i],self.catTitleList[j])
-                j+=1
-                titleData[i] = data
+            catData = {}
+            for i in thema:
+                catData[i] = indexDoc(thema[i],self.master.master.getCategory(i))
 
-            j = 0
-            temp = {}
-            for i in titleData["Cardio Canine"]:
-                temp[i] = indexDoc(titleData["Cardio Canine"][i],self.subCatList[j])
-                j+=1
 
+            titlesData = {}
+            titlesList = self.master.master.getTitles("Cardio Canine")
+            for cat in catData["Cardio Canine"]:
+                titlesData[cat] = indexDoc(catData["Cardio Canine"][cat],titlesList)
 
             tempTitles = {}
-            for i in temp:
+            for i in titlesData:
                 tempTitles[i] = {}
-                for j in temp[i]:
-                    tempTitles[i][j] = indexDoc(temp[i][j],tags)
+                for j in titlesData[i]:
+                    tempTitles[i][j] = indexDoc(titlesData[i][j],tags)
 
-            patientData = titleData["Patient Data"]
             cardioCanine = {}
             for cat in tempTitles:
                 for title in tempTitles[cat]:
@@ -1181,14 +1152,16 @@ class pdfReader(tk.Tk):
                 cardioCanine[i] = buildNumber(temp,self.master)
 
             input = {}
-            for i in cardioCanine:
-                for tag in tempTags:
-                    if tag[0] == i:
-                        if "-" not in cardioCanine[i]:
-                            temp = cardioCanine[i]
-                        else:
-                            temp = cardioCanine[i].replace("-","")
-                        input[tag[1]] = temp
+            for tag in tempTags:
+                try:
+                     if "-" not in cardioCanine[tag[0]]:
+                         temp = cardioCanine[tag[0]]
+                     else:
+                         temp = cardioCanine[tag[0]].replace("-","")
+                     input[tag[2]] = temp
+                except:
+                    pass
+
         return input
 
 class menuEnt(tk.Tk):
