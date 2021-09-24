@@ -1029,7 +1029,7 @@ class photoReader(tk.Tk):
         self.master = master
         self.name = name
         self.sort = sort
-        self.value =  { "filePath" : tk.StringVar(value = "+++"), "files" : None }
+        self.value =  { "filePath" : tk.StringVar(value = "+++"), "files" : {} }
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
 
@@ -1041,13 +1041,13 @@ class photoReader(tk.Tk):
         self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
 
     def buttonAction(self):
-        fileName = filedialog.askdirectory()
+        filePath = filedialog.askdirectory()
         import os
-        if fileName != None:
-            self.value["files"] = os.listdir(fileName)
+        if filePath != None:
+            self.value["filePath"] = filePath
+            print(self.value["filePath"])
         else:
             pass
-
 
     def gridWidgets(self):
         column = 0
@@ -1060,11 +1060,10 @@ class photoReader(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        if self.value["files"] != None and len(self.value["files"]) != 0:
-            images = glob.glob('C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\Fotos\\'+"/*.bmp")
-            print(images)
-            for image in range(len(images)):
-                self.value["files"]["image"+str(i)] = image[i]
+        if self.value["filePath"] != "+++" and self.value["filePath"] != None:
+            images = glob.glob(self.value["filePath"]+"/*.bmp")
+            for i in range(len(images)):
+                self.value["files"]["image"+str(i)] = self.value["filePath"] + images[i]
             return self.value["files"]
         else:
             return None
