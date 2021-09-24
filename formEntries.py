@@ -1044,8 +1044,7 @@ class photoReader(tk.Tk):
         filePath = filedialog.askdirectory()
         import os
         if filePath != None:
-            self.value["filePath"] = filePath
-            print(self.value["filePath"])
+            self.value["filePath"].set(filePath)
         else:
             pass
 
@@ -1061,9 +1060,9 @@ class photoReader(tk.Tk):
 
     def getWidgetValues(self):
         if self.value["filePath"] != "+++" and self.value["filePath"] != None:
-            images = glob.glob(self.value["filePath"]+"/*.bmp")
+            images = glob.glob(str(self.value["filePath"].get())+"/*.bmp")
             for i in range(len(images)):
-                self.value["files"]["image"+str(i)] = self.value["filePath"] + images[i]
+                self.value["files"]["image"+str(i)] = str(self.value["filePath"].get()) + images[i]
             return self.value["files"]
         else:
             return None
