@@ -9,8 +9,9 @@ import formEntries
 class formWindow(tk.Tk):
 
     def __del__(self):
+
         for ent in self.entries:
-            self.entries[ent].destroy()
+            self.entries[ent].destroy
         print("Ending formWindow")
 
     def __init__(self,master):
@@ -165,6 +166,7 @@ class formWindow(tk.Tk):
 
     def clearWidgets(self):
         self.canvas.destroy()
+        self.buttonFrame.destroy()
         self.createInputFrame()
 
     def goBack(self):

@@ -1172,11 +1172,14 @@ class pdfReader(tk.Tk):
                             cardioCanine[tag] = tempTitles[cat][title][tag].split()
 
             for i in cardioCanine:
+<<<<<<< Updated upstream
                 if len(cardioCanine[i])==2 and cardioCanine[i][1] == "cm":
                     print(cardioCanine[i][0])
+=======
+                if "cm" in cardioCanine[i][1:]:
+>>>>>>> Stashed changes
                     temp = float(Decimal(cardioCanine[i][0]) * Decimal(10))
                 else:
-
                     if len(cardioCanine[i])!=0:
                         temp = float(cardioCanine[i][0])
                 cardioCanine[i] = buildNumber(temp,self.master)
