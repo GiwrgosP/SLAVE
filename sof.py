@@ -1,3 +1,4 @@
+
 from docx import Document
 import tkinter as tk
 import os
@@ -61,6 +62,30 @@ class window(tk.Tk):
     def getEksetasi(self):
         self.c.execute("SELECT * FROM Eksetasi")
         rows = self.c.fetchall()
+        return rows
+
+    def getThema(self):
+        self.c.execute("SELECT text FROM thema")
+        temp = self.c.fetchall()
+        rows = list()
+        for row in temp:
+            rows.append(row[0])
+        return rows
+
+    def getCategory(self,themaId):
+        self.c.execute("SELECT text FROM categoryThema WHERE id_thema = ?", (themaId,))
+        temp = self.c.fetchall()
+        rows = list()
+        for row in temp:
+            rows.append(row[0])
+        return rows
+
+    def getTitles(self,categoryId):
+        self.c.execute("SELECT text FROM titlesCategories WHERE id_thema = ?", (categoryId,))
+        temp = self.c.fetchall()
+        rows = list()
+        for row in temp:
+            rows.append(row[0])
         return rows
 
     def getPetWeightIndex(self,petId):

@@ -51,7 +51,6 @@ class fileSelectionWindow(tk.Tk):
 
 
     def openTemplate(self,ent):
-        print(ent)
         str = self.master.path + "\\Protipa\\" + ent[4]
         #try:
         doc = DocxTemplate(str)

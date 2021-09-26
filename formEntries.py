@@ -4,6 +4,7 @@ import tika
 from tika import parser
 import re
 from decimal import *
+import glob
 
 def indexDoc(doc,tagList):
     indexList = list()
@@ -15,6 +16,7 @@ def indexDoc(doc,tagList):
             pass
         else:
             endIndex = startIndex+len(tag)
+            
             indexList.append((startIndex,endIndex))
 
     indexList = sorted(indexList, key = lambda x : x[1])
@@ -643,9 +645,10 @@ class weightSpinBoxEnt(tk.Tk):
 
     def getWidgetValues(self):
         input = float(self.widgets[1].get())
+        print(input)
         if input == 0.0:
             return None
-        return self.master.buildNumber(input)
+        return buildNumber(input,self.master)
 
 class bodyWeightSpinBoxEnt(tk.Tk):
     def __init__(self, master, name, widgetId,sort):
@@ -679,7 +682,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
             print("Error with widget ", self.name, num)
             return None
 
-        temp = self.master.buildNumber(num)
+        temp = buildNumber(num,self.master)
         input += temp + "/5)"
 
         return input
@@ -758,15 +761,14 @@ class checkUpSpinBoxEnt(tk.Tk):
         input = list()
         curDate = self.master.entries["date"].getWidgetValues()
         if curDate!= None and self.widgets[1].get() != "0":
-            print(curDate)
 
             curDate = curDate.split(".")
 
             curMonth = int(curDate[1])
             curYear = int(curDate[2])
             endDate = int(self.widgets[1].get())
-            endMonth = monthCounter[(endDate % 12) + curMonth]
-            endYear = curYear +(endDate // 12)
+            endMonth = monthCounter[(endDate + curMonth) % 12]
+            endYear = curYear + (endDate // 12)
 
             temp = list()
             temp.append(str(endDate))
@@ -1008,7 +1010,7 @@ class medicMenuEnt(tk.Tk):
             if flag == False:
                 pass
             else:
-                temp["doseNumber"] = self.master.buildNumber(float(temp["doseNumber"]))
+                temp["doseNumber"] = buildNumber(float(temp["doseNumber"]),self.master)
                 values.append(temp)
                 self.checkSelf(temp)
 
@@ -1028,36 +1030,24 @@ class photoReader(tk.Tk):
         self.master = master
         self.name = name
         self.sort = sort
-        self.value =  { "filePath" : tk.StringVar(value = "+++"), "files" : None }
+        self.value =  { "filePath" : tk.StringVar(value = "+++"), "files" : [] }
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
 
         self.widgets.append(tk.Button(self.mainWidgetFrame, text = self.name, command = self.buttonAction))
 
-        self.widgets.append(tk.Entry(self.mainWidgetFrame, text = self.value["filePath"], state = 'disabled' ))
+        self.widgets.append(tk.Entry(self.mainWidgetFrame, text = self.value["filePath"]))
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = self.sort,sticky = "we",padx = 5, pady = 5)
 
     def buttonAction(self):
-        fileName = filedialog.askdirectory()
+        filePath = filedialog.askdirectory()
         import os
-        if fileName != None:
-            self.value["files"] = os.listdir(fileName)
-            print()
-            if len(self.widgets) > 2:
-                for i in range(len(self.widgets)-1,2,-1):
-                    self.widgets[i].destroy()
-                    del self.widgets[i]
-
-            for file in self.value["files"]:
-                self.widgets.append(tk.Label(self.mainWidgetFrame, text = file))
-
-            self.gridWidgets()
-
+        if filePath != None:
+            self.value["filePath"].set(filePath)
         else:
             pass
-
 
     def gridWidgets(self):
         column = 0
@@ -1070,33 +1060,15 @@ class photoReader(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        if self.value["files"] != None and len(self.value["files"]) != 0:
+        if self.value["filePath"] != "+++" and self.value["filePath"] != None:
+            images = glob.glob(str(self.value["filePath"].get())+"/*.bmp")
+            for i in images:
+                self.value["files"].append(i)
             return self.value["files"]
         else:
             return None
 
 class pdfReader(tk.Tk):
-
-    catDataList = ("Patient Data",\
-    "Cardio Canine"\
-    ,"Attached images")
-
-    catTitleList = ((),
-    ("M-Mode",\
-    "Doppler",\
-    "B-Mode"),\
-    ("Owner name",\
-    "Animal name",\
-    "Breed","Age",\
-    "Gender",\
-    "Weight",\
-    "Exam Date",\
-    "Report Data"))
-
-    subCatList = (("Aorta/LA","Sphericity Index","EF A-L", "EF SP (Simpson)","EF MOD"),\
-    ("Aorta","MV","MR","Pulmonary A","AVA (VTI)",\
-    "Pulmonary Capillary Wedge Pressure"),\
-    ("MV","Left Ventricle"))
 
     def __init__(self, master, name,widgetId,sort):
         self.master = master
@@ -1131,39 +1103,36 @@ class pdfReader(tk.Tk):
         if fileName == "+++":
             return None
         else:
+            catDataList = self.master.master.getThema()
+
             tags = list()
             tempTags = self.master.master.getEksetasi()
             for i in tempTags:
                 tags.append(i[0])
 
-            parsed = parser.from_file('C:\\Users\\Vostro\\Documents\\GitHub\\SLAVE\\Report1.pdf')
+            parsed = parser.from_file(fileName)
             metaData = parsed["metadata"]
             doc = parsed["content"]
             doc = re.sub("\n", " ", doc)
 
-            catData = indexDoc(doc,self.catDataList)
+            thema = indexDoc(doc,catDataList)
 
-            titleData = {}
-            j = 0
-            for i in catData:
-                data = indexDoc(catData[i],self.catTitleList[j])
-                j+=1
-                titleData[i] = data
+            catData = {}
+            for i in thema:
+                catData[i] = indexDoc(thema[i],self.master.master.getCategory(i))
 
-            j = 0
-            temp = {}
-            for i in titleData["Cardio Canine"]:
-                temp[i] = indexDoc(titleData["Cardio Canine"][i],self.subCatList[j])
-                j+=1
 
+            titlesData = {}
+            titlesList = self.master.master.getTitles("Cardio Canine")
+            for cat in catData["Cardio Canine"]:
+                titlesData[cat] = indexDoc(catData["Cardio Canine"][cat],titlesList)
 
             tempTitles = {}
-            for i in temp:
+            for i in titlesData:
                 tempTitles[i] = {}
-                for j in temp[i]:
-                    tempTitles[i][j] = indexDoc(temp[i][j],tags)
+                for j in titlesData[i]:
+                    tempTitles[i][j] = indexDoc(titlesData[i][j],tags)
 
-            patientData = titleData["Patient Data"]
             cardioCanine = {}
             for cat in tempTitles:
                 for title in tempTitles[cat]:
@@ -1172,12 +1141,7 @@ class pdfReader(tk.Tk):
                             cardioCanine[tag] = tempTitles[cat][title][tag].split()
 
             for i in cardioCanine:
-<<<<<<< Updated upstream
-                if len(cardioCanine[i])==2 and cardioCanine[i][1] == "cm":
-                    print(cardioCanine[i][0])
-=======
                 if "cm" in cardioCanine[i][1:]:
->>>>>>> Stashed changes
                     temp = float(Decimal(cardioCanine[i][0]) * Decimal(10))
                 else:
                     if len(cardioCanine[i])!=0:
@@ -1185,10 +1149,16 @@ class pdfReader(tk.Tk):
                 cardioCanine[i] = buildNumber(temp,self.master)
 
             input = {}
-            for i in cardioCanine:
-                for tag in tempTags:
-                    if tag[0] == i:
-                        input[tag[1]] = cardioCanine[i]
+            for tag in tempTags:
+                try:
+                     if "-" not in cardioCanine[tag[0]]:
+                         temp = cardioCanine[tag[0]]
+                     else:
+                         temp = cardioCanine[tag[0]].replace("-","")
+                     input[tag[2]] = temp
+                except:
+                    pass
+
         return input
 
 class menuEnt(tk.Tk):

@@ -1,10 +1,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import messagebox
-from docxtpl import DocxTemplate
+from docxtpl import DocxTemplate, InlineImage
 from tkinter import filedialog
 import formEntries
-
 
 class formWindow(tk.Tk):
 
@@ -116,17 +115,6 @@ class formWindow(tk.Tk):
         else:
             return "elder"
 
-    def buildNumber(self,num):
-        if num % 1 == 0:
-            num = str(int(num))
-        else:
-            if num % 0.1 == 0:
-                num = round(num,1)
-            num = str(num)
-            if self.language == "greek":
-                num = num.replace(".",",")
-        return num
-
     def createScrollbar(self):
         self.canvas.update_idletasks()
         self.canvas.create_window(0, 0, anchor='nw', window=self.inputFrame)
@@ -178,6 +166,8 @@ class formWindow(tk.Tk):
         filePath = self.master.path+"\\Protipa\\" + self.fileLocation
         doc = DocxTemplate(filePath)
         context = {}
+        img = []
+
 
         self.loadingBar = ttk.Progressbar(self.buttonFrame, orient = "horizontal", length = 100, mode = 'determinate')
         self.loadingBar.pack(anchor = "s")
@@ -190,14 +180,20 @@ class formWindow(tk.Tk):
             if input == "" or input == "0.0" or input == [['', ' (0  )']] or input == None : # or ' (0.0 mg/kg po )'
                 pass
             else:
+                temp = []
+                if ent == "PHOTOS":
+                    for image in input:
+                        myImage = InlineImage(doc, image, width = (5000),height = (5000))
+                        temp.append(myImage)
+                else:
+                    temp = input
+                context[ent] = temp
 
-                context[ent] = input
 
-        print(context)
         doc.render(context)
+        print(context)
         filePath = ""
         filePath = filedialog.asksaveasfilename(title = "Select file",filetypes = [("docx files","*.docx")])
-        print(filePath)
         if filePath == "":
             self.loadingBar.destroy()
         else:
