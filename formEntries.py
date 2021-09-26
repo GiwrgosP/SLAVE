@@ -1140,7 +1140,7 @@ class pdfReader(tk.Tk):
                             cardioCanine[tag] = tempTitles[cat][title][tag].split()
 
             for i in cardioCanine:
-                if len(cardioCanine[i])==2 and cardioCanine[i][1] == "cm":
+                if "cm" in cardioCanine[i][1:]:
                     temp = float(Decimal(cardioCanine[i][0]) * Decimal(10))
                 else:
 
