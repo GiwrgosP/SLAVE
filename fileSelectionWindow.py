@@ -4,6 +4,8 @@ from docx import Document
 import os
 from tkinter import filedialog,messagebox
 
+
+#a dictionary to divide the files data by lang and pet
 def divideOptions(optionsList):
     teams = { "greek" : { "dog" : list(), "cat" : list()}, "english" : { "dog" : list(), "cat" : list()}}
 
@@ -16,13 +18,17 @@ class fileSelectionWindow(tk.Tk):
     def __del__(self):
         print("Ending fileSelectionWindow")
 
+
     def __init__(self,master):
+        #reference to window class as master
         self.master = master
+        #call getFile() from class window to get a list of all files for display
         self.files = self.master.getFile()
+        #create a frame inside the window class
         self.mainFrame = tk.Frame(self.master.window, background = "MediumPurple4")
-
+        #call a function to divide the files list into subcategories
         teams = divideOptions(self.files)
-
+        #make a grid of widegts and place them into each category and subcategory frame
         for lang in teams:
             frame = tk.Frame(self.mainFrame,background = "steel blue")
             label = tk.Label(frame, text = lang)
@@ -49,13 +55,16 @@ class fileSelectionWindow(tk.Tk):
 
         self.mainFrame.pack(fill='both', expand = True)
 
-
+    #for every button available try to open its word document, if it succeed
+    #make the window class selection value equal to the doc info
+    #and destroy this fileSelectionWindow object
     def openTemplate(self,ent):
         str = self.master.path + "\\Protipa\\" + ent[4]
-        #try:
-        doc = DocxTemplate(str)
-        self.master.fileSelected = ent
-        self.mainFrame.destroy()
-        self.master.checkState()
-        #except:
-            #messagebox.showerror(title = "Slave could not complete your request", message = "Slave encounterred an error while trying to open the file asked or create the form")
+        try:
+            doc = DocxTemplate(str)
+        except:
+            messagebox.showerror(title = "Slave could not complete your request", message = "Slave encounterred an error while trying to open the file asked or create the form")
+        else:
+            self.master.fileSelected = ent
+            self.mainFrame.destroy()
+            self.master.checkState()

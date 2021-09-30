@@ -3,25 +3,33 @@ from docx import Document
 import tkinter as tk
 import os
 import sqlite3
-import formWindow
+import formsWindow
 import fileSelectionWindow
 
-
+#window object
 class window(tk.Tk):
     def __del__(self):
         print("Ending")
         self.con.close()
 
-
     def __init__(self):
+        #find the path of the current file
         self.path = os.path.dirname(os.path.abspath(__file__))
+        #make the fileSelected paremeter equal to None
+        #using this paremeter to check the state of the window that will be shown
         self.fileSelected = None
+        #create the database connection paremeters
         self.c,self.con = self.conn()
+        #create a window object
         self.window = tk.Tk()
+        #name it
         self.window.title("Sophi's Loyal Assistant Veterinarian Edition")
+        #size it
         self.window.geometry("1024x512")
+        #call the checkState function to fill the window
         self.checkState()
 
+#database connection paremeters
     def conn(self):
         str = self.path +"\\dataBase.db"
         try:
@@ -31,15 +39,20 @@ class window(tk.Tk):
         except:
             print("Error While Connectiong To DataBase", str)
 
+#get all file that are on the data base files table [fieldId,testId,langId,petId,filePath]
     def getFile(self):
         self.c.execute("SELECT * FROM files")
         rows = self.c.fetchall()
         return rows
 
+#get widgets for the form selected form[fileId,widgetId]
     def getForm(self,widgetId):
         self.c.execute("SELECT widgetId FROM form WHERE fileId = ?", (widgetId,))
         rows = self.c.fetchall()
-        return rows
+        temp = list()
+        for row in rows:
+            temp.append(row[0])
+        return temp
 
     def getWidget(self,widgetId):
         self.c.execute("SELECT objectId,name,nameVal,sort FROM widget WHERE widgetId = ?", (widgetId,))
@@ -102,6 +115,8 @@ class window(tk.Tk):
         self.c.execute("INSERT INTO menuValues (menuId,value) VALUES(?,?)", (field,value,))
         self.con.commit()
 
+    #check if any selection objects that have been made and delete them
+    #then create a new selection object based on fileSelected
     def checkState(self):
         try:
             del self.selection
@@ -110,11 +125,12 @@ class window(tk.Tk):
         if self.fileSelected == None:
             self.selection = fileSelectionWindow.fileSelectionWindow(self)
         else:
-            self.selection = formWindow.formWindow(self)
+            self.selection = formsWindow.formWindow(self)
 
+#main, create and run the tkinter object
 def main():
     root = window()
     root.window.mainloop()
 
-
+#call the main function
 main()

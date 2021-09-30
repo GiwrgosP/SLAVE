@@ -8,7 +8,10 @@ import formEntries
 class formWindow(tk.Tk):
 
     def __del__(self):
-
+        self.buttonFrame.destroy()
+        self.mainFrame.destoy()
+        for ent in self.entries:
+            del self.entries[ent]
         for ent in self.entries:
             self.entries[ent].destroy
         print("Ending formWindow")
@@ -80,22 +83,7 @@ class formWindow(tk.Tk):
         self.createScrollbar()
         self.createButtonFrame()
 
-    def createButtonFrame(self):
-        self.buttonFrame = tk.Frame(self.mainFrame)
 
-        fileSelectedLabel = tk.Label(self.buttonFrame, text = self.testName + "\n" + self.language + "\n" + self.pet )
-        fileSelectedLabel.pack(anchor = "n")
-
-        enterData =  tk.Button(self.buttonFrame, text = "Enter Data", command = self.enterdata)
-        enterData.pack(anchor = "center")
-
-        clearButton =  tk.Button(self.buttonFrame, text = "Clear Form", command = self.clearForm)
-        clearButton.pack(anchor = "center")
-
-        quitButton =  tk.Button(self.buttonFrame, text="Back to form selection", command = self.quit)
-        quitButton.pack(anchor = "s")
-
-        self.buttonFrame.pack(anchor = "s", fill = "both", expand = True)
 
     def calcWeight(self,weight):
         indexes = self.master.getPetWeightIndex(self.pet)
