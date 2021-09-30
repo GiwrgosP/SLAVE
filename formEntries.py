@@ -54,11 +54,11 @@ def replaceValues(values,value):
             temp = temp.replace(word[::-1],value[word].get())
 
         result.append(temp)
-
+    print(result)
     return result
 
 class breedMenuEnt(tk.Tk):
-    def __init__(self, master, name, widgetId, sort):
+    def __init__(self, master,nameVal, name, widgetId, sort):
         self.master = master
         self.field = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = name
@@ -100,7 +100,7 @@ class breedMenuEnt(tk.Tk):
             return self.value[self.field[0]].get()
 
 class historyMenuEnt(tk.Tk):
-    def __init__(self, master, name, widgetId, sort):
+    def __init__(self, master,nameVal, name, widgetId, sort):
         self.master = master
         self.field = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = name
@@ -278,6 +278,7 @@ class catHCMRECardiologicalAnalysisListBoxEnt(tk.Tk):
 class catKfCardiologicalAnalysisListBoxEnt(tk.Tk):
 
     def __init__(self, master, name, widgetId,sort):
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         self.master = master
         self.widgetMenus = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = name
@@ -374,7 +375,7 @@ class catKfCardiologicalAnalysisListBoxEnt(tk.Tk):
 
 class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
 
-    def __init__(self, master, name, widgetId,sort):
+    def __init__(self, master,nameVal, name, widgetId,sort):
         self.master = master
         self.widgetMenus = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = name
@@ -621,7 +622,7 @@ class auditoryFindingsMenuEnt(tk.Tk):
             column += 1
 
 class weightSpinBoxEnt(tk.Tk):
-    def __init__(self, master, name, widgetId, sort):
+    def __init__(self, master,nameVal, name, widgetId, sort):
         self.master = master
         self.name = name
         self.sort = sort
@@ -693,7 +694,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
             column += 1
 
 class nameAitEntryEnt(tk.Tk):
-    def __init__(self, master, name,widgetId,sort):
+    def __init__(self, master,nameVal, name,widgetId,sort):
         self.master = master
         self.name = name
         self.sort = sort
@@ -728,7 +729,7 @@ class nameAitEntryEnt(tk.Tk):
         return input
 
 class checkUpSpinBoxEnt(tk.Tk):
-    def __init__(self, master, name, widetId,sort):
+    def __init__(self, master,nameVal, name, widetId,sort):
         self.master = master
         self.name = name
         self.sort = sort
@@ -785,7 +786,7 @@ class checkUpSpinBoxEnt(tk.Tk):
             column += 1
 
 class ecgMenuEnt(tk.Tk):
-    def __init__(self, master, name,widgetId,sort):
+    def __init__(self, master,nameVal, name,widgetId,sort):
         self.master = master
         self.field = self.master.master.getWidgetMenus(widgetId)[0]
         self.name = name
@@ -868,7 +869,7 @@ class ecgMenuEnt(tk.Tk):
                 self.master.master.createValue(val.get(),self.field[0])
 
 class ageSpinBoxEnt(tk.Tk):
-    def __init__(self, master, name, widgetId, sort):
+    def __init__(self, master,nameVal, name, widgetId, sort):
         self.master = master
         self.name = name
         self.sort = sort
@@ -917,7 +918,7 @@ class ageSpinBoxEnt(tk.Tk):
         return str(age)+textTimeAproximation
 
 class medicMenuEnt(tk.Tk):
-    def __init__(self, master, name,widgetId,sort):
+    def __init__(self, master,nameVal, name,widgetId,sort):
         self.master = master
         self.widgetMenus = self.master.master.getWidgetMenus(widgetId)
         self.sort = sort
@@ -1025,7 +1026,7 @@ class medicMenuEnt(tk.Tk):
                 self.master.master.createValue(value[field],self.fields[field])
 
 class photoReader(tk.Tk):
-    def __init__(self, master, name,widgetId,sort):
+    def __init__(self, master,nameVal, name,widgetId,sort):
         self.master = master
         self.name = name
         self.sort = sort
@@ -1069,7 +1070,7 @@ class photoReader(tk.Tk):
 
 class pdfReader(tk.Tk):
 
-    def __init__(self, master, name,widgetId,sort):
+    def __init__(self, master,nameVal, name,widgetId,sort):
         self.master = master
         self.name = name
         self.sort = sort
@@ -1163,32 +1164,31 @@ class pdfReader(tk.Tk):
 
 class menuEnt(tk.Tk):
     def __init__(self, master, name,nameId,widgetId,sort):
-        print(name)
         self.master = master
         self.field = self.master.master.getWidgetMenus(widgetId)[0]
-        self.name = nameId
+        self.nameId = nameId
         self.sort = sort
         self.mainWidgetFrame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         self.widgets = list()
-        self.value =  { self.name : tk.StringVar(value = "+++") }
-        self.values = { self.name : self.master.master.getValues(self.field[0])}
+        self.value =  { self.nameId : tk.StringVar(value = "+++") }
+        self.values = { self.nameId : self.master.master.getValues(self.field[0])}
 
         self.widgets.append(tk.Menubutton(self.mainWidgetFrame, text = name))
 
         self.widgets[0].menu = tk.Menu(self.widgets[0])
         self.widgets[0]["menu"] = self.widgets[0].menu
-        self.widgets[0].menu.add_radiobutton(label = "+++", value = "+++",variable = self.value[self.name])
-        for val in self.values[self.name]:
-            self.widgets[0].menu.add_radiobutton(label = val, value = val,variable = self.value[self.name])
+        self.widgets[0].menu.add_radiobutton(label = "+++", value = "+++",variable = self.value[self.nameId])
+        for val in self.values[self.nameId]:
+            self.widgets[0].menu.add_radiobutton(label = val, value = val,variable = self.value[self.nameId])
 
-        self.widgets.append( tk.Entry(self.mainWidgetFrame, text = self.value[self.name]))
+        self.widgets.append( tk.Entry(self.mainWidgetFrame, text = self.value[self.nameId]))
 
         self.gridWidgets()
         self.mainWidgetFrame.grid(column = 0, row = self.sort ,sticky = "we",padx = 5, pady = 5)
 
     def checkSelf(self):
-        if self.values[self.name].count(self.value[self.name].get()) == 0 :
-            self.master.master.createValue(self.value[self.name].get(),self.field[0])
+        if self.values[self.nameId].count(self.value[self.nameId].get()) == 0 :
+            self.master.master.createValue(self.value[self.nameId].get(),self.field[0])
 
     def gridWidgets(self):
         column = 0
@@ -1197,14 +1197,14 @@ class menuEnt(tk.Tk):
             column += 1
 
     def getWidgetValues(self):
-        if self.value[self.name].get() == "+++" or self.value[self.name].get() == "" :
+        if self.value[self.nameId].get() == "+++" or self.value[self.nameId].get() == "" :
             return None
         else:
             self.checkSelf()
-            return self.value[self.name].get()
+            return self.value[self.nameId].get()
 
 class entryEnt(tk.Tk):
-    def __init__(self, master, name, widgetId,sort):
+    def __init__(self, master,nameVal, name, widgetId,sort):
         self.master = master
         self.name = name
         self.nameId = widgetId
@@ -1222,7 +1222,7 @@ class entryEnt(tk.Tk):
     def gridWidgets(self):
         column = 0
         for ent in self.widgets:
-            ent.grid(column = column, row = 0,padx = 5, pady = 5)
+            ent.grid(column = column, row = 0)
             column += 1
 
     def getWidgetValues(self):
