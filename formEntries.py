@@ -16,6 +16,7 @@ def indexDoc(doc,tagList):
             pass
         else:
             endIndex = startIndex+len(tag)
+            
             indexList.append((startIndex,endIndex))
 
     indexList = sorted(indexList, key = lambda x : x[1])
@@ -1144,7 +1145,6 @@ class pdfReader(tk.Tk):
                 if "cm" in cardioCanine[i][1:]:
                     temp = float(Decimal(cardioCanine[i][0]) * Decimal(10))
                 else:
-
                     if len(cardioCanine[i])!=0:
                         temp = float(cardioCanine[i][0])
                 cardioCanine[i] = buildNumber(temp,self.master)
