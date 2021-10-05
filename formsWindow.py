@@ -147,7 +147,7 @@ class formWindow(tk.Tk):
         #make a DocxTemplate object
         doc = DocxTemplate(filePath)
         context = {}
-        #make a loading bat into the buttonFrame
+        #make a loading bar into the buttonFrame
         self.loadingBar = ttk.Progressbar(self.buttonFrame, orient = "horizontal", length = 100, mode = 'determinate')
         self.loadingBar.pack(anchor = "s")
         #divide the progress bar into equal piecies, depending on the on many widget have been made
