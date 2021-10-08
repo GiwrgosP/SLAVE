@@ -55,7 +55,7 @@ class fileSelectionWindow(tk.Tk):
 
         self.mainFrame.pack(fill='both', expand = True)
 
-    #for every button available try to open its word document, if it succeed
+    #for every button available try to open its word document, if it succeeds
     #make the window class selection value equal to the doc info
     #and destroy this fileSelectionWindow object
     def openTemplate(self,ent):
