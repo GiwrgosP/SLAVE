@@ -7,6 +7,17 @@ from decimal import *
 import glob
 import os
 
+
+def replaceValues(values,value):
+    result = list()
+    for sentence in values:
+        temp = sentence
+        for word in value:
+            temp = temp.replace(word[::-1],value[word].get())
+
+        result.append(temp)
+    return result
+
 def indexDoc(doc,tagList):
     indexList = list()
     stringList = {}
@@ -112,13 +123,13 @@ class entryEnt(tk.Tk):
 
 #widget having a frame with a menu, entry and a label
 class menuEnt(tk.Tk):
-    def __init__(self, master,nameVal, name, widgetId, sort):
+    def __init__(self, master, nameVal, name, widgetId, sort):
         #reference to formWinfow Object
         self.master = master
         #the name to be displayed by the Label widget
         self.displayName = nameVal
         #reference to for the value of this object
-        self.widgetid = widgetId
+        self.widgetId = widgetId
         #row of the widget to be grided when displayed
         self.sort = sort
         #a dictionary with the widgetId and a string Var
@@ -137,7 +148,7 @@ class menuEnt(tk.Tk):
 
         fillMenuWithValues(self.widgets[0],self.menuValues,self.value[self.widgetId])
         #make an entry widgets that shows the string var from the self.value
-        self.widgets.append( tk.Entry(self.frame, text = self.value[self.menuId]))
+        self.widgets.append( tk.Entry(self.frame, text = self.value[self.widgetId]))
 
         #call the function gridWidgets to grid the widgets in the widget list
         gridWidgets(self.widgets)
@@ -447,7 +458,7 @@ class pdfReader(tk.Tk):
         return input
 
 #like medimenuent
-class ecgMenuEnt(tk.TK):
+class ecgMenuEnt(tk.Tk):
     def __init__(self, master, nameVal, name, widgetId, sort):
         #reference to formWinfow Object
         self.master = master
@@ -602,7 +613,7 @@ class nameAitEntryEnt(tk.Tk):
             pass
 
     def updateValue(self, *args):
-        self.value[self.widgetId] = self.master.entries["petName"].value.["petName"].get()
+        self.value[self.widgetId] = self.master.entries["petName"].value["petName"].get()
 
     def getWidgetValues(self):
         value = self.value[self.widgetId].get()
@@ -702,7 +713,7 @@ class bodyWeightSpinBoxEnt(tk.Tk):
         self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
 
         self.widgets.append(tk.Label(self.frame, text = self.displayName))
-        self.widgets.append(tk.Spinbox(self.frame, from_ = 0, to = 5, increment=1,textvariable = self.value[self.widgetId]]))
+        self.widgets.append(tk.Spinbox(self.frame, from_ = 0, to = 5, increment=1,textvariable = self.value[self.widgetId]))
 
         gridWidgets(self.widgets)
         self.frame.grid(column = 0, row =self.sort,sticky = "we",padx = 5, pady = 5)
@@ -750,7 +761,7 @@ class weightSpinBoxEnt(tk.Tk):
         self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
 
         self.widgets.append(tk.Label(self.frame, text = self.displayName))
-        self.widgets.append(tk.Spinbox(self.frame, from_ = 0, to = 1000, increment=0.1, format= "%.1f", textvariable = self.value[self.widgetId]]))
+        self.widgets.append(tk.Spinbox(self.frame, from_ = 0, to = 1000, increment=0.1, format= "%.1f", textvariable = self.value[self.widgetId]))
 
         gridWidgets(self.widgets)
         self.frame.grid(column = 0, row =self.sort,sticky = "we",padx = 5, pady = 5)
@@ -763,10 +774,10 @@ class weightSpinBoxEnt(tk.Tk):
 
 #
 class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
-    self.fileStructAge = { "greek" : {"young" : "νεαρό", "adult" : "ενήλικο", "elder" : "υπερήλικο"},\
+    fileStructAge = { "greek" : {"young" : "νεαρό", "adult" : "ενήλικο", "elder" : "υπερήλικο"},\
                         "english" : { "young" : "young", "adult" : "adult", "elder" : "elder"}}
 
-    self.fileStructWeight = { "greek" : { "small" : "μικρόσωμο", "average" : "μεγαλόσωμο", "υπέρβαρο" : "huge"},\
+    fileStructWeight = { "greek" : { "small" : "μικρόσωμο", "average" : "μεγαλόσωμο", "υπέρβαρο" : "huge"},\
                             "english" : {  "small" : "small", "average" : "average", "tooMuch" : "huge"}}
     def __init__(self, master,nameVal, name, widgetId, sort):
         #reference to formWinfow Object
@@ -779,7 +790,7 @@ class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
         self.sort = sort
         #a dictionary with the widgetId and a string Var
         #so that the value can be accesed by a different object
-        self.value = { "weight" : tk.StringVar(value = "+++"), "age" : tk.StringVar(value = "+++"), "cardiologicalAnalysis" : tk.StringVar(value = "")}
+        self.value = { "weight" : tk.StringVar(value = "+++"), "age" : tk.StringVar(value = "+++"), self.widgetId : tk.StringVar(value = "")}
         #a list with all the widgets of this object
         self.widgets = list()
 
@@ -797,6 +808,26 @@ class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
         self.frame.grid(column = 0, row = self.sort, sticky = "we", padx = 5, pady = 5)
 
 
+    def updateState(self):
+        if self.value["weight"].get() == "+++" or self.value["age"].get() == "+++":
+            self.widgets[-1].configure(state = "disabled")
+        else:
+            self.widgets[-1].configure(state = "normal")
+            self.applyValues()
+
+    def applyValues(self):
+        try:
+            self.widgets[1].menu.destroy()
+        except:
+            pass
+        self.values = replaceValues(self.master.master.getValues(self.master.master.getWidgetMenus(self.widgetId)),self.value)
+
+        self.widgets[1].menu =   tk.Menu(self.widgets[1])
+        self.widgets[1]["menu"] = self.widgets[1].menu
+        self.widgets[1].menu.add_radiobutton(label = "+++", value ="+++",variable = self.value[self.widgetId])
+
+        for val in self.values:
+            self.widgets[1].menu.add_radiobutton(label = val, value = val,variable = self.value[self.widgetId])
 
     def updateValueWeight(self, *args):
         try:
@@ -806,5 +837,29 @@ class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
         else:
             if val != 0.0:
                 weight = float(val)
+                temp = self.fileStructWeight[self.master.language][self.master.calcWeight(weight)]
             else:
-                weight = self.fileStructWeight[self.master.language][self.master.calcWeight(weight)]
+                temp = "+++"
+
+        self.value["weight"].set(temp)
+        self.updateState()
+
+    def updateValueAge(self, *args):
+        try:
+            val = self.master.entries["age"].value["age"].get()
+        except:
+            pass
+        else:
+            approx = self.master.entries["age"].value["ageAprox"].get()
+
+            if approx == 1:
+                temp = self.fileStructAge[self.master.language]["young"]
+            else:
+                if age == 0:
+                    temp = "+++"
+                else:
+                    temp = self.fileStructAge[self.master.language][self.master.calcAge(age)]
+
+            self.value["age"].set(temp)
+
+            self.updateState()

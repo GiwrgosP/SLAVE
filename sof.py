@@ -59,13 +59,17 @@ class window(tk.Tk):
         rows = self.c.fetchall()
         return rows[0]
 
-    def getWidgetMenus(self,widgetId):
+    def getWidgetMenuId(self,widgetId):
         self.c.execute("SELECT menuId FROM widgetMenus WHERE widgetId = ?", (widgetId,))
-        rows = self.c.fetchall()
+        temp = self.c.fetchall()
+        rows = list()
+        for i in temp:
+            rows.append(i[0])
         return rows
 
     def getValues(self,widgetMenuId):
-        self.c.execute("SELECT value FROM menuValues WHERE menuId = ?", (widgetMenuId,))
+        print(widgetMenuId)
+        self.c.execute("SELECT value FROM menuValues WHERE menuId = ?", (widgetMenuId))
         rows = self.c.fetchall()
         temp = list()
         for row in rows:
