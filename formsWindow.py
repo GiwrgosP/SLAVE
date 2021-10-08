@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from docxtpl import DocxTemplate, InlineImage
 from tkinter import filedialog
-import formEntries
+import widgets as formEntries
 import tkinter.ttk as ttk
 
 class formWindow(tk.Tk):
