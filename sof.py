@@ -25,7 +25,7 @@ class window(tk.Tk):
         #name it
         self.window.title("Sophi's Loyal Assistant Veterinarian Edition")
         #size it
-        self.window.geometry("1024x512")
+        self.window.geometry("1408x512")
         #call the checkState function to fill the window
         self.checkState()
 
@@ -68,7 +68,6 @@ class window(tk.Tk):
         return self.collectOneValue(rows)
 
     def getValues(self,widgetMenuId):
-        print(widgetMenuId)
         self.c.execute("SELECT value FROM menuValues WHERE menuId = ?", (widgetMenuId,))
         rows = self.c.fetchall()
         return self.collectOneValue(rows)
