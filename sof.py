@@ -29,6 +29,12 @@ class window(tk.Tk):
         #call the checkState function to fill the window
         self.checkState()
 
+    def collectOneValue(self,data):
+        temp = list()
+        for i in data:
+            temp.append(i[0])
+        return temp
+
 #database connection paremeters
     def conn(self):
         str = self.path +"\\dataBase.db"
@@ -46,13 +52,10 @@ class window(tk.Tk):
         return rows
 
 #get widgets for the form selected form[fileId,widgetId]
-    def getForm(self,widgetId):
-        self.c.execute("SELECT widgetId FROM form WHERE fileId = ?", (widgetId,))
+    def getForm(self,fileId):
+        self.c.execute("SELECT widgetId FROM form WHERE fileId = ?", (fileId,))
         rows = self.c.fetchall()
-        temp = list()
-        for row in rows:
-            temp.append(row[0])
-        return temp
+        return self.collectOneValue(rows)
 
     def getWidget(self,widgetId):
         self.c.execute("SELECT objectId,name,nameVal,sort FROM widget WHERE widgetId = ?", (widgetId,))
@@ -61,20 +64,14 @@ class window(tk.Tk):
 
     def getWidgetMenuId(self,widgetId):
         self.c.execute("SELECT menuId FROM widgetMenus WHERE widgetId = ?", (widgetId,))
-        temp = self.c.fetchall()
-        rows = list()
-        for i in temp:
-            rows.append(i[0])
-        return rows
+        rows = self.c.fetchall()
+        return self.collectOneValue(rows)
 
     def getValues(self,widgetMenuId):
         print(widgetMenuId)
-        self.c.execute("SELECT value FROM menuValues WHERE menuId = ?", (widgetMenuId))
+        self.c.execute("SELECT value FROM menuValues WHERE menuId = ?", (widgetMenuId,))
         rows = self.c.fetchall()
-        temp = list()
-        for row in rows:
-            temp.append(row[0])
-        return temp
+        return self.collectOneValue(rows)
 
     def getEksetasi(self):
         self.c.execute("SELECT * FROM Eksetasi")
@@ -83,27 +80,18 @@ class window(tk.Tk):
 
     def getThema(self):
         self.c.execute("SELECT text FROM thema")
-        temp = self.c.fetchall()
-        rows = list()
-        for row in temp:
-            rows.append(row[0])
-        return rows
+        rows = self.c.fetchall()
+        return self.collectOneValue(rows)
 
     def getCategory(self,themaId):
         self.c.execute("SELECT text FROM categoryThema WHERE id_thema = ?", (themaId,))
-        temp = self.c.fetchall()
-        rows = list()
-        for row in temp:
-            rows.append(row[0])
-        return rows
+        rows = self.c.fetchall()
+        return self.collectOneValue(rows)
 
     def getTitles(self,categoryId):
         self.c.execute("SELECT text FROM titlesCategories WHERE id_thema = ?", (categoryId,))
-        temp = self.c.fetchall()
-        rows = list()
-        for row in temp:
-            rows.append(row[0])
-        return rows
+        rows = self.c.fetchall()
+        return self.collectOneValue(rows)
 
     def getPetWeightIndex(self,petId):
         self.c.execute("SELECT average,tooMuch FROM petWeightIndex WHERE petId = ?", (petId,))

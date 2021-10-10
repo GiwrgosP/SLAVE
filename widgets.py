@@ -117,7 +117,7 @@ class entryEnt(tk.Tk):
     #return the value or None
     def getWidgetValues(self):
         value = self.value[self.widgetId].get()
-        if value != "+++" and len(input.split()) != 0:
+        if value != "+++" and len(value.split()) != 0:
             return value
         return None
 
@@ -140,7 +140,7 @@ class menuEnt(tk.Tk):
         #call to the window object in order to get the menuId for the widget
         self.menuId = self.master.master.getWidgetMenuId(self.widgetId)
         #call to the window object to get a list of the menuValues for the menu
-        self.menuValues = self.master.master.getValues(self.menuId)
+        self.menuValues = self.master.master.getValues(self.menuId[0])
 
         self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         #make a menu widget and add it to the widgets list
@@ -163,7 +163,7 @@ class menuEnt(tk.Tk):
     #return the value and chech if the value exists on the menu value list or return None
     def getWidgetValues(self):
         value = self.value[self.widgetId].get()
-        if value != "+++" and len(input.split()) != 0:
+        if value != "+++" and len(value.split()) != 0:
             self.checkSelf()
             return value
         return None
@@ -178,7 +178,7 @@ class medicMenuEnt(tk.Tk):
         #the name to be displayed by the Label widget
         self.displayName = nameVal
         #reference to for the value of this object
-        self.widgetid = widgetId
+        self.widgetId = widgetId
         #row of the widget to be grided when displayed
         self.sort = sort
         #a dictionary with the widgetId and a string Var of all the inputs for this objet
@@ -194,7 +194,7 @@ class medicMenuEnt(tk.Tk):
         self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         #call to the window object in order to get the menuId for the widget
         #a list of all the menus for this widget
-        self.menuId = self.master.master.getWidgetMenus(widgetId)
+        self.menuId = self.master.master.getWidgetMenuId(self.widgetId)
         #for every menu in the list
         for menu in self.menuId:
             #create a list that will contain all the values for this menu
@@ -231,7 +231,7 @@ class medicMenuEnt(tk.Tk):
 
                 if menu == "medicationGreekMenu" or menu == "medication2GreekMenu":
                     self.value["doseNumber"].append(tk.StringVar(value = "0.0"))
-                    tempWidgetList.append(tk.Spinbox(widgetFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f",textvariable = self.value["doseNumber"][-1]))
+                    tempWidgetList.append(tk.Spinbox(tempFrame, from_ = 0, to = 1000, increment=0.1, format= "%.1f",textvariable = self.value["doseNumber"][-1]))
 
             self.frames.append(tempFrame)
             self.widgets.append(tempWidgetList)
@@ -271,7 +271,7 @@ class medicMenuEnt(tk.Tk):
             #for all the widgets in the dictionary self.value
             for menu in self.value:
                 #store all the values from the widgets of this frame into temp
-                temp[menu] = self.value[menu][i]
+                temp[menu] = self.value[menu][i].get()
             #check if all the values from the widgets in this frame have been altered in any way
             for t in temp:
                 #in any of them is not valid make the flag false
@@ -312,7 +312,7 @@ class ageSpinBoxEnt(tk.Tk):
         #a dictionary with the widgetId and a string Var for the number of age
         #and an IntVar for the ageAproximaton (e.g ετών, μηνών)
         #so that the value can be accesed by a different object
-        self.value = { "age" : tk.StringVar(value = "0"), "ageAprox" : tk.IntVar(value = 2)}
+        self.value = { "age" : tk.IntVar(value = 0), "ageAprox" : tk.IntVar(value = 2)}
         #a list with all the widgets of this object
         self.widgets = list()
 
@@ -330,7 +330,7 @@ class ageSpinBoxEnt(tk.Tk):
         self.frame.grid(column = 0, row =self.sort,sticky = "we",padx = 5, pady = 5)
 
     def getWidgetValues(self):
-        age = int(self.value["age"].get())
+        age = self.value["age"].get()
         timeAproximation = self.value["ageAprox"].get()
 
         flagPlural = True
@@ -359,7 +359,7 @@ class pdfReader(tk.Tk):
         #the name to be displayed by the Label widget
         self.displayName = nameVal
         #reference to for the value of this object
-        self.widgetid = widgetId
+        self.widgetId = widgetId
         #row of the widget to be grided when displayed
         self.sort = sort
         #a dictionary with the widgetId and a string Var of all the inputs for this objet
@@ -465,7 +465,7 @@ class ecgMenuEnt(tk.Tk):
         #the name to be displayed by the Label widget
         self.displayName = nameVal
         #reference to for the value of this object
-        self.widgetid = widgetId
+        self.widgetId = widgetId
         #row of the widget to be grided when displayed
         self.sort = sort
         #a dictionary with the widgetId and a string Var of all the inputs for this objet
@@ -481,7 +481,7 @@ class ecgMenuEnt(tk.Tk):
         self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
         #call to the window object in order to get the menuId for the widget
         #a list of all the menus for this widget
-        self.menuId = self.master.master.getWidgetMenus(widgetId)
+        self.menuId = self.master.master.getWidgetMenuId(self.widgetId)
         #for every menu in the list
         for menu in self.menuId:
             #create a list that will contain all the values for this menu
@@ -553,7 +553,7 @@ class ecgMenuEnt(tk.Tk):
             #for all the widgets in the dictionary self.value
             for menu in self.value:
                 #store all the values from the widgets of this frame into temp
-                temp[menu] = self.value[menu][i]
+                temp[menu] = self.value[menu][i].get()
             #check if all the values from the widgets in this frame have been altered in any way
             for t in temp:
                 #in any of them is not valid make the flag false
@@ -679,10 +679,13 @@ class checkUpSpinBoxEnt(tk.Tk):
                 #make a paremeter of the sum between current month and the mothns for next visit
                 temp = nextVisitMonths + curMonth
                 #pick a month with the mothcounter dictionary
-                endMonth = self.monthCounter[temp % 12]
-                #calculate the year
-                endYear = curYear + (temp // 12)
-
+                if temp > 12:
+                    endMonth = self.monthCounter[temp % 12]
+                    #calculate the year
+                    endYear = curYear + (temp // 12)
+                else:
+                    endMonth = temp
+                    endYear = curYear
                 return [str(nextVisitMonths),endMonth,str(endYear)]
 
             else:
@@ -767,7 +770,7 @@ class weightSpinBoxEnt(tk.Tk):
         self.frame.grid(column = 0, row =self.sort,sticky = "we",padx = 5, pady = 5)
 
     def getWidgetValues(self):
-        num = self.value[self.widgetId]
+        num = self.value[self.widgetId].get()
         if num == 0.0:
             return None
         return buildNumber(num,self.master)
@@ -795,8 +798,9 @@ class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
         self.widgets = list()
 
         self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
-
+        self.widgets.append(tk.Entry(self.frame, text = self.value[self.widgetId], state = 'disabled' ))
         self.widgets.append(tk.Menubutton(self.frame, text = self.displayName))
+
 
 
         self.master.entries["weight"].value["weight"].trace_add("write",  self.updateValueWeight)
@@ -820,7 +824,7 @@ class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
             self.widgets[1].menu.destroy()
         except:
             pass
-        self.values = replaceValues(self.master.master.getValues(self.master.master.getWidgetMenus(self.widgetId)),self.value)
+        self.values = replaceValues(self.master.master.getValues(self.master.master.getWidgetMenuId(self.widgetId)[0]),self.value)
 
         self.widgets[1].menu =   tk.Menu(self.widgets[1])
         self.widgets[1]["menu"] = self.widgets[1].menu
@@ -846,7 +850,7 @@ class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
 
     def updateValueAge(self, *args):
         try:
-            val = self.master.entries["age"].value["age"].get()
+            age = self.master.entries["age"].value["age"].get()
         except:
             pass
         else:
@@ -863,3 +867,54 @@ class dogDMVDCardiologicalAnalysisListBoxEnt(tk.Tk):
             self.value["age"].set(temp)
 
             self.updateState()
+
+    def getWidgetValues(self):
+        input = self.value[self.widgetId].get()
+        if input == "+++" or input == "":
+            return None
+        return input
+
+class photoReader(tk.Tk):
+        def __init__(self, master, nameVal,name ,widgetId ,sort):
+            #reference to formWinfow Object
+            self.master = master
+            #the name to be displayed by the Label widget
+            self.displayName = nameVal
+            #reference to for the value of this object
+            self.widgetId = widgetId
+            #row of the widget to be grided when displayed
+            self.sort = sort
+            #a dictionary with the widgetId and a string Var of all the inputs for this objet
+            #so that the value can be accesed by a different object
+            self.value = {self.widgetId : tk.StringVar(value = "+++"), "files" : []}
+            #a list with all the widgets of this object
+            self.widgets = list()
+
+
+            self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
+
+            self.widgets.append(tk.Label(self.frame, text = self.displayName))
+            self.widgets.append(tk.Button(self.frame, text = "Select", command = self.buttonAction))
+            self.widgets.append(tk.Entry(self.frame, text = self.value[self.widgetId], state = 'disabled' ))
+
+            gridWidgets(self.widgets)
+
+            self.frame.grid(column = 0, row = self.sort, sticky = "we", padx = 5, pady = 5)
+
+        def buttonAction(self):
+            filePath = filedialog.askdirectory()
+            import os
+            if filePath != None:
+                self.value[self.widgetId].set(filePath)
+            else:
+                pass
+
+        def getWidgetValues(self):
+            val = self.value[self.widgetId].get()
+            if val != "+++" and val != "":
+                images = glob.glob(val+"/*.bmp")
+                for i in images:
+                    self.value["files"].append(i)
+                return self.value["files"]
+            else:
+                return None
