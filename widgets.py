@@ -157,8 +157,8 @@ class menuEnt(tk.Tk):
 
     #a function to look if the value submited in the entry widget existied in the menuValues list
     def checkSelf(self):
-        if self.menuValues.count(self.value[self.menuId].get()) == 0 :
-            self.master.master.createValue(self.value[self.menuId].get(),self.menuId)
+        if self.menuValues.count(self.value[self.widgetId].get()) == 0 :
+            self.master.master.createValue(self.value[self.widgetId].get(),self.menuId)
     #chech if the value has been altered in a meaningful way
     #return the value and chech if the value exists on the menu value list or return None
     def getWidgetValues(self):
@@ -655,7 +655,7 @@ class checkUpSpinBoxEnt(tk.Tk):
         self.frame = tk.Frame(self.master.inputFrame, background = frameBgColor(self.sort))
 
         self.widgets.append(tk.Label(self.frame, text = self.displayName))
-        self.widgets.append(tk.Spinbox(self.frame, from_ = 0, to = 1000, increment= 1))
+        self.widgets.append(tk.Spinbox(self.frame, from_ = 0, to = 1000, increment= 1,textvariable = self.value[self.widgetId]))
 
         gridWidgets(self.widgets)
         self.frame.grid(column = 0, row =self.sort,sticky = "we",padx = 5, pady = 5)
@@ -686,7 +686,7 @@ class checkUpSpinBoxEnt(tk.Tk):
                 else:
                     endMonth = temp
                     endYear = curYear
-                return [str(nextVisitMonths),endMonth,str(endYear)]
+                return [[str(nextVisitMonths),endMonth,str(endYear)]]
 
             else:
                 return None
