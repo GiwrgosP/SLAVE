@@ -89,6 +89,10 @@ def fillMenuWithValues(menuObj,values,variable):
 
 #widget having a frame with a label and an entry
 class entryEnt(tk.Tk):
+
+    def __del__(self):
+        print("Hello")
+
     def __init__(self, master,nameVal, name, widgetId, sort):
         #reference to formWinfow Object
         self.master = master
