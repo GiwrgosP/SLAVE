@@ -91,7 +91,9 @@ def fillMenuWithValues(menuObj,values,variable):
 class entryEnt(tk.Tk):
 
     def __del__(self):
-        print("Hello")
+        print("hello")
+        val = self.getWidgetValues()
+
 
     def __init__(self, master,nameVal, name, widgetId, sort):
         #reference to formWinfow Object

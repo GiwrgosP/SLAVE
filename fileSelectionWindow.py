@@ -66,5 +66,4 @@ class fileSelectionWindow(tk.Tk):
             messagebox.showerror(title = "Slave could not complete your request", message = "Slave encounterred an error while trying to open the file asked or create the form")
         else:
             self.master.fileSelected = ent
-            self.mainFrame.destroy()
             self.master.checkState()

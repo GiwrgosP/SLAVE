@@ -30,6 +30,11 @@ class formWindow(tk.Tk):
     }
     def __del__(self):
         print("Ending formsWindow")
+        tempKeyList = list()
+
+
+        print(self.entries)
+
 
     def __init__(self,master):
         #reference to window class as master
@@ -137,7 +142,7 @@ class formWindow(tk.Tk):
     #and the function checkState is being called
     def goBack(self):
         self.master.fileSelected = None
-        self.mainFrame.destroy()
+        self.master.window.destroy()
         self.master.checkState()
 
     #a fuction to collect all the data from the widgets and create the docx file
@@ -159,7 +164,7 @@ class formWindow(tk.Tk):
             #call the loadingBarProgress
             self.loadingBarProgress(loadingBarValue)
 
-            if input == "" or input == "0.0" or input == [['', ' (0  )']] or input == None : # or ' (0.0 mg/kg po )'
+            if input == None :
                 pass
             #if the there has been any change in the widgets
             else:

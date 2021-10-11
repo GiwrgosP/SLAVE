@@ -20,20 +20,23 @@ class window(tk.Tk):
         self.fileSelected = None
         #create the database connection paremeters
         self.c,self.con = self.conn()
+        #call the checkState function to fill the window
+        self.checkState()
+    #takes lists of lists and makes a list of items
+    #made to correct the data return form the database
+    def collectOneValue(self,data):
+        temp = list()
+        for i in data:
+            temp.append(i[0])
+        return temp
+
+    def createWindow(self):
         #create a window object
         self.window = tk.Tk()
         #name it
         self.window.title("Sophi's Loyal Assistant Veterinarian Edition")
         #size it
         self.window.geometry("1408x512")
-        #call the checkState function to fill the window
-        self.checkState()
-
-    def collectOneValue(self,data):
-        temp = list()
-        for i in data:
-            temp.append(i[0])
-        return temp
 
 #database connection paremeters
     def conn(self):
@@ -110,9 +113,11 @@ class window(tk.Tk):
     #then create a new selection object based on fileSelected
     def checkState(self):
         try:
-            del self.selection
+            self.selection.__del__()
+            self.window.destroy()
         except:
             pass
+        self.createWindow()
         if self.fileSelected == None:
             self.selection = fileSelectionWindow.fileSelectionWindow(self)
         else:
