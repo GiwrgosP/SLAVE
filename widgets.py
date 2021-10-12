@@ -7,7 +7,6 @@ from decimal import *
 import glob
 import os
 
-
 def replaceValues(values,value):
     result = list()
     for sentence in values:
@@ -892,7 +891,7 @@ class photoReader(tk.Tk):
             self.sort = sort
             #a dictionary with the widgetId and a string Var of all the inputs for this objet
             #so that the value can be accesed by a different object
-            self.value = {self.widgetId : tk.StringVar(value = "+++"), "files" : []}
+            self.value = {self.widgetId : tk.StringVar(value = "+++"), "files" : list()}
             #a list with all the widgets of this object
             self.widgets = list()
 
@@ -918,7 +917,7 @@ class photoReader(tk.Tk):
         def getWidgetValues(self):
             val = self.value[self.widgetId].get()
             if val != "+++" and val != "":
-                images = glob.glob(val+"/*.bmp")
+                images = glob.glob(str(val)+"/*.bmp")
                 for i in images:
                     self.value["files"].append(i)
                 return self.value["files"]

@@ -164,7 +164,11 @@ class formWindow(tk.Tk):
             #call the loadingBarProgress
             self.loadingBarProgress(loadingBarValue)
 
+<<<<<<< Updated upstream
             if input == None :
+=======
+            if input == None : # or ' (0.0 mg/kg po )'
+>>>>>>> Stashed changes
                 pass
             #if the there has been any change in the widgets
             else:
@@ -172,7 +176,7 @@ class formWindow(tk.Tk):
                 temp = []
                 if ent == "PHOTOS":
                     for image in input:
-                        myImage = InlineImage(doc, image, width = (5000),height = (5000))
+                        myImage = InlineImage(doc, image )
                         temp.append(myImage)
                 else:
                     temp = input
