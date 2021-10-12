@@ -164,11 +164,7 @@ class formWindow(tk.Tk):
             #call the loadingBarProgress
             self.loadingBarProgress(loadingBarValue)
 
-<<<<<<< Updated upstream
             if input == None :
-=======
-            if input == None : # or ' (0.0 mg/kg po )'
->>>>>>> Stashed changes
                 pass
             #if the there has been any change in the widgets
             else:

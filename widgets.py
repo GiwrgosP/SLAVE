@@ -6,6 +6,19 @@ import re
 from decimal import *
 import glob
 import os
+from PIL import Image
+
+def resizeImage(images):
+    resizedImageList = list()
+    for img in images:
+        temp = Image.open(img)
+        str = img[:-4]
+        resizeImage = temp.resize((430,404))
+        resizeImage.save(str+"resized.bmp")
+        resizedImageList.append(str+"resized.bmp")
+    return resizedImageList
+
+
 
 def replaceValues(values,value):
     result = list()
@@ -891,7 +904,7 @@ class photoReader(tk.Tk):
             self.sort = sort
             #a dictionary with the widgetId and a string Var of all the inputs for this objet
             #so that the value can be accesed by a different object
-            self.value = {self.widgetId : tk.StringVar(value = "+++"), "files" : list()}
+            self.value = {self.widgetId : tk.StringVar(value = "+++")}
             #a list with all the widgets of this object
             self.widgets = list()
 
@@ -918,8 +931,7 @@ class photoReader(tk.Tk):
             val = self.value[self.widgetId].get()
             if val != "+++" and val != "":
                 images = glob.glob(str(val)+"/*.bmp")
-                for i in images:
-                    self.value["files"].append(i)
+                self.value["files"] = resizeImage(images)
                 return self.value["files"]
             else:
                 return None
