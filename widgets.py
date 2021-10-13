@@ -590,11 +590,10 @@ class ecgMenuEnt(tk.Tk):
         else:
             return None
     #check if the values of the from the widgets of a frame are new and add them on the database
-    def chechSelf(self,value):
-        print(value)
-        for menu in self.menuValues:
-            if self.menuValues[menu].count(value) == 0:
-                self.master.master.createValue(value,menu)
+    def checkSelf(self,value):
+        for menu in self.value:
+            if self.menuValues[menu].count(value[menu]) == 0:
+                self.master.master.createValue(value[menu],menu)
 
 #like entry but with a trace call on petName to much it when it is changed
 class nameAitEntryEnt(tk.Tk):
