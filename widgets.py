@@ -176,7 +176,7 @@ class menuEnt(tk.Tk):
     #a function to look if the value submited in the entry widget existied in the menuValues list
     def checkSelf(self):
         if self.menuValues.count(self.value[self.widgetId].get()) == 0 :
-            self.master.master.createValue(self.value[self.widgetId].get(),self.menuId[0])
+            self.master.master.createValue(self.value[self.widgetId].get(),self.menuId)
     #chech if the value has been altered in a meaningful way
     #return the value and chech if the value exists on the menu value list or return None
     def getWidgetValues(self):
@@ -488,7 +488,7 @@ class ecgMenuEnt(tk.Tk):
         self.sort = sort
         #a dictionary with the widgetId and a string Var of all the inputs for this objet
         #so that the value can be accesed by a different object
-        self.value = {}
+        self.value = {self.widgetId : list() }
         #a dictionary with the widgetId and a list of all the menus for this object
         self.menuValues = {}
         #a list with all the widgets of this object
@@ -500,13 +500,7 @@ class ecgMenuEnt(tk.Tk):
         #call to the window object in order to get the menuId for the widget
         #a list of all the menus for this widget
         self.menuId = self.master.master.getWidgetMenuId(self.widgetId)
-        #for every menu in the list
-        for menu in self.menuId:
-            #create a list that will contain all the values for this menu
-            #this widget can have more than one of each menu
-            self.value[menu] = list()
-            #call the getValues fuction to collect all the values for this menu
-            self.menuValues[menu] = self.master.master.getValues(menu)
+        self.menuValues = self.master.master.getValues(self.menuId[0])
 
         self.createWidgets()
         self.frame.grid(column = 0, row = self.sort, sticky = "we", padx = 5, pady = 5)
@@ -522,16 +516,15 @@ class ecgMenuEnt(tk.Tk):
             tempWidgetList.append(tk.Button(tempFrame, text = "-", command = lambda x = tempFrame: self.destroyButtonAction(x)))
             #a label with the self.display name
             tempWidgetList.append(tk.Button(tk.Label(tempFrame, text = self.displayName)))
-            #for every menu in the self.menuValues list
-            for menu in self.menuValues:
-                #create a menu
-                tempWidgetList.append(tk.Menubutton(tempFrame, text = menu))
-                #create a string Var
-                self.value[menu].append(tk.StringVar(value = "+++"))
-                #call the function fillMenuWithValues
-                fillMenuWithValues(tempWidgetList[-1],self.menuValues[menu],self.value[menu][-1])
-                #make an entry for the menu
-                tempWidgetList.append(tk.Entry(tempFrame, textvariable = self.value[menu][-1]))
+
+            #create a menu
+            tempWidgetList.append(tk.Menubutton(tempFrame, text =self.displayName))
+            #create a string Var
+            self.value[self.widgetId].append(tk.StringVar(value = "+++"))
+            #call the function fillMenuWithValues
+            fillMenuWithValues(tempWidgetList[-1],self.menuValues,self.value[self.widgetId][-1])
+            #make an entry for the menu
+            tempWidgetList.append(tk.Entry(tempFrame, textvariable = self.value[self.widgetId][-1]))
 
             self.frames.append(tempFrame)
             self.widgets.append(tempWidgetList)
@@ -553,7 +546,7 @@ class ecgMenuEnt(tk.Tk):
             del self.frames[counter]
 
             for menu in self.values:
-                del self.value[menu][counter]
+                del self.value[counter]
 
             del self.widgets[counter]
 
@@ -566,24 +559,12 @@ class ecgMenuEnt(tk.Tk):
         flag = True
         #for all the frames
         for i in range(counter):
-            #a temp dictionary to store all the values of the frame
-            temp = {}
-            #for all the widgets in the dictionary self.value
-            for menu in self.value:
-                #store all the values from the widgets of this frame into temp
-                temp[menu] = self.value[menu][i].get()
-            #check if all the values from the widgets in this frame have been altered in any way
-            for t in temp:
-                #in any of them is not valid make the flag false
-                if temp[t] == "+++" or len(temp[t].split()) == 0:
-                    flag = False
-
-            #if all the values are valid
-            if flag == True:
-                #save temp to values
-                values.append(temp)
-                #check if the values of the menus in temp are are new or existed
-                self.checkSelf(temp)
+            val = self.value[self.widgetId][i].get()
+            if val == "+++" or len(val.split()) == 0:
+                pass
+            else:
+                values.append(val)
+                self.checkSelf(val)
         #if values list is not empty return it else return None
         if len(values) != 0:
             return values
@@ -591,9 +572,8 @@ class ecgMenuEnt(tk.Tk):
             return None
     #check if the values of the from the widgets of a frame are new and add them on the database
     def checkSelf(self,value):
-        for menu in self.value:
-            if self.menuValues[menu].count(value[menu]) == 0:
-                self.master.master.createValue(value[menu],menu)
+        if self.menuValues.count(value) == 0:
+            self.master.master.createValue(value,self.menuId[0])
 
 #like entry but with a trace call on petName to much it when it is changed
 class nameAitEntryEnt(tk.Tk):
