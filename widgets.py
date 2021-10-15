@@ -176,7 +176,7 @@ class menuEnt(tk.Tk):
     #a function to look if the value submited in the entry widget existied in the menuValues list
     def checkSelf(self):
         if self.menuValues.count(self.value[self.widgetId].get()) == 0 :
-            self.master.master.createValue(self.value[self.widgetId].get(),self.menuId)
+            self.master.master.createValue(self.value[self.widgetId].get(),self.menuId[0])
     #chech if the value has been altered in a meaningful way
     #return the value and chech if the value exists on the menu value list or return None
     def getWidgetValues(self):
@@ -310,8 +310,8 @@ class medicMenuEnt(tk.Tk):
         else:
             return None
     #check if the values of the from the widgets of a frame are new and add them on the database
-    def chechSelf(self,value):
-        for menu in self.value:
+    def checkSelf(self,value):
+        for menu in self.menuValues:
             if self.menuValues[menu].count(value[menu]) == 0:
                 self.master.master.createValue(value[menu],menu)
 
